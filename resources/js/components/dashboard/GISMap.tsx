@@ -59,7 +59,9 @@ export function GISMap({ parcels, selectedParcel, onSelectParcel, activeLayers }
 
     mapInstanceRef.current = map;
     if (!isMapReady) { // Only set if not already true
-      setIsMapReady(true);
+      setTimeout(() => {
+        setIsMapReady(true);
+      }, 0);
     }
 
     return () => {

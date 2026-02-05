@@ -182,29 +182,7 @@ const formatParcelPopup = (parcel: ParcelData) => {
   return `<div style="min-width:260px;max-width:340px;">${header}${sol}${hydro}${conservation}${footer}</div>`;
 };
 
-const parcelToPopupProperties = (parcel: ParcelData): GeoJSON.GeoJsonProperties => ({
-  id: parcel.id,
-  name: parcel.name,
-  region: parcel.location.region,
-  commune: parcel.location.commune,
-  latitude: parcel.location.coordinates[0],
-  longitude: parcel.location.coordinates[1],
-  area: parcel.area,
-  soilType: parcel.pedology.soilType,
-  pH: parcel.pedology.pH,
-  organicMatter: parcel.pedology.organicMatter,
-  texture: parcel.pedology.texture,
-  waterTableDepth: parcel.hydrology.waterTableDepth,
-  annualFlow: parcel.hydrology.annualFlow,
-  drainageClass: parcel.hydrology.drainageClass,
-  kFactor: parcel.conservation.kFactor,
-  erosionRisk: parcel.conservation.erosionRisk,
-  slopePercent: parcel.conservation.slopePercent,
-  vegetationCover: parcel.conservation.vegetationCover,
-  fertility: parcel.fertility,
-  aptitude: parcel.aptitude,
-  scientificStatus: parcel.scientificStatus,
-});
+
 
 export function MapContainer({
   parcels,
@@ -257,7 +235,9 @@ export function MapContainer({
 
     mapInstanceRef.current = map;
     if (!isMapReady) { // Only set if not already true
-      setIsMapReady(true);
+      setTimeout(() => {
+        setIsMapReady(true);
+      }, 0);
     }
 
     return () => {

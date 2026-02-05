@@ -78,7 +78,7 @@ const Index = () => {
         const data = await response.json();
         if (!data || !Array.isArray(data.features)) return;
 
-        const mapped: ParcelData[] = data.features.map((feature: any, index: number) => {
+        const mapped: ParcelData[] = data.features.map((feature: GeoJSON.Feature, index: number) => {
           const item = feature.properties as ParcelApi;
           const geometry = feature.geometry;
 
@@ -194,7 +194,9 @@ const Index = () => {
   useEffect(() => {
     if (!isMobile) {
       if (mapPane !== 'map') { // Only update if it's different
-        setMapPane('map');
+        setTimeout(() => {
+          setMapPane('map');
+        }, 0);
       }
     }
   }, [isMobile, mapPane]); // Added mapPane to dependencies to satisfy the linter for the conditional update

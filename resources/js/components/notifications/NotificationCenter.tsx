@@ -146,7 +146,9 @@ export function NotificationCenter({ onNavigateToParcel, onClose }: Notification
 
   useEffect(() => {
     if (loading) { // Only set to false if it's currently true
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 0);
     }
   }, []);
 

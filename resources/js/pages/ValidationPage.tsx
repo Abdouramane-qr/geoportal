@@ -39,7 +39,9 @@ export default function ValidationPage() {
   useEffect(() => {
     if (!isMobile) {
       if (mobilePane !== 'map') { // Only update if it's different
-        setMobilePane('map');
+        setTimeout(() => {
+          setMobilePane('map');
+        }, 0);
       }
     }
   }, [isMobile, mobilePane]); // Added mobilePane to dependencies
@@ -119,7 +121,9 @@ export default function ValidationPage() {
   useEffect(() => {
     if (isMobile && viewMode === 'split') {
       if (viewMode !== 'list') { // Only update if it's different
-        setViewMode('list');
+        setTimeout(() => {
+          setViewMode('list');
+        }, 0);
       }
     }
   }, [isMobile, viewMode]);

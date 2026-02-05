@@ -31,7 +31,9 @@ export default function Navbar({ items = defaultItems }: NavbarProps) {
 
   useEffect(() => {
     // Initial check for scroll position
-    setIsScrolled(window.scrollY > 50); // Set initial state outside handleScroll to avoid re-render
+    setTimeout(() => { // Wrap in setTimeout to make it asynchronous
+      setIsScrolled(window.scrollY > 50);
+    }, 0);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);

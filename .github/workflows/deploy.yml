@@ -44,7 +44,7 @@ jobs:
           REMOTE_HOST: 149.102.140.189
           REMOTE_USER: root
           TARGET: /var/www/html/geoportal
-          EXCLUDE: "/node_modules/, /vendor/"
+          EXCLUDE: "/node_modules/"
           
       - name: Run post-deployment commands
         if: success()

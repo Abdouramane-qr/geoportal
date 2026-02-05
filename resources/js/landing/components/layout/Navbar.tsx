@@ -19,6 +19,7 @@ const defaultItems: NavItem[] = [
   { label: "Cas d'usage", href: '#use-cases' },
   { label: 'Documentation', href: '#documentation' },
   { label: 'Contact', href: '#contact' },
+  { label: 'Carte', href: '/carte' },
 ];
 
 export default function Navbar({ items = defaultItems }: NavbarProps) {

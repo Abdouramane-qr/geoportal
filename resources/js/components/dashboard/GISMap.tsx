@@ -69,7 +69,7 @@ export function GISMap({ parcels, selectedParcel, onSelectParcel, activeLayers }
       mapInstanceRef.current = null;
       setIsMapReady(false);
     };
-  }, []);
+  }, [isMapReady]);
 
   // Add/update parcels
    
@@ -101,7 +101,7 @@ export function GISMap({ parcels, selectedParcel, onSelectParcel, activeLayers }
       polygon.addTo(map);
       polygonsRef.current.set(parcel.id, polygon);
     });
-  }, [parcels, selectedParcel, activeLayers, onSelectParcel, isMapReady]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [parcels, selectedParcel, activeLayers, onSelectParcel, isMapReady]);  
 
   return (
     <div 

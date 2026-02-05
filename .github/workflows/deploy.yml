@@ -44,7 +44,7 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           REMOTE_HOST: 149.102.140.189
           REMOTE_USER: root
-          TARGET: ${{ secrets.SSH_TARGET_DIR }}
+          TARGET: /var/www/html/geoportal
           EXCLUDE: "/node_modules/, /vendor/"
           
       - name: Run post-deployment commands
@@ -55,7 +55,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ${{ secrets.SSH_TARGET_DIR }}
+            cd /var/www/html/geoportal
             php artisan migrate --force
             php artisan optimize:clear
             php artisan optimize

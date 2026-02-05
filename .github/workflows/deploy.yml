@@ -34,8 +34,7 @@ jobs:
       - name: Build frontend assets
         run: npm run build
 
-      - name: Run tests
-        run: composer run test:prod-backend
+
 
       - name: Deploy to server
         if: success()

@@ -1,29 +1,28 @@
-Okay, it looks like we have a few critical issues on your production server. Don't worry, we can fix them.
+Okay, it seems the Nginx configuration file (`/etc/nginx/sites-available/geoportal.conf`) still has an issue that is preventing Nginx from starting. The error "unknown directive 'nginx'" on line 2 means that there's an incorrect line at the very beginning of the file.
 
-The most immediate problem is a syntax error in your Nginx configuration file (`/etc/nginx/sites-available/geoportal.conf`), which is preventing Nginx from starting. This is why Certbot is also failing, as it relies on a functional Nginx.
+Also, I noticed that your server has PHP 8.3.30 installed. We need to update the Nginx configuration and our CI/CD pipeline to reflect this.
 
-The error message:
-`unknown directive "nginx" in /etc/nginx/sites-enabled/geoportal.conf:2`
+Let's fix the Nginx configuration first:
 
-This usually means that the file `geoportal.conf` contains an extra `nginx` keyword or some global Nginx configuration (like `user www-data;` or `worker_processes auto;`) that should *not* be inside a `server` block. Your `geoportal.conf` file should *start* with `server {` on the very first line.
-
-**Action Required: Fix Nginx Configuration**
+### Action Required: Fix Nginx Configuration (Again) and Update PHP Version
 
 1.  **Open the Nginx configuration file for editing**:
     ```bash
     nano /etc/nginx/sites-available/geoportal.conf
     ```
-2.  **Carefully review the content**. It should *only* contain the `server { ... }` block that I provided previously. **Remove any lines before `server {` and ensure that `server {` is on the very first line of the file (line 1), and there are no extra keywords like `nginx` or `http` outside of that block.**
-
-    Here is the correct content for `geoportal.conf` again:
+2.  **Completely DELETE the current content of the file and replace it with the following**.
+    *   **Do not include any other lines.**
+    *   **Ensure `server {` is on the very first line.**
+    *   I've updated the `fastcgi_pass` to use `php8.3-fpm.sock` to match your server's PHP version.
+    *   I've also used `geoportal.smartschool.zapwize.com` as the primary domain.
 
     ```nginx
     server {
         listen 80;
         listen [::]:80;
-        server_name geoportal.smartschool.zapwize.com 149.102.140.189; # Ensure this matches your domain/IP
+        server_name geoportal.smartschool.zapwize.com www.geoportal.smartschool.zapwize.com 149.102.140.189;
 
-        root /var/www/html/geoportal/public;
+        root /var/www/geoportal/public; # IMPORTANT: Using /var/www/geoportal as per your previous command
 
         add_header X-Frame-Options "SAMEORIGIN";
         add_header X-Content-Type-Options "nosniff";
@@ -42,7 +41,7 @@ This usually means that the file `geoportal.conf` contains an extra `nginx` keyw
         error_page 404 /index.php;
 
         location ~ \.php$ {
-            fastcgi_pass unix:/var/run/php/php8.2-fpm.sock; # Keep this as 8.2 for now, we'll address PHP version next
+            fastcgi_pass unix:/var/run/php/php8.3-fpm.sock; # UPDATED to php8.3
             fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
             include fastcgi_params;
             fastcgi_buffers 16 16k;
@@ -55,21 +54,25 @@ This usually means that the file `geoportal.conf` contains an extra `nginx` keyw
         }
     }
     ```
-    *Make sure to use your exact domain `geoportal.smartschool.zapwize.com` in `server_name`.*
+    *   **Very carefully check that there are no extra characters or lines before `server {`**.
+    *   **Save and close the file** (`Ctrl+O`, `Enter`, `Ctrl+X`).
 
-3.  **Save and close the file** (`Ctrl+O`, `Enter`, `Ctrl+X`).
-
-4.  **Test Nginx configuration again**:
+3.  **Test Nginx configuration again**:
     ```bash
     sudo nginx -t
     ```
     *   Expected output: `syntax is ok`, `test is successful`.
 
-5.  **If the test is successful, restart Nginx**:
+4.  **If the test is successful, restart Nginx**:
     ```bash
     sudo systemctl restart nginx
     sudo systemctl status nginx # Verify it's running
     ```
     *   Expected output for status: `active (running)`.
 
-**Once Nginx is successfully running, please let me know. We will then address the PHP version conflict and re-run Certbot.**
+**Important Notes:**
+
+*   **Application Directory**: I've adjusted the `root` directive in Nginx to `/var/www/geoportal/public` based on your `chown` command. This means your application should reside in `/var/www/geoportal`. If you intend to use `/var/www/html/geoportal`, please let me know, and we'll adjust everything accordingly.
+*   **PHP 8.3**: We are now targeting PHP 8.3 for your server configuration. This means your `deploy.yml` will also need to be updated to use `php-version: '8.3'`. We will do this after Nginx is working.
+
+**Once Nginx is successfully running, please confirm by telling me the output of `sudo systemctl status nginx`. We will then proceed to update your `deploy.yml` and re-run Certbot.**

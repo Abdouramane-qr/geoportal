@@ -62,6 +62,10 @@
         "test:lint": [
             "pint --parallel --test"
         ],
+        "test:prod-backend": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test"
+        ],
         "test": [
             "@php artisan config:clear --ansi",
             "@test:lint",

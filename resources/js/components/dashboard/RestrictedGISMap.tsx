@@ -100,7 +100,9 @@ export function RestrictedGISMap({
     }).addTo(map);
 
     mapInstanceRef.current = map;
-    setIsMapReady(true);
+    if (!isMapReady) { // Only set if not already true
+      setIsMapReady(true);
+    }
 
     return () => {
       map.remove();

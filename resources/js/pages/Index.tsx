@@ -173,8 +173,6 @@ const Index = () => {
       }
     };
     window.addEventListener('geoportal:layers-updated', handleUpdate);
-    // Ensure we catch layers hydrated before the listener was attached.
-    setLayers(loadLayers());
     return () => {
       window.removeEventListener('geoportal:layers-updated', handleUpdate);
     };
@@ -195,9 +193,11 @@ const Index = () => {
 
   useEffect(() => {
     if (!isMobile) {
-      setMapPane('map');
+      if (mapPane !== 'map') { // Only update if it's different
+        setMapPane('map');
+      }
     }
-  }, [isMobile]);
+  }, [isMobile, mapPane]); // Added mapPane to dependencies to satisfy the linter for the conditional update
 
   // Calculate KPIs from parcels data dynamically
   const kpiData = useMemo(() => {
@@ -224,7 +224,7 @@ const Index = () => {
       aptZones,
       avgFertility,
     };
-  }, []);
+  }, [parcels]); // Added parcels to dependency array
 
   // Calculate visible statuses for dynamic legend
   const visibleStatuses = useMemo(() => {

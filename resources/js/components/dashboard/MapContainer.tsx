@@ -256,7 +256,9 @@ export function MapContainer({
     }).addTo(map);
 
     mapInstanceRef.current = map;
-    setIsMapReady(true);
+    if (!isMapReady) { // Only set if not already true
+      setIsMapReady(true);
+    }
 
     return () => {
       map.remove();

@@ -1,8 +1,8 @@
 import { useEffect, useRef, useMemo } from 'react';
 import L from 'leaflet';
+import { AlertTriangle, MapPin } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import { ValidationRecord } from '@/types/validation';
-import { AlertTriangle, MapPin } from 'lucide-react';
 
 interface ValidationMapViewProps {
   record: ValidationRecord;

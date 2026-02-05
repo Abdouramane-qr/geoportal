@@ -145,7 +145,9 @@ export function NotificationCenter({ onNavigateToParcel, onClose }: Notification
   const [filter, setFilter] = useState<'all' | NotificationType>('all');
 
   useEffect(() => {
-    setLoading(false);
+    if (loading) { // Only set to false if it's currently true
+      setLoading(false);
+    }
   }, []);
 
   const markAsRead = (id: string) => {

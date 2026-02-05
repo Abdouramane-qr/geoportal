@@ -38,9 +38,11 @@ export default function ValidationPage() {
 
   useEffect(() => {
     if (!isMobile) {
-      setMobilePane('map');
+      if (mobilePane !== 'map') { // Only update if it's different
+        setMobilePane('map');
+      }
     }
-  }, [isMobile]);
+  }, [isMobile, mobilePane]); // Added mobilePane to dependencies
 
   const selectedRecord = records.find(r => r.id === selectedRecordId);
 
@@ -116,7 +118,9 @@ export default function ValidationPage() {
 
   useEffect(() => {
     if (isMobile && viewMode === 'split') {
-      setViewMode('list');
+      if (viewMode !== 'list') { // Only update if it's different
+        setViewMode('list');
+      }
     }
   }, [isMobile, viewMode]);
 

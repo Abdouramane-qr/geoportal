@@ -1,5 +1,5 @@
-import { Container } from '@/landing/components/ui/Container';
 import { Button } from '@/landing/components/ui/Button';
+import { Container } from '@/landing/components/ui/Container';
 import { cn } from '@/lib/utils';
 
 const badges = [

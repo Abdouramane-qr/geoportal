@@ -1,12 +1,13 @@
 import { FileEdit, CheckCircle2, BadgeCheck } from 'lucide-react';
-import { ScientificStatus, getStatusConfig } from '@/types/scientificStatus';
-import { cn } from '@/lib/utils';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
+import type { ScientificStatus} from '@/types/scientificStatus';
+import { getStatusConfig } from '@/types/scientificStatus';
 
 interface ScientificStatusBadgeProps {
   status: ScientificStatus;

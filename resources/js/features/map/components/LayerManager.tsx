@@ -1,8 +1,8 @@
 import { LocateFixed, X } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { Checkbox } from '@/components/ui/checkbox';
 import type { Layer } from '@/features/map/types/layers';
+import { cn } from '@/lib/utils';
 
 interface LayerManagerProps {
   layers: Layer[];

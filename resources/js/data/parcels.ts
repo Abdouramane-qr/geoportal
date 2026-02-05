@@ -1,4 +1,4 @@
-import { ParcelData } from '@/types/parcel';
+import type { ParcelData } from '@/types/parcel';
 
 export const parcelsData: ParcelData[] = [
   {

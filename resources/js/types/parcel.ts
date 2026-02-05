@@ -1,4 +1,4 @@
-import { ScientificStatus } from './scientificStatus';
+import type { ScientificStatus } from './scientificStatus';
 
 export interface ParcelData {
   id: string;

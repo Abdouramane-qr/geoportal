@@ -94,9 +94,9 @@ This initial Nginx configuration will serve your site over HTTP. Certbot will la
     server {
         listen 80;
         listen [::]:80;
-        server_name your_domain.com www.your_domain.com; # Replace with your actual domain(s)
+        server_name geoportal.smartschool.zapwize.com www.geoportal.smartschool.zapwize.com; # Replace with your actual domain(s)
 
-        root /var/www/html/geoportal/public;
+        root /var/www/html/geoportal/geoportal/public;
 
         add_header X-Frame-Options "SAMEORIGIN";
         add_header X-Content-Type-Options "nosniff";

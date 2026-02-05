@@ -1,4 +1,4 @@
-import { LandConflict, SensitiveZone, DecisionSummary } from '@/types/authority';
+import type { LandConflict, SensitiveZone, DecisionSummary } from '@/types/authority';
 
 export const mockConflicts: LandConflict[] = [
   {

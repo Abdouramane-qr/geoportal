@@ -1,9 +1,9 @@
-import { useState, useCallback } from 'react';
 import { AlertTriangle } from 'lucide-react';
-import { MainNav } from '@/components/layout/MainNav';
+import { useState, useCallback } from 'react';
 import { PredictiveAlerts } from '@/components/alerts/PredictiveAlerts';
+import { MainNav } from '@/components/layout/MainNav';
 import { NotificationCenter } from '@/components/notifications/NotificationCenter';
-import { PredictiveAlert } from '@/types/alerts';
+import type { PredictiveAlert } from '@/types/alerts';
 
 export default function AlertsPage() {
   const [alerts, setAlerts] = useState<PredictiveAlert[]>([]);

@@ -1,4 +1,4 @@
-import { PredictiveAlert } from '@/types/alerts';
+import type { PredictiveAlert } from '@/types/alerts';
 
 export const mockAlerts: PredictiveAlert[] = [
   {

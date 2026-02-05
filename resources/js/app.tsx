@@ -4,8 +4,8 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../css/app.css';
-import { Toaster } from './components/ui/toaster';
 import { Toaster as Sonner } from './components/ui/sonner';
+import { Toaster } from './components/ui/toaster';
 import { TooltipProvider } from './components/ui/tooltip';
 import { initializeTheme } from './hooks/use-appearance';
 

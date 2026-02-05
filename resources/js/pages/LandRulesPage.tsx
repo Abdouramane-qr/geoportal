@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
 import L from 'leaflet';
 import { 
   Plus, 
@@ -11,11 +10,13 @@ import {
   Clock,
   Pencil
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
+import { useState, useEffect, useRef } from 'react';
 import { MainNav } from '@/components/layout/MainNav';
-import { LandRule, RuleStatus, DocumentAttachment } from '@/types/landRules';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import type { LandRule, RuleStatus} from '@/types/landRules';
+
 
 
 function StatusBadge({ status }: { status: RuleStatus }) {
@@ -39,7 +40,6 @@ export default function LandRulesPage() {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const polygonsRef = useRef<Map<string, L.Polygon>>(new Map());
-  const drawingLayerRef = useRef<L.Polygon | null>(null);
   
   const [rules, setRules] = useState<LandRule[]>([]);
   const [selectedRule, setSelectedRule] = useState<LandRule | null>(null);

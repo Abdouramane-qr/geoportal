@@ -1,6 +1,6 @@
+import type { InertiaLinkProps } from "@inertiajs/react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type { InertiaLinkProps } from "@inertiajs/react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

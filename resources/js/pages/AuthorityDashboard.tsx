@@ -1,13 +1,14 @@
+import { Building2 } from 'lucide-react';
 import { useState, useMemo } from 'react';
-import { Building2, MapPin } from 'lucide-react';
-import { MainNav } from '@/components/layout/MainNav';
 import { AuthorityKPIs } from '@/components/authority/AuthorityKPIs';
 import { ConflictList } from '@/components/authority/ConflictList';
-import { SensitiveZones } from '@/components/authority/SensitiveZones';
 import { DecisionsPanel } from '@/components/authority/DecisionsPanel';
+import { SensitiveZones } from '@/components/authority/SensitiveZones';
 import { GeographicContextSelector } from '@/components/dashboard/GeographicContextSelector';
-import { GeographicContext, getContextFromLocation } from '@/types/geographic';
+import { MainNav } from '@/components/layout/MainNav';
 import type { LandConflict, SensitiveZone, DecisionSummary } from '@/types/authority';
+import type { GeographicContext} from '@/types/geographic';
+import { getContextFromLocation } from '@/types/geographic';
 
 export default function AuthorityDashboard() {
   const [geoContext, setGeoContext] = useState<GeographicContext>(

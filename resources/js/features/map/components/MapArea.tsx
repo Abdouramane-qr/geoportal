@@ -1,8 +1,8 @@
-import { useMemo, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, LayersControl, GeoJSON, ZoomControl, useMap } from 'react-leaflet';
 import type { GeoJsonObject } from 'geojson';
 import type { PathOptions } from 'leaflet';
 import L from 'leaflet';
+import { useMemo, useEffect, useRef } from 'react';
+import { MapContainer, TileLayer, LayersControl, GeoJSON, ZoomControl, useMap } from 'react-leaflet';
 
 export interface MapLayer {
   id: string;

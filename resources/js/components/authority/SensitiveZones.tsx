@@ -10,8 +10,9 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { SensitiveZone, ZONE_TYPE_LABELS } from '@/types/authority';
 import { cn } from '@/lib/utils';
+import type { SensitiveZone} from '@/types/authority';
+import { ZONE_TYPE_LABELS } from '@/types/authority';
 
 interface SensitiveZonesProps {
   zones: SensitiveZone[];

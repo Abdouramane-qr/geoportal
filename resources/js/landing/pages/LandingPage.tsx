@@ -1,7 +1,7 @@
-import { lazy, Suspense } from 'react';
 import { Head } from '@inertiajs/react';
-import Navbar from '@/landing/components/layout/Navbar';
+import { lazy, Suspense } from 'react';
 import Footer from '@/landing/components/layout/Footer';
+import Navbar from '@/landing/components/layout/Navbar';
 
 const Hero = lazy(() => import('@/landing/components/landing/Hero'));
 const MobileAppSection = lazy(() => import('@/landing/components/landing/MobileAppSection'));

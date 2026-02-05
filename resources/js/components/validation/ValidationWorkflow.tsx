@@ -1,14 +1,15 @@
-import { useState, useMemo } from 'react';
 import { Check, AlertCircle, ChevronRight, User, FileCheck, Loader2, X, CheckCircle } from 'lucide-react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
+import { cn } from '@/lib/utils';
+import type { 
   ValidationRecord, 
   ValidationStep, 
-  CorrectionProposal,
+  CorrectionProposal} from '@/types/validation';
+import {
   STEP_CONFIG 
 } from '@/types/validation';
-import { cn } from '@/lib/utils';
 
 interface ValidationWorkflowProps {
   record: ValidationRecord;

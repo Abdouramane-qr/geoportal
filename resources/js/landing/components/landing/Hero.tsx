@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { Container } from '@/landing/components/ui/Container';
 import { Button } from '@/landing/components/ui/Button';
+import { Container } from '@/landing/components/ui/Container';
 import { HERO_CONTENT } from '@/landing/constants/content';
 
 const fadeUpVariants = {

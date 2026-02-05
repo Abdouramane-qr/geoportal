@@ -1,23 +1,5 @@
-import { useState } from 'react';
-import { MainNav } from '@/components/layout/MainNav';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import {
   FileText,
   Search,
@@ -30,17 +12,36 @@ import {
   CheckCircle,
   Loader2,
 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { MainNav } from '@/components/layout/MainNav';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import type {
+  AuditAction,
+  AuditEntry} from '@/types/audit';
 import {
   ACTION_LABELS,
   ENTITY_LABELS,
-  JUSTIFICATION_LABELS,
-  AuditAction,
-  AuditEntry,
+  JUSTIFICATION_LABELS
 } from '@/types/audit';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import { toast } from 'sonner';
 
 function ActionBadge({ action }: { action: AuditAction }) {
   const variants: Record<AuditAction, string> = {

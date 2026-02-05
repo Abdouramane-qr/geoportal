@@ -1,4 +1,4 @@
-import { ValidationRecord } from '@/types/validation';
+import type { ValidationRecord } from '@/types/validation';
 
 export const mockValidationRecords: ValidationRecord[] = [
   {

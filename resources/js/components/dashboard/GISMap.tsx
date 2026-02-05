@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
-import { ParcelData, LayerState } from '@/types/parcel';
+import { useEffect, useRef, useState } from 'react';
+import type { ParcelData, LayerState } from '@/types/parcel';
 
 interface GISMapProps {
   parcels: ParcelData[];
@@ -72,6 +72,7 @@ export function GISMap({ parcels, selectedParcel, onSelectParcel, activeLayers }
   }, []);
 
   // Add/update parcels
+   
   useEffect(() => {
     if (!mapInstanceRef.current || !isMapReady) return;
 
@@ -100,7 +101,7 @@ export function GISMap({ parcels, selectedParcel, onSelectParcel, activeLayers }
       polygon.addTo(map);
       polygonsRef.current.set(parcel.id, polygon);
     });
-  }, [parcels, selectedParcel, activeLayers, onSelectParcel, isMapReady]);
+  }, [parcels, selectedParcel, activeLayers, onSelectParcel, isMapReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div 

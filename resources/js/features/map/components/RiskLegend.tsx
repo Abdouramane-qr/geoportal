@@ -1,6 +1,6 @@
-import type { ErosionRiskLevel } from '@/types/parcel-api';
 import { getRiskColor, getRiskLabel } from '@/lib/soil-utils';
 import { cn } from '@/lib/utils';
+import type { ErosionRiskLevel } from '@/types/parcel-api';
 
 const DEFAULT_LEVELS: ErosionRiskLevel[] = ['low', 'moderate', 'high', 'critical', 'unknown'];
 

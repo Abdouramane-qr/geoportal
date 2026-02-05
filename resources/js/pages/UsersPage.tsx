@@ -1,6 +1,4 @@
-import { useState } from 'react';
 import { 
-  Users, 
   Search, 
   Plus, 
   Shield, 
@@ -12,16 +10,18 @@ import {
   Mail,
   MapPin
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useState } from 'react';
 import { MainNav } from '@/components/layout/MainNav';
-import { User, UserRole, ROLE_PERMISSIONS, ROLE_LABELS } from '@/types/users';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import type { User, UserRole} from '@/types/users';
+import { ROLE_PERMISSIONS, ROLE_LABELS } from '@/types/users';
 
 
 function RoleBadge({ role }: { role: UserRole }) {

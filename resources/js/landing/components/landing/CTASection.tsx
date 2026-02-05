@@ -1,10 +1,10 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { motion } from 'framer-motion';
-import { Container } from '@/landing/components/ui/Container';
 import { Button } from '@/landing/components/ui/Button';
+import { Container } from '@/landing/components/ui/Container';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Nom requis'),

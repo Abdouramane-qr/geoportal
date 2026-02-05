@@ -32,7 +32,6 @@ import {
   faoClassDetails
 } from '@/types/landUnit';
 import type { ParcelData } from '@/types/parcel';
-import { ScientificStatus } from '@/types/scientificStatus';
 
 interface ParcelDetailsSidebarProps {
   parcel: ParcelData | null;

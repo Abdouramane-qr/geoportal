@@ -1,10 +1,10 @@
-import { useCallback, useId, useState } from 'react';
 import { Upload } from 'lucide-react';
+import { useCallback, useId, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { cn } from '@/lib/utils';
-import type { Layer } from '@/features/map/types/layers';
 import { createLayer, normalizeGeoJSON } from '@/features/map/lib/layer-utils';
+import type { Layer } from '@/features/map/types/layers';
+import { cn } from '@/lib/utils';
 
 interface DataImporterProps {
   onAddLayer: (layer: Layer) => void;

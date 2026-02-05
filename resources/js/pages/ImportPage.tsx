@@ -1,28 +1,21 @@
-import { useState, useCallback, useId } from 'react';
 import { Upload, FileSpreadsheet, AlertTriangle, CheckCircle, XCircle, Trash2 } from 'lucide-react';
+import { useState, useCallback, useId } from 'react';
+import { MainNav } from '@/components/layout/MainNav';
 import { Button } from '@/components/ui/button';
-import { 
+import { addLayerToStore } from '@/features/map/lib/layer-store';
+import { assessGeoJsonCoordinates, countValidGeometries, createLayer, normalizeGeoJSON } from '@/features/map/lib/layer-utils';
+import type { 
   ImportSession, 
   ImportedRow, 
   ImportStatus, 
-  ValidationIssue,
+  ValidationIssue} from '@/types/import';
+import {
   VALIDATION_RULES 
 } from '@/types/import';
-import { MainNav } from '@/components/layout/MainNav';
-import { addLayerToStore } from '@/features/map/lib/layer-store';
-import { assessGeoJsonCoordinates, countValidGeometries, createLayer, normalizeGeoJSON } from '@/features/map/lib/layer-utils';
 
 type RawRow = Record<string, string | number | null | undefined>;
 
-const NUMBER_FIELDS = [
-  'pH',
-  'organicMatter',
-  'slope',
-  'waterTableDepth',
-  'kFactor',
-  'vegetationCover',
-  'area',
-];
+
 
 const normalizeHeader = (value: string) =>
   value

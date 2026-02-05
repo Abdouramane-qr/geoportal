@@ -1,5 +1,6 @@
-import { LayerState } from '@/types/parcel';
-import { scientificStatusConfig, ScientificStatus } from '@/types/scientificStatus';
+import type { LayerState } from '@/types/parcel';
+import type { ScientificStatus } from '@/types/scientificStatus';
+import { scientificStatusConfig } from '@/types/scientificStatus';
 
 interface DynamicMapLegendProps {
   activeLayers: LayerState;

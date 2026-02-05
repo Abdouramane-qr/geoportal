@@ -1,5 +1,5 @@
 import { Layers, Droplets, Leaf, Mountain } from 'lucide-react';
-import { LayerState } from '@/types/parcel';
+import type { LayerState } from '@/types/parcel';
 
 interface LayerControlsProps {
   layers: LayerState;

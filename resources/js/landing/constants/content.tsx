@@ -1,4 +1,3 @@
-import type { Feature, UseCase } from '@/landing/types/landing.types';
 import {
   ClipboardCheck,
   FileText,
@@ -7,6 +6,7 @@ import {
   Lock,
   ShieldCheck,
 } from 'lucide-react';
+import type { Feature, UseCase } from '@/landing/types/landing.types';
 
 export const HERO_CONTENT = {
   headline:

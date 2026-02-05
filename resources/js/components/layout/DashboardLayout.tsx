@@ -1,9 +1,8 @@
-import { ReactNode } from 'react';
 import { Link, usePage } from '@inertiajs/react';
 import { Bell, FileCheck, LayoutDashboard, Map, Settings, AlertTriangle } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +17,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import { cn } from '@/lib/utils';
 
 const navItems = [
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },

@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import { Check, X, AlertCircle, FileCheck, Loader2, Download } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ValidationRecord, CorrectionProposal, ValidationError } from '@/types/validation';
 import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
+import type { ValidationRecord, CorrectionProposal, ValidationError } from '@/types/validation';
 
 interface CorrectionFormProps {
   record: ValidationRecord;

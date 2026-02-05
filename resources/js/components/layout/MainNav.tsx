@@ -1,8 +1,8 @@
 import { Link, usePage } from '@inertiajs/react';
 import { Map, Upload, Scale, Users, Menu, X, Shield, FileCheck, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
+import { cn } from '@/lib/utils';
 
 const navItems = [
   { path: '/carte', label: 'Carte SIG', icon: Map },

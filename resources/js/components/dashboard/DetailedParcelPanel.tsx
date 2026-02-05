@@ -9,23 +9,24 @@ import {
   FlaskConical,
   ChevronRight,
 } from 'lucide-react';
-import { ParcelData } from '@/types/parcel';
-import { ScientificStatus } from '@/types/scientificStatus';
-import { ScientificStatusBadge } from '@/components/ui/scientific-status-badge';
 import { Button } from '@/components/ui/button';
+import { ScientificStatusBadge } from '@/components/ui/scientific-status-badge';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import type {
+  RiskInfo} from '@/types/landUnit';
 import { 
   convertToFAOClass, 
   determineMainRisk, 
   generateRecommendation,
-  faoClassDetails,
-  RiskInfo,
+  faoClassDetails
 } from '@/types/landUnit';
+import type { ParcelData } from '@/types/parcel';
+import type { ScientificStatus } from '@/types/scientificStatus';
 
 interface DetailedParcelPanelProps {
   parcel: ParcelData;

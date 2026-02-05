@@ -15,6 +15,7 @@ export const HERO_CONTENT = {
     'LandSense Hub centralise les données sol, eau et foncier dans une interface lisible et auditée',
   ctaPrimary: 'Demander une démonstration',
   ctaSecondary: 'Recevoir la documentation',
+  ctaMap: 'Accéder à la carte',
 };
 
 export const FEATURES_DATA: Feature[] = [

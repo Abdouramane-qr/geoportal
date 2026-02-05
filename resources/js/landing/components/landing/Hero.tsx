@@ -81,6 +81,9 @@ export default function Hero({ onPrimaryClick, onSecondaryClick }: HeroProps) {
             <Button variant="secondary" size="lg" onClick={onSecondaryClick}>
               {HERO_CONTENT.ctaSecondary}
             </Button>
+            <Button variant="secondary" size="lg" asChild>
+              <a href="/carte">{HERO_CONTENT.ctaMap}</a>
+            </Button>
           </motion.div>
 
           <motion.div

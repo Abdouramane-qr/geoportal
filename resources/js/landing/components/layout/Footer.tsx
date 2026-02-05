@@ -59,14 +59,14 @@ export default function Footer({ links = defaultLinks }: FooterProps) {
             <ul className="space-y-2 text-sm">
               <li>
                 <a
-                  href="mailto:contact@landsense.hub"
+                  href="mailto:quoreichgroup@gmail.com"
                   className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
                 >
-                  contact@landsense.hub
+                  quoreichgroup@gmail.com
                 </a>
               </li>
-              <li>+221 33 000 0000</li>
-              <li>Dakar, Sénégal</li>
+              <li>+226 64 97 09 92 /78 70 43 13</li>
+              <li>Ouagadougou, Burkina Faso</li>
             </ul>
           </div>
 

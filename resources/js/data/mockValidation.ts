@@ -1,0 +1,96 @@
+import { ValidationRecord } from '@/types/validation';
+
+export const mockValidationRecords: ValidationRecord[] = [
+  {
+    id: 'val-001',
+    parcelId: 'P003',
+    parcelName: 'Parcelle Sud - Fatick',
+    originalData: {
+      pH: 8.4,
+      matièreOrganique: 0.8,
+      pente: 6.8,
+      facteurK: 0.42,
+      profondeurNappe: 1.5,
+    },
+    errors: [
+      {
+        field: 'pH',
+        value: 8.4,
+        rule: 'pH optimal: 6.0-7.5',
+        message: 'Le pH est trop alcalin pour la plupart des cultures',
+        severity: 'warning',
+      },
+      {
+        field: 'matièreOrganique',
+        value: 0.8,
+        rule: 'Minimum: 2%',
+        message: 'Teneur en matière organique insuffisante',
+        severity: 'error',
+      },
+    ],
+    corrections: [
+      {
+        field: 'matièreOrganique',
+        originalValue: 0.8,
+        proposedValue: 2.1,
+        reason: 'Correction basée sur la moyenne régionale et le type de sol halomorphe',
+        accepted: null,
+      },
+    ],
+    currentStep: 'correction',
+    stepStatus: {
+      import: 'completed',
+      detection: 'completed',
+      correction: 'active',
+      validation: 'pending',
+    },
+    validatedBy: null,
+    validatedAt: null,
+  },
+  {
+    id: 'val-002',
+    parcelId: 'P002',
+    parcelName: 'Parcelle Centrale - Mbour',
+    originalData: {
+      pH: 7.1,
+      matièreOrganique: 3.2,
+      pente: 1.2,
+      facteurK: 0.15,
+      profondeurNappe: 4.2,
+    },
+    errors: [],
+    corrections: [],
+    currentStep: 'validation',
+    stepStatus: {
+      import: 'completed',
+      detection: 'completed',
+      correction: 'completed',
+      validation: 'active',
+    },
+    validatedBy: null,
+    validatedAt: null,
+  },
+  {
+    id: 'val-003',
+    parcelId: 'P001',
+    parcelName: 'Parcelle Nord-Est - Thiès',
+    originalData: {
+      pH: 6.2,
+      matièreOrganique: 2.1,
+      pente: 3.5,
+      facteurK: 0.28,
+      profondeurNappe: 8.5,
+    },
+    errors: [],
+    corrections: [],
+    currentStep: 'validation',
+    stepStatus: {
+      import: 'completed',
+      detection: 'completed',
+      correction: 'completed',
+      validation: 'completed',
+    },
+    validatedBy: 'Dr. Amadou Diallo',
+    validatedAt: new Date('2024-01-10'),
+  },
+];

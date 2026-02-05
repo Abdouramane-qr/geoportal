@@ -1,0 +1,455 @@
+/* Land Sense theme (ported from Vite index.css, Tailwind v4 compatible) */
+
+/* Agricultural GIS Dashboard Design System
+   Institutional, professional, decision-oriented
+   Colors: Forest green, ochre, neutral grays
+*/
+
+@layer base {
+  :root {
+    /* Base */
+    --background: 150 20% 98%;
+    --foreground: 160 12% 12%;
+
+    /* Card surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 160 12% 12%;
+
+    /* Popover */
+    --popover: 0 0% 100%;
+    --popover-foreground: 160 12% 12%;
+
+    /* Primary - Brand Green */
+    --primary: 145 63% 49%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Deep Green */
+    --secondary: 145 63% 41%;
+    --secondary-foreground: 0 0% 100%;
+
+    /* Muted - Warm Gray */
+    --muted: 150 18% 94%;
+    --muted-foreground: 0 0% 32%;
+
+    /* Accent - Warm Orange */
+    --accent: 34 86% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Status Colors */
+    --success: 145 63% 49%;
+    --success-foreground: 0 0% 100%;
+    --warning: 34 86% 45%;
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 70% 50%;
+    --danger-foreground: 0 0% 100%;
+    --info: 200 80% 45%;
+    --info-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders and inputs */
+    --border: 150 12% 88%;
+    --input: 150 12% 88%;
+    --ring: 145 63% 49%;
+
+    --radius: 0.375rem;
+
+    /* Sidebar */
+    --sidebar-background: 160 18% 12%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 145 63% 49%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 160 16% 18%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 160 16% 18%;
+    --sidebar-ring: 145 63% 49%;
+
+    /* Map specific */
+    --map-border: 150 15% 80%;
+    --legend-bg: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 160 14% 8%;
+    --foreground: 0 0% 96%;
+
+    --card: 160 12% 12%;
+    --card-foreground: 0 0% 96%;
+
+    --popover: 160 12% 12%;
+    --popover-foreground: 0 0% 96%;
+
+    --primary: 145 63% 49%;
+    --primary-foreground: 0 0% 8%;
+
+    --secondary: 145 63% 41%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 160 10% 16%;
+    --muted-foreground: 0 0% 78%;
+
+    --accent: 34 86% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 100%;
+    --info: 200 80% 45%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 160 10% 20%;
+    --input: 160 10% 20%;
+    --ring: 145 63% 49%;
+
+    --sidebar-background: 160 14% 6%;
+    --sidebar-foreground: 0 0% 96%;
+    --sidebar-primary: 145 63% 49%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 160 12% 12%;
+    --sidebar-accent-foreground: 0 0% 96%;
+    --sidebar-border: 160 12% 15%;
+    --sidebar-ring: 145 63% 49%;
+
+    --map-border: 150 15% 25%;
+    --legend-bg: 150 18% 12%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+  }
+
+  :where(a, button, [role='button'], input, select, textarea):focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .kpi-card {
+    @apply bg-card border border-border rounded-md p-4 shadow-sm;
+  }
+
+  .kpi-value {
+    @apply text-2xl font-semibold text-foreground;
+  }
+
+  .kpi-label {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .status-high {
+    @apply bg-success text-success-foreground;
+  }
+
+  .status-medium {
+    @apply bg-warning text-warning-foreground;
+  }
+
+  .status-low {
+    @apply bg-danger text-danger-foreground;
+  }
+
+  .layer-toggle {
+    @apply flex items-center gap-2 px-3 py-2 rounded border border-border bg-card hover:bg-accent transition-colors cursor-pointer;
+  }
+
+  .layer-toggle.active {
+    @apply bg-primary text-primary-foreground border-primary;
+  }
+
+  .legend-item {
+    @apply flex items-center gap-2 text-sm;
+  }
+
+  .legend-color {
+    @apply w-4 h-4 rounded-sm border border-border;
+  }
+
+  .info-section {
+    @apply border-b border-border pb-4 mb-4;
+  }
+
+  .info-section:last-child {
+    @apply border-b-0 pb-0 mb-0;
+  }
+
+  .info-label {
+    @apply text-xs text-muted-foreground uppercase tracking-wide;
+  }
+
+  .info-value {
+    @apply text-sm font-medium text-foreground;
+  }
+
+  .app-shell {
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(46, 204, 113, 0.10), transparent 60%),
+      radial-gradient(900px 500px at 85% 0%, rgba(214, 137, 16, 0.08), transparent 55%),
+      hsl(var(--background));
+  }
+
+  .qualifier-badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
+  }
+
+  .qualifier-low {
+    @apply bg-success/15 text-success;
+  }
+
+  .qualifier-medium {
+    @apply bg-warning/15 text-warning;
+  }
+
+  .qualifier-high {
+    @apply bg-danger/15 text-danger;
+  }
+
+  /* Scientific Status System - Institutional styling */
+  .status-draft {
+    @apply bg-muted text-muted-foreground border-border;
+  }
+
+  .status-validated {
+    @apply bg-info/15 text-info border-info/30;
+  }
+
+  .status-official {
+    @apply bg-primary/15 text-primary border-primary/30;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 50%, #d68910 100%);
+    color: #ffffff;
+  }
+
+  .hero-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .hero-text h1 {
+    font-size: clamp(2.4rem, 1.8rem + 2vw, 4rem);
+    line-height: 1.08;
+  }
+
+  .hero-text p {
+    font-size: clamp(1rem, 0.9rem + 0.5vw, 1.5rem);
+  }
+
+  .hero-buttons {
+    justify-content: flex-start;
+  }
+
+  .hero-badges article {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .hero-image {
+    display: flex;
+    justify-content: center;
+  }
+
+  .screen-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .screen-icon {
+    font-size: 32px;
+  }
+
+  .screen-badge {
+    margin-top: 15px;
+    background: white;
+    padding: 6px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: #212121;
+    font-weight: 600;
+  }
+
+  .phone-mockup {
+    @apply relative flex items-center justify-center;
+    animation: float 6s ease-in-out infinite;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .phone-frame {
+    width: 100%;
+    aspect-ratio: 9 / 18;
+    background: #111;
+    border-radius: 36px;
+    padding: 10px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  }
+
+  .phone-screen {
+    background: linear-gradient(135deg, #e8f8f2 0%, #dff5e1 100%);
+    border-radius: 28px;
+    height: 100%;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .floating-badge {
+    @apply absolute rounded-2xl bg-white/90 px-4 py-2 text-sm font-semibold text-[#2ECC71] shadow-lg;
+    letter-spacing: 0.04em;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/60 bg-white px-6 py-3 text-sm font-semibold text-[#2ECC71] shadow-md shadow-[#2ECC71]/20 transition duration-200 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#27AE60]/40;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/50 bg-white/40 px-6 py-3 text-sm font-semibold text-white shadow-sm transition duration-200 hover:bg-white/70;
+  }
+
+  .btn-nav {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-[#27AE60] bg-[#2ECC71] px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition duration-200 hover:-translate-y-0.5 hover:bg-[#27AE60];
+  }
+}
+
+/* Info color classes */
+.text-info {
+  color: hsl(200 80% 45%);
+}
+
+.bg-info\/15 {
+  background-color: hsl(200 80% 45% / 0.15);
+}
+
+.border-info\/30 {
+  border-color: hsl(200 80% 45% / 0.3);
+}
+
+@keyframes landing-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: auto;
+    padding-top: 80px;
+  }
+
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .hero-text h1 {
+    font-size: 34px;
+    line-height: 1.2;
+  }
+
+  .hero-text p {
+    font-size: 16px;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+  }
+
+  .hero-image {
+    order: -1;
+  }
+
+  .phone-mockup {
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  .floating-badge {
+    display: none;
+  }
+
+  nav .nav-links {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .landing-fade-up {
+    animation: landing-fade-up 0.7s ease-out both;
+  }
+
+  .landing-fade-up-delay-1 {
+    animation-delay: 0.1s;
+  }
+
+  .landing-fade-up-delay-2 {
+    animation-delay: 0.2s;
+  }
+
+  .landing-fade-up-delay-3 {
+    animation-delay: 0.3s;
+  }
+}
+
+/* Leaflet overrides for institutional look */
+.leaflet-container {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: hsl(var(--muted));
+}
+
+.leaflet-control-zoom {
+  border: 1px solid hsl(var(--border)) !important;
+  border-radius: var(--radius) !important;
+  overflow: hidden;
+}
+
+.leaflet-control-zoom a {
+  background: hsl(var(--card)) !important;
+  color: hsl(var(--foreground)) !important;
+  border-bottom: 1px solid hsl(var(--border)) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: hsl(var(--accent)) !important;
+}
+
+.leaflet-control-attribution {
+  background: hsl(var(--card) / 0.9) !important;
+  font-size: 10px;
+}

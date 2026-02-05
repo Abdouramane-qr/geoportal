@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Container } from '@/landing/components/ui/Container';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from '@/landing/components/ui/Button';
+import { Container } from '@/landing/components/ui/Container';
 import { cn } from '@/lib/utils';
 
 export interface NavItem {

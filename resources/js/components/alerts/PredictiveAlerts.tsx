@@ -1,4 +1,3 @@
-import { useState, useMemo } from 'react';
 import { 
   Mountain, 
   Droplets, 
@@ -7,21 +6,20 @@ import {
   ChevronRight, 
   MapPin,
   TrendingUp,
-  TrendingDown,
-  Info,
   CheckCircle,
-  X
 } from 'lucide-react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
+import { cn } from '@/lib/utils';
+import type { 
   PredictiveAlert, 
   AlertType, 
-  AlertSeverity,
+  AlertSeverity} from '@/types/alerts';
+import {
   SEVERITY_CONFIG 
 } from '@/types/alerts';
-import { cn } from '@/lib/utils';
 
 interface PredictiveAlertsProps {
   alerts: PredictiveAlert[];

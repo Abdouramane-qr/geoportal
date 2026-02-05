@@ -1,9 +1,10 @@
-import { AlertTriangle, CheckCircle, XCircle, Info, Lightbulb } from 'lucide-react';
+import { AlertTriangle, CheckCircle, XCircle, Lightbulb } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import {
+import type {
   AptitudeClass,
-  RiskInfo,
+  RiskInfo} from '@/types/landUnit';
+import {
   aptitudeClasses,
 } from '@/types/landUnit';
 

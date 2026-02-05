@@ -1,15 +1,15 @@
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { Bell, AlertTriangle, Info, AlertCircle, Check } from 'lucide-react';
 import { useState } from 'react';
-import { Bell, X, AlertTriangle, Info, AlertCircle, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 
 interface Notification {

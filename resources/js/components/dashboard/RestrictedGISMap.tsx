@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
-import { ParcelData, LayerState } from '@/types/parcel';
-import { GeographicContext } from '@/types/geographic';
+import { useEffect, useRef, useState } from 'react';
+import type { GeographicContext } from '@/types/geographic';
+import type { ParcelData, LayerState } from '@/types/parcel';
 import { getStatusConfig } from '@/types/scientificStatus';
 
 interface RestrictedGISMapProps {

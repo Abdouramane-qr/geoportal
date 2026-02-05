@@ -1,10 +1,10 @@
+import { formatDistanceToNow } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { Bell, Info, AlertTriangle, AlertCircle, MapPin, Check, CheckCheck, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { Bell, Info, AlertTriangle, AlertCircle, MapPin, ExternalLink, Check, CheckCheck, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 
 type NotificationType = 'info' | 'warning' | 'critical';

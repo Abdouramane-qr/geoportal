@@ -1,19 +1,18 @@
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
 import { 
   FileText, 
   Clock, 
   CheckCircle, 
   XCircle,
   MapPin,
-  Calendar,
-  ArrowRight
+  Calendar
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Button } from '@/components/ui/button';
-import { DecisionSummary, DECISION_TYPE_LABELS } from '@/types/authority';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
+import type { DecisionSummary} from '@/types/authority';
+import { DECISION_TYPE_LABELS } from '@/types/authority';
 
 interface DecisionsPanelProps {
   decisions: DecisionSummary[];

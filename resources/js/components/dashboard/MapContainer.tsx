@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
-import { ParcelData, LayerState } from '@/types/parcel';
-import { GeographicContext } from '@/types/geographic';
-import { getStatusConfig, ScientificStatus } from '@/types/scientificStatus';
+import { useEffect, useRef, useState } from 'react';
 import type { Layer } from '@/features/map/types/layers';
+import type { GeographicContext } from '@/types/geographic';
+import type { ParcelData, LayerState } from '@/types/parcel';
+import type { ScientificStatus } from '@/types/scientificStatus';
+import { getStatusConfig } from '@/types/scientificStatus';
 
 interface MapContainerProps {
   parcels: ParcelData[];

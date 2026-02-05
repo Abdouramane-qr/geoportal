@@ -1,5 +1,4 @@
 import { 
-  X, 
   MapPin, 
   Layers, 
   Droplets, 
@@ -7,14 +6,11 @@ import {
   Lightbulb,
   HelpCircle,
   FlaskConical,
-  ChevronRight,
   CheckCircle2,
 } from 'lucide-react';
-import { ParcelData } from '@/types/parcel';
-import { ScientificStatus } from '@/types/scientificStatus';
+import { toast } from 'sonner';
 import { ScientificStatusBadge } from '@/components/ui/scientific-status-badge';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Sheet,
   SheetContent,
@@ -27,15 +23,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import type {
+  RiskInfo} from '@/types/landUnit';
 import { 
   convertToFAOClass, 
   determineMainRisk, 
   generateRecommendation,
-  faoClassDetails,
-  RiskInfo,
+  faoClassDetails
 } from '@/types/landUnit';
-import { toast } from 'sonner';
+import type { ParcelData } from '@/types/parcel';
+import { ScientificStatus } from '@/types/scientificStatus';
 
 interface ParcelDetailsSidebarProps {
   parcel: ParcelData | null;
@@ -202,7 +199,6 @@ export function ParcelDetailsSidebar({
   );
   const mainRisk = determineMainRisk(parcel);
   const recommendation = generateRecommendation(faoClass, mainRisk);
-  const faoInfo = faoClassDetails[faoClass as keyof typeof faoClassDetails];
 
   const getRiskColorClass = (risk: RiskInfo): string => {
     if (risk.level === 'faible') return 'bg-success/15 text-success';

@@ -2,9 +2,7 @@ import {
   Shield, 
   AlertTriangle, 
   FileText, 
-  MapPin,
-  TrendingUp,
-  TrendingDown
+  TrendingUp
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

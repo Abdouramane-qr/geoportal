@@ -1,6 +1,6 @@
-import { X, MapPin, Ruler, Layers, Droplets, Shield } from 'lucide-react';
-import { ParcelData } from '@/types/parcel';
+import { X, MapPin, Layers, Droplets, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import type { ParcelData } from '@/types/parcel';
 
 interface ParcelInfoPanelProps {
   parcel: ParcelData | null;

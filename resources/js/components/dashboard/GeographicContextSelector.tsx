@@ -1,5 +1,6 @@
+import { MapPin, Lock, Building2, Home, Map } from 'lucide-react';
 import { useState, useMemo } from 'react';
-import { MapPin, ChevronDown, Lock, Building2, Home, Map } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
@@ -7,11 +8,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import {
+import type {
   GeographicLevel,
-  GeographicContext,
+  GeographicContext} from '@/types/geographic';
+import {
   geographicData,
   getContextFromLocation,
 } from '@/types/geographic';

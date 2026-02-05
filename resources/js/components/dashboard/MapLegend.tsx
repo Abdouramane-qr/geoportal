@@ -1,5 +1,5 @@
-import { LayerState } from '@/types/parcel';
-import { scientificStatusConfig, ScientificStatus } from '@/types/scientificStatus';
+import type { LayerState } from '@/types/parcel';
+import type { ScientificStatus } from '@/types/scientificStatus';
 
 interface MapLegendProps {
   activeLayers: LayerState;

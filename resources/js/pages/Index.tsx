@@ -1,34 +1,35 @@
-import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { Map, AlertTriangle, CheckCircle, TrendingUp } from 'lucide-react';
-import { MainNav } from '@/components/layout/MainNav';
-import { KPICard } from '@/components/dashboard/KPICard';
-import { MapContainer } from '@/components/dashboard/MapContainer';
-import { LayerControls } from '@/components/dashboard/LayerControls';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { DynamicMapLegend } from '@/components/dashboard/DynamicMapLegend';
-import { ParcelDetailsSidebar } from '@/components/dashboard/ParcelDetailsSidebar';
 import { GeographicContextSelector } from '@/components/dashboard/GeographicContextSelector';
+import { KPICard } from '@/components/dashboard/KPICard';
 import { LandUnitSummary } from '@/components/dashboard/LandUnitSummary';
-import { ParcelData, LayerState } from '@/types/parcel';
-import { GeographicContext, getContextFromLocation } from '@/types/geographic';
-import { ScientificStatus } from '@/types/scientificStatus';
+import { LayerControls } from '@/components/dashboard/LayerControls';
+import { MapContainer } from '@/components/dashboard/MapContainer';
+import { ParcelDetailsSidebar } from '@/components/dashboard/ParcelDetailsSidebar';
+import { MainNav } from '@/components/layout/MainNav';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import DataImporter from '@/features/map/components/DataImporter';
 import LayerManager from '@/features/map/components/LayerManager';
-import type { Layer } from '@/features/map/types/layers';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import type { ParcelApi } from '@/types/parcel-api';
-import {
-  convertToFAOClass,
-  determineMainRisk,
-  generateRecommendation,
-} from '@/types/landUnit';
 import {
   type StorageMode,
   getLayerStorageStatus,
   loadLayers,
   saveLayers,
 } from '@/features/map/lib/layer-store';
+import type { Layer } from '@/features/map/types/layers';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { getContextFromLocation } from '@/types/geographic';
+import type { GeographicContext} from '@/types/geographic';
+import {
+  convertToFAOClass,
+  determineMainRisk,
+  generateRecommendation,
+} from '@/types/landUnit';
+import type { ParcelData, LayerState } from '@/types/parcel';
+import type { ParcelApi } from '@/types/parcel-api';
+import type { ScientificStatus } from '@/types/scientificStatus';
 
 const Index = () => {
   const [parcels, setParcels] = useState<ParcelData[]>([]);

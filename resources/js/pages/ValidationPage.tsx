@@ -1,13 +1,13 @@
-import { useState, useCallback, useEffect } from 'react';
 import { FileCheck, AlertTriangle, List, LayoutPanelLeft } from 'lucide-react';
+import { useState, useCallback, useEffect } from 'react';
 import { MainNav } from '@/components/layout/MainNav';
-import { ValidationMapView } from '@/components/validation/ValidationMapView';
-import { CorrectionForm } from '@/components/validation/CorrectionForm';
 import { Button } from '@/components/ui/button';
-import { ValidationRecord } from '@/types/validation';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@/components/ui/resizable';
-import { cn } from '@/lib/utils';
+import { CorrectionForm } from '@/components/validation/CorrectionForm';
+import { ValidationMapView } from '@/components/validation/ValidationMapView';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
+import type { ValidationRecord } from '@/types/validation';
 
 type RecordStatusTone = 'success' | 'warning' | 'danger';
 

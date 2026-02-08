@@ -25,14 +25,11 @@ jobs:
         with:
           node-version: '20' # Match your production environment
 
-      - name: Install Composer dependencies
-        run: composer install --no-dev --optimize-autoloader
 
-      - name: Install NPM dependencies
-        run: npm install
 
-      - name: Build frontend assets
-        run: npm run build
+
+
+
 
 
 
@@ -55,6 +52,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/html/geoportal
+            composer install --no-dev --optimize-autoloader
+            npm install
+            npm run build
             php artisan migrate --force
             php artisan optimize:clear
             php artisan optimize

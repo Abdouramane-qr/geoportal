@@ -52,6 +52,16 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /var/www/html/geoportal
+            echo "--- Current directory listing ---"
+            ls -al
+            echo "--- Vendor directory listing ---"
+            ls -al vendor
+            echo "--- Public build directory listing ---"
+            ls -al public/build
+            echo "--- Last Git Commit ---"
+            git log -1
+            echo "--- Disk Space ---"
+            df -h .
             composer install --no-dev --optimize-autoloader
             npm install
             npm run build

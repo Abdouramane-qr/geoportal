@@ -50,20 +50,16 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script_stop: true
           script: |
+            set -euo pipefail
             cd /var/www/html/geoportal
-            echo "--- Current directory listing ---"
-            ls -al
-            echo "--- Vendor directory listing ---"
-            ls -al vendor
-            echo "--- Public build directory listing ---"
-            ls -al public/build
-            echo "--- Last Git Commit ---"
-            git log -1
-            echo "--- Disk Space ---"
-            df -h .
+
+            echo "--- Deploying commit on server ---"
+            git log -1 --oneline || true
+
             composer install --no-dev --optimize-autoloader
-            npm install
+            npm ci
             npm run build
             php artisan migrate --force
             php artisan optimize:clear

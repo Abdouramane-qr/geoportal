@@ -10,7 +10,7 @@ import {
   Mail,
   MapPin
 } from 'lucide-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { MainNav } from '@/components/layout/MainNav';
 import { Button } from '@/components/ui/button';
@@ -33,6 +33,14 @@ type ApiUser = {
     role?: UserRole;
     full_name?: string | null;
   } | null;
+};
+
+type PaginatedUsersResponse = {
+  data: ApiUser[];
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  total: number;
 };
 
 function RoleBadge({ role }: { role: UserRole }) {
@@ -71,12 +79,23 @@ export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [serverSearch, setServerSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async (options?: { page?: number; search?: string }) => {
+    const targetPage = options?.page ?? page;
+    const targetSearch = options?.search ?? serverSearch;
     try {
       setLoading(true);
-      const response = await fetch('/api/users', {
+      const query = new URLSearchParams({
+        page: String(targetPage),
+        per_page: '10',
+        ...(targetSearch ? { search: targetSearch } : {}),
+      }).toString();
+      const response = await fetch(`/api/users?${query}`, {
         headers: { Accept: 'application/json' },
         credentials: 'include',
       });
@@ -85,8 +104,8 @@ export default function UsersPage() {
         throw new Error(`Failed to fetch users: ${response.status}`);
       }
 
-      const data = (await response.json()) as ApiUser[];
-      const mapped: User[] = data.map((user) => ({
+      const payload = (await response.json()) as PaginatedUsersResponse;
+      const mapped: User[] = payload.data.map((user) => ({
         id: String(user.id),
         name: user.name,
         email: user.email,
@@ -97,17 +116,29 @@ export default function UsersPage() {
         createdAt: new Date(user.created_at),
       }));
       setUsers(mapped);
+      setPage(payload.current_page);
+      setLastPage(payload.last_page);
+      setTotalUsers(payload.total);
     } catch (error) {
       console.error(error);
       toast.error("Impossible de charger la liste des utilisateurs.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, serverSearch]);
 
   useEffect(() => {
     void fetchUsers();
-  }, []);
+  }, [fetchUsers]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setServerSearch(searchQuery.trim());
+      void fetchUsers({ page: 1, search: searchQuery.trim() });
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [fetchUsers, searchQuery]);
 
   const createUser = async () => {
     const name = window.prompt("Nom de l'utilisateur ?");
@@ -133,7 +164,7 @@ export default function UsersPage() {
         throw new Error(`Failed to create user: ${response.status}`);
       }
       toast.success('Utilisateur créé.');
-      await fetchUsers();
+      await fetchUsers({ page: 1, search: serverSearch });
     } catch (error) {
       console.error(error);
       toast.error("Échec de création de l'utilisateur.");
@@ -185,19 +216,13 @@ export default function UsersPage() {
     }
   };
 
-  const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (user.region ?? '').toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
   const stats = useMemo(() => ({
-    total: users.length,
+    total: totalUsers,
     active: users.filter(u => u.isActive).length,
     admins: users.filter(u => u.role === 'admin').length,
     agronomes: users.filter(u => u.role === 'agronome').length,
     autorites: users.filter(u => u.role === 'autorite').length,
-  }), [users]);
+  }), [users, totalUsers]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background app-shell">
@@ -276,7 +301,7 @@ export default function UsersPage() {
                       Chargement des utilisateurs...
                     </td>
                   </tr>
-                ) : filteredUsers.map((user) => (
+                ) : users.map((user) => (
                   <tr 
                     key={user.id} 
                     className="hover:bg-muted/50 cursor-pointer"
@@ -355,6 +380,29 @@ export default function UsersPage() {
                 ))}
               </tbody>
               </table>
+            </div>
+            <div className="flex items-center justify-between px-4 py-3 border-t border-border">
+              <p className="text-sm text-muted-foreground">
+                Page {page} / {lastPage} ({totalUsers} utilisateurs)
+              </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={page <= 1 || loading}
+                  onClick={() => void fetchUsers({ page: page - 1, search: serverSearch })}
+                >
+                  Précédent
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={page >= lastPage || loading}
+                  onClick={() => void fetchUsers({ page: page + 1, search: serverSearch })}
+                >
+                  Suivant
+                </Button>
+              </div>
             </div>
           </div>
 

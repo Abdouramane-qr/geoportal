@@ -26,7 +26,14 @@ class UserManagementApiTest extends TestCase
         User::factory()->count(2)->create();
 
         $response = $this->getJson('/api/users');
-        $response->assertOk();
+        $response->assertOk()
+            ->assertJsonStructure([
+                'data',
+                'current_page',
+                'last_page',
+                'per_page',
+                'total',
+            ]);
     }
 
     public function test_non_admin_cannot_list_users(): void
@@ -73,5 +80,25 @@ class UserManagementApiTest extends TestCase
 
         $response = $this->deleteJson("/api/users/{$admin->id}");
         $response->assertForbidden();
+    }
+
+    public function test_admin_can_search_users_by_name_or_email(): void
+    {
+        $this->actingAsAdmin();
+        User::factory()->create([
+            'name' => 'Alpha User',
+            'email' => 'alpha@example.com',
+        ]);
+        User::factory()->create([
+            'name' => 'Beta User',
+            'email' => 'beta@example.com',
+        ]);
+
+        $response = $this->getJson('/api/users?search=alpha');
+
+        $response->assertOk();
+        $data = $response->json('data');
+        $this->assertNotEmpty($data);
+        $this->assertSame('alpha@example.com', $data[0]['email']);
     }
 }

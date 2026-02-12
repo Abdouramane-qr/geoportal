@@ -56,3 +56,47 @@ curl -X POST http://127.0.0.1:8000/api/auth/logout \
 - Tokens are Sanctum Personal Access Tokens.
 - Store tokens securely on mobile (secure storage / keychain).
 - On logout, only the current token is revoked.
+
+## User Management API (Admin)
+
+All endpoints below require:
+- `Authorization: Bearer YOUR_TOKEN`
+- an authenticated user with role `admin`
+
+### List users (with pagination and search)
+
+```bash
+curl "http://127.0.0.1:8000/api/users?page=1&per_page=10&search=alpha" \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+
+### Create user
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/users \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "New User",
+    "email": "new.user@example.com",
+    "password": "Password#12345",
+    "role": "agronome",
+    "full_name": "New User Full"
+  }'
+```
+
+### Update user
+
+```bash
+curl -X PATCH http://127.0.0.1:8000/api/users/123 \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"role": "autorite"}'
+```
+
+### Delete user
+
+```bash
+curl -X DELETE http://127.0.0.1:8000/api/users/123 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```

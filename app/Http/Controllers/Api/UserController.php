@@ -14,10 +14,28 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $users = User::query()
+        $validated = $request->validate([
+            'search' => ['nullable', 'string', 'max:255'],
+            'page' => ['nullable', 'integer', 'min:1'],
+            'per_page' => ['nullable', 'integer', 'min:1', 'max:100'],
+        ]);
+
+        $search = $validated['search'] ?? null;
+        $perPage = $validated['per_page'] ?? 10;
+
+        $query = User::query()
             ->with('profile')
-            ->orderBy('id')
-            ->get();
+            ->orderBy('id');
+
+        if ($search) {
+            $query->where(function ($builder) use ($search) {
+                $builder
+                    ->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $users = $query->paginate($perPage);
 
         return response()->json($users);
     }

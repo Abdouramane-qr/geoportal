@@ -19,6 +19,6 @@
 - [x] `RBAC-004` Add tests for route/page access by role.
 
 ## Lot 4 - Operational Quality
-- [ ] `OPS-001` Add API docs examples for user CRUD.
+- [x] `OPS-001` Add API docs examples for user CRUD.
 - [ ] `OPS-002` Add audit logging for user create/update/delete.
-- [ ] `OPS-003` Add pagination + search on user list endpoint.
+- [x] `OPS-003` Add pagination + search on user list endpoint.

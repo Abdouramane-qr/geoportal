@@ -14,7 +14,7 @@
 
 ## Lot 3 - Role & Access Hardening
 - [x] `RBAC-001` Protect `/utilisateurs` route with auth and role check.
-- [ ] `RBAC-002` Align role naming front/back (`autorite` vs `autorité_locale`).
+- [x] `RBAC-002` Align role naming front/back (`autorite` standard).
 - [x] `RBAC-003` Add role-aware navigation visibility (hide forbidden pages).
 - [x] `RBAC-004` Add tests for route/page access by role.
 

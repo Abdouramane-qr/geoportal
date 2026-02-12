@@ -54,17 +54,18 @@ export default function AuthorityDashboard() {
     <div className="min-h-screen flex flex-col bg-background app-shell">
       <MainNav />
       {/* Simplified Header for Authority */}
-      <div className="px-6 py-4 border-b border-border bg-primary/5">
+      <div className="border-b border-[#2ECC71]/20 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] px-4 py-4 sm:px-6">
         <div className="flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <Building2 size={24} className="text-primary" />
+            <div className="rounded-lg bg-[#2ECC71]/15 p-2">
+              <Building2 size={24} className="text-[#27AE60]" />
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-foreground">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#27AE60]">Autorité locale</p>
+              <h1 className="text-xl font-semibold text-[#212121]">
                 Tableau de bord - Autorité locale
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-[#616161]">
                 Vue simplifiée des décisions et conflits fonciers
               </p>
             </div>
@@ -77,7 +78,7 @@ export default function AuthorityDashboard() {
           />
         </div>
       </div>
-      <main className="flex-1 p-6">
+      <main className="flex-1 bg-[linear-gradient(180deg,#f8f9fa_0%,#ffffff_45%,#f8f9fa_100%)] p-4 sm:p-6">
         <div className="max-w-7xl mx-auto space-y-6">
           {/* KPIs - Simplified metrics */}
           <AuthorityKPIs {...kpiData} />
@@ -110,9 +111,9 @@ export default function AuthorityDashboard() {
           />
 
           {/* Help/Context */}
-          <div className="bg-muted/30 border border-border rounded-lg p-4">
-            <h3 className="font-medium text-foreground mb-2">Information</h3>
-            <p className="text-sm text-muted-foreground">
+          <div className="rounded-xl border border-[#2ECC71]/25 bg-white p-4 shadow-sm">
+            <h3 className="mb-2 font-medium text-[#212121]">Information</h3>
+            <p className="text-sm text-[#616161]">
               Cette interface présente une vue simplifiée des données foncières de votre juridiction. 
               Les détails techniques (analyses pédologiques, hydrologiques) sont masqués pour faciliter 
               la prise de décision. Pour accéder aux données scientifiques complètes, utilisez l'interface expert.

@@ -77,38 +77,43 @@ Appliquer le branding LandSense Hub et assurer un responsive design cohérent su
 - [x] `UI-USR-004` Ajouter test UI manuel responsive (320px, 768px, desktop).
 
 ### B) `Audit` (`resources/js/pages/AuditLogPage.tsx`)
-- [ ] `UI-AUD-001` Appliquer palette branding sur filtres, badges d’action et stats.
-- [ ] `UI-AUD-002` Améliorer contraste tableau/expanded row.
-- [ ] `UI-AUD-003` Vérifier responsive des filtres et table (scroll horizontal maîtrisé).
+- [x] `UI-AUD-001` Appliquer palette branding sur filtres, badges d’action et stats.
+- [x] `UI-AUD-002` Améliorer contraste tableau/expanded row.
+- [x] `UI-AUD-003` Vérifier responsive des filtres et table (scroll horizontal maîtrisé).
 
 ### C) `Autorités` (`resources/js/pages/AuthorityDashboard.tsx`)
-- [ ] `UI-AUTH-001` Aligner CTA/cards sur vert principal + hover brand.
-- [ ] `UI-AUTH-002` Harmoniser hiérarchie typo (titre, sous-titre, texte secondaire).
-- [ ] `UI-AUTH-003` Vérifier lisibilité mobile des KPIs et panels.
+- [x] `UI-AUTH-001` Aligner CTA/cards sur vert principal + hover brand.
+- [x] `UI-AUTH-002` Harmoniser hiérarchie typo (titre, sous-titre, texte secondaire).
+- [x] `UI-AUTH-003` Vérifier lisibilité mobile des KPIs et panels.
 
 ### D) `Alertes` (`resources/js/pages/AlertsPage.tsx`)
-- [ ] `UI-ALT-001` Revoir couleurs de sévérité avec contraste AA minimal.
-- [ ] `UI-ALT-002` Uniformiser badges/statuts avec tokens brand.
-- [ ] `UI-ALT-003` Vérifier interactions mobile (filtres, cartes, liste).
+- [x] `UI-ALT-001` Revoir couleurs de sévérité avec contraste AA minimal.
+- [x] `UI-ALT-002` Uniformiser badges/statuts avec tokens brand.
+- [x] `UI-ALT-003` Vérifier interactions mobile (filtres, cartes, liste).
 
 ### E) `Carte` (`resources/js/pages/Index.tsx`, `resources/js/components/dashboard/MapContainer.tsx`)
-- [ ] `UI-MAP-001` Aligner panneaux latéraux/contrôles avec branding.
-- [ ] `UI-MAP-002` Stabiliser interactions Leaflet (zoom/pan) sans erreur runtime.
-- [ ] `UI-MAP-003` Vérifier comportement responsive map/controls/sheet.
-- [ ] `UI-MAP-004` Confirmer que le fix GeoJSON (`500`) reste stable après refonte UI.
+- [x] `UI-MAP-001` Aligner panneaux latéraux/contrôles avec branding.
+- [x] `UI-MAP-002` Stabiliser interactions Leaflet (zoom/pan) sans erreur runtime.
+- [x] `UI-MAP-003` Vérifier comportement responsive map/controls/sheet.
+- [x] `UI-MAP-004` Confirmer que le fix GeoJSON (`500`) reste stable après refonte UI.
 
 ### F) `Validation` (`resources/js/pages/ValidationPage.tsx`)
-- [ ] `UI-VAL-001` Uniformiser sections décision/justification avec tokens brand.
-- [ ] `UI-VAL-002` Clarifier états des boutons (désactivé, hover, success/error).
-- [ ] `UI-VAL-003` Vérifier responsive des formulaires longs.
+- [x] `UI-VAL-001` Uniformiser sections décision/justification avec tokens brand.
+- [x] `UI-VAL-002` Clarifier états des boutons (désactivé, hover, success/error).
+- [x] `UI-VAL-003` Vérifier responsive des formulaires longs.
 
 ### G) `Import` (`resources/js/pages/ImportPage.tsx`)
-- [ ] `UI-IMP-001` Harmoniser zone d’upload et cards de progression.
-- [ ] `UI-IMP-002` Appliquer styles brand aux étapes et feedbacks.
-- [ ] `UI-IMP-003` Vérifier robustesse mobile (dropzone, tableaux, logs).
+- [x] `UI-IMP-001` Harmoniser zone d’upload et cards de progression.
+- [x] `UI-IMP-002` Appliquer styles brand aux étapes et feedbacks.
+- [x] `UI-IMP-003` Vérifier robustesse mobile (dropzone, tableaux, logs).
 
 ### H) Contrôles transverses (inclure les fixes déjà faits)
-- [ ] `UI-X-001` Valider auth UI/API sur `/utilisateurs` après fix Sanctum stateful.
-- [ ] `UI-X-002` Vérifier absence de régression des correctifs map (`_leaflet_pos`, boucle React).
-- [ ] `UI-X-003` Exécuter `npm run lint && npm run types` avant chaque lot.
+- [x] `UI-X-001` Valider auth UI/API sur `/utilisateurs` après fix Sanctum stateful.
+- [x] `UI-X-002` Vérifier absence de régression des correctifs map (`_leaflet_pos`, boucle React).
+- [x] `UI-X-003` Exécuter `npm run lint && npm run types` avant chaque lot.
 - [ ] `UI-X-004` Captures écran desktop/mobile pour validation visuelle finale.
+
+Notes de vérification transverses:
+- `UI-X-001`: `routes/api.php` garde `/api/users` sous `auth:sanctum`; `UsersPage` envoie `credentials: 'include'`; `config/sanctum.php` inclut les domaines stateful locaux.
+- `UI-X-002`: correction de stabilité map appliquée dans `resources/js/components/dashboard/MapContainer.tsx` (init map non-bouclante) et aucun warning lint/type associé.
+- `UI-X-003`: `npm run -s lint` et `npm run -s types` exécutés après chaque lot (Users, Audit, Autorités, Alertes, Carte, Validation, Import).

@@ -14,17 +14,17 @@ export function LayerControls({ layers, onToggle }: LayerControlsProps) {
   ];
 
   return (
-    <div className="bg-card border border-border rounded-md p-3 shadow-sm">
-      <div className="flex items-center gap-2 mb-3 pb-2 border-b border-border">
-        <Layers size={16} className="text-muted-foreground" />
-        <span className="text-sm font-medium text-foreground">Couches</span>
+    <div className="rounded-lg border border-[#2ECC71]/20 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-3 shadow-sm">
+      <div className="mb-3 flex items-center gap-2 border-b border-[#2ECC71]/15 pb-2">
+        <Layers size={16} className="text-[#27AE60]" />
+        <span className="text-sm font-medium text-[#212121]">Couches</span>
       </div>
       <div className="flex flex-col gap-2">
         {layerConfig.map(({ key, label, icon: Icon }) => (
           <button
             key={key}
             onClick={() => onToggle(key)}
-            className={`layer-toggle text-sm ${layers[key] ? 'active' : ''}`}
+            className={`layer-toggle text-sm ${layers[key] ? 'active' : ''} ${layers[key] ? 'ring-1 ring-[#2ECC71]/30' : ''}`}
           >
             <Icon size={14} />
             <span>{label}</span>

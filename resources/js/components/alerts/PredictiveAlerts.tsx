@@ -40,9 +40,9 @@ const alertTypeLabels: Record<AlertType, string> = {
 };
 
 const alertTypeColors: Record<AlertType, string> = {
-  erosion: 'text-warning',
-  water_deficit: 'text-info',
-  crop_incompatibility: 'text-danger',
+  erosion: 'text-[#D68910]',
+  water_deficit: 'text-[#27AE60]',
+  crop_incompatibility: 'text-[#D68910]',
 };
 
 function IndicatorBar({ 
@@ -59,24 +59,24 @@ function IndicatorBar({
         <span className="text-muted-foreground">{indicator.name}</span>
         <span className={cn(
           'font-medium',
-          indicator.exceeded ? 'text-danger' : 'text-foreground'
+          indicator.exceeded ? 'text-[#D68910]' : 'text-[#212121]'
         )}>
           {indicator.value} {indicator.unit}
           {indicator.exceeded && (
-            <TrendingUp size={12} className="inline ml-1 text-danger" />
+            <TrendingUp size={12} className="inline ml-1 text-[#D68910]" />
           )}
         </span>
       </div>
-      <div className="relative h-2 bg-muted rounded-full overflow-visible">
+      <div className="relative h-2 overflow-visible rounded-full bg-[#616161]/20">
         <div 
           className={cn(
             'absolute h-full rounded-full transition-all',
-            indicator.exceeded ? 'bg-danger' : 'bg-success'
+            indicator.exceeded ? 'bg-[#D68910]' : 'bg-[#2ECC71]'
           )}
           style={{ width: `${Math.min(percentage, 100)}%` }}
         />
         <div 
-          className="absolute top-0 h-full w-0.5 bg-foreground/50"
+          className="absolute top-0 h-full w-0.5 bg-[#212121]/50"
           style={{ left: `${thresholdPosition / 1.5}%` }}
         />
         <span 
@@ -109,12 +109,12 @@ function AlertCard({
       className={cn(
         'border rounded-lg overflow-hidden transition-all',
         alert.acknowledged 
-          ? 'bg-muted/30 border-border opacity-70' 
+          ? 'border-[#2ECC71]/20 bg-[#f8f9fa] opacity-70' 
           : alert.severity === 'critical' 
-            ? 'border-danger bg-danger/5 shadow-md shadow-danger/10'
+            ? 'border-[#D68910]/40 bg-[linear-gradient(135deg,#fff7ec_0%,#ffffff_100%)] shadow-md shadow-[#D68910]/10'
             : alert.severity === 'high'
-              ? 'border-warning bg-warning/5'
-              : 'border-border bg-card'
+              ? 'border-[#D68910]/30 bg-[linear-gradient(135deg,#fff7ec_0%,#ffffff_100%)]'
+              : 'border-[#2ECC71]/20 bg-white'
       )}
     >
       <div 
@@ -124,16 +124,16 @@ function AlertCard({
         <div className="flex items-start gap-3">
           <div className={cn(
             'p-2 rounded-lg',
-            alert.acknowledged ? 'bg-muted' : 'bg-muted/50'
+            alert.acknowledged ? 'bg-[#616161]/15' : 'bg-[#2ECC71]/10'
           )}>
-            <Icon size={20} className={alert.acknowledged ? 'text-muted-foreground' : typeColor} />
+            <Icon size={20} className={alert.acknowledged ? 'text-[#616161]' : typeColor} />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <p className={cn(
                   'font-medium',
-                  alert.acknowledged ? 'text-muted-foreground' : 'text-foreground'
+                  alert.acknowledged ? 'text-[#616161]' : 'text-[#212121]'
                 )}>
                   {alert.title}
                 </p>
@@ -141,7 +141,7 @@ function AlertCard({
                   <span className={cn('text-xs px-2 py-0.5 rounded-full', severityConfig.className)}>
                     {severityConfig.label}
                   </span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-[#616161]">
                     {alertTypeLabels[alert.type]}
                   </span>
                 </div>
@@ -149,12 +149,12 @@ function AlertCard({
               <ChevronRight 
                 size={16} 
                 className={cn(
-                  'text-muted-foreground transition-transform',
+                  'text-[#616161] transition-transform',
                   expanded && 'rotate-90'
                 )} 
               />
             </div>
-            <div className="flex items-center gap-1 mt-2 text-xs text-muted-foreground">
+            <div className="mt-2 flex items-center gap-1 text-xs text-[#616161]">
               <MapPin size={12} />
               <span>{alert.parcelName}</span>
             </div>
@@ -163,21 +163,21 @@ function AlertCard({
       </div>
 
       {expanded && (
-        <div className="px-4 pb-4 pt-0 space-y-4 border-t border-border/50 mt-2">
+        <div className="mt-2 space-y-4 border-t border-[#2ECC71]/15 px-4 pb-4 pt-0">
           {/* Cause Explanation */}
-          <div className="p-3 bg-muted/50 rounded-md">
+          <div className="rounded-md bg-[#f8f9fa] p-3">
             <div className="flex items-start gap-2">
-              <AlertTriangle size={16} className="text-warning mt-0.5" />
+              <AlertTriangle size={16} className="mt-0.5 text-[#D68910]" />
               <div>
-                <p className="text-sm font-medium text-foreground">Pourquoi cette alerte?</p>
-                <p className="text-sm text-muted-foreground mt-1">{alert.cause}</p>
+                <p className="text-sm font-medium text-[#212121]">Pourquoi cette alerte?</p>
+                <p className="mt-1 text-sm text-[#616161]">{alert.cause}</p>
               </div>
             </div>
           </div>
 
           {/* Indicators */}
           <div>
-            <p className="text-xs font-medium text-foreground mb-3">Indicateurs de risque</p>
+            <p className="mb-3 text-xs font-medium text-[#212121]">Indicateurs de risque</p>
             <div className="space-y-4">
               {alert.indicators.map((indicator, idx) => (
                 <IndicatorBar key={idx} indicator={indicator} />
@@ -186,12 +186,12 @@ function AlertCard({
           </div>
 
           {/* Recommendation */}
-          <div className="p-3 bg-success/10 border border-success/30 rounded-md">
+          <div className="rounded-md border border-[#2ECC71]/30 bg-[#2ECC71]/10 p-3">
             <div className="flex items-start gap-2">
-              <CheckCircle size={16} className="text-success mt-0.5" />
+              <CheckCircle size={16} className="mt-0.5 text-[#27AE60]" />
               <div>
-                <p className="text-sm font-medium text-foreground">Que faire?</p>
-                <p className="text-sm text-muted-foreground mt-1">{alert.recommendation}</p>
+                <p className="text-sm font-medium text-[#212121]">Que faire?</p>
+                <p className="mt-1 text-sm text-[#616161]">{alert.recommendation}</p>
               </div>
             </div>
           </div>
@@ -259,12 +259,12 @@ export function PredictiveAlerts({
 
   return (
     <Card className="w-full max-w-lg border-border">
-      <CardHeader className="border-b border-border pb-4">
+      <CardHeader className="border-b border-[#2ECC71]/15 bg-white pb-4">
         <CardTitle className="text-lg flex items-center gap-2">
-          <AlertTriangle size={20} className="text-warning" />
+          <AlertTriangle size={20} className="text-[#D68910]" />
           Alertes prédictives
           {stats.total > 0 && (
-            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-warning text-warning-foreground">
+            <span className="ml-2 rounded-full bg-[#D68910] px-2 py-0.5 text-xs text-white">
               {stats.total}
             </span>
           )}
@@ -272,26 +272,26 @@ export function PredictiveAlerts({
 
         {/* Stats Summary */}
         <div className="grid grid-cols-3 gap-2 mt-4">
-          <div className="p-2 bg-warning/10 rounded-md text-center">
-            <Mountain size={16} className="mx-auto text-warning" />
-            <p className="text-lg font-semibold text-foreground">{stats.erosion}</p>
-            <p className="text-[10px] text-muted-foreground">Érosion</p>
+          <div className="rounded-md border border-[#D68910]/20 bg-[#D68910]/10 p-2 text-center">
+            <Mountain size={16} className="mx-auto text-[#D68910]" />
+            <p className="text-lg font-semibold text-[#212121]">{stats.erosion}</p>
+            <p className="text-[10px] text-[#616161]">Érosion</p>
           </div>
-          <div className="p-2 bg-info/10 rounded-md text-center">
-            <Droplets size={16} className="mx-auto text-info" />
-            <p className="text-lg font-semibold text-foreground">{stats.water}</p>
-            <p className="text-[10px] text-muted-foreground">Hydrique</p>
+          <div className="rounded-md border border-[#2ECC71]/20 bg-[#2ECC71]/10 p-2 text-center">
+            <Droplets size={16} className="mx-auto text-[#27AE60]" />
+            <p className="text-lg font-semibold text-[#212121]">{stats.water}</p>
+            <p className="text-[10px] text-[#616161]">Hydrique</p>
           </div>
-          <div className="p-2 bg-danger/10 rounded-md text-center">
-            <Wheat size={16} className="mx-auto text-danger" />
-            <p className="text-lg font-semibold text-foreground">{stats.crop}</p>
-            <p className="text-[10px] text-muted-foreground">Culture</p>
+          <div className="rounded-md border border-[#D68910]/20 bg-[#D68910]/10 p-2 text-center">
+            <Wheat size={16} className="mx-auto text-[#D68910]" />
+            <p className="text-lg font-semibold text-[#212121]">{stats.crop}</p>
+            <p className="text-[10px] text-[#616161]">Culture</p>
           </div>
         </div>
 
         {/* Critical Banner */}
         {stats.critical > 0 && (
-          <div className="mt-3 p-2 bg-danger text-danger-foreground rounded-md flex items-center gap-2">
+          <div className="mt-3 flex items-center gap-2 rounded-md bg-[#D68910] p-2 text-white">
             <AlertTriangle size={16} />
             <span className="text-sm font-medium">
               {stats.critical} alerte{stats.critical > 1 ? 's' : ''} critique{stats.critical > 1 ? 's' : ''} nécessite{stats.critical > 1 ? 'nt' : ''} une action immédiate
@@ -300,27 +300,27 @@ export function PredictiveAlerts({
         )}
 
         {/* Filters */}
-        <div className="flex items-center gap-2 mt-4 flex-wrap">
+        <div className="mt-4 flex flex-wrap items-center gap-2">
           {(['all', 'erosion', 'water_deficit', 'crop_incompatibility'] as const).map((type) => (
             <button
               key={type}
               onClick={() => setFilter(type)}
               className={cn(
-                'px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
+                'rounded-md px-3 py-1.5 text-xs font-medium transition-colors',
                 filter === type 
-                  ? 'bg-primary text-primary-foreground' 
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                  ? 'bg-[#27AE60] text-white' 
+                  : 'bg-[#f8f9fa] text-[#616161] hover:bg-[#2ECC71]/10'
               )}
             >
               {type === 'all' ? 'Toutes' : alertTypeLabels[type]}
             </button>
           ))}
-          <label className="flex items-center gap-1.5 ml-auto text-xs text-muted-foreground cursor-pointer">
+          <label className="ml-0 flex cursor-pointer items-center gap-1.5 text-xs text-[#616161] sm:ml-auto">
             <input
               type="checkbox"
               checked={showAcknowledged}
               onChange={(e) => setShowAcknowledged(e.target.checked)}
-              className="rounded border-border"
+              className="rounded border-[#2ECC71]/40"
             />
             Afficher traitées
           </label>
@@ -331,7 +331,7 @@ export function PredictiveAlerts({
         <ScrollArea className="h-[400px]">
           <div className="p-4 space-y-3">
             {filteredAlerts.length === 0 ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="py-8 text-center text-[#616161]">
                 <CheckCircle size={32} className="mx-auto mb-2 opacity-30" />
                 <p className="text-sm">Aucune alerte active</p>
                 <p className="text-xs mt-1">Les parcelles sont conformes aux seuils de risque</p>

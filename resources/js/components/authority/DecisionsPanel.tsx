@@ -22,26 +22,26 @@ interface DecisionsPanelProps {
 const statusConfig = {
   en_attente: { 
     icon: Clock, 
-    className: 'bg-warning/15 text-warning border-warning/30',
+    className: 'bg-[#D68910]/12 text-[#D68910] border-[#D68910]/30',
     label: 'En attente',
   },
   approuvée: { 
     icon: CheckCircle, 
-    className: 'bg-success/15 text-success border-success/30',
+    className: 'bg-[#2ECC71]/12 text-[#27AE60] border-[#2ECC71]/30',
     label: 'Approuvée',
   },
   refusée: { 
     icon: XCircle, 
-    className: 'bg-danger/15 text-danger border-danger/30',
+    className: 'bg-[#D68910]/10 text-[#D68910] border-[#D68910]/30',
     label: 'Refusée',
   },
 };
 
 const decisionTypeColors = {
-  attribution: 'bg-primary/15 text-primary',
-  régularisation: 'bg-success/15 text-success',
-  interdiction: 'bg-danger/15 text-danger',
-  délimitation: 'bg-warning/15 text-warning',
+  attribution: 'bg-[#2ECC71]/12 text-[#27AE60]',
+  régularisation: 'bg-[#2ECC71]/12 text-[#27AE60]',
+  interdiction: 'bg-[#D68910]/10 text-[#D68910]',
+  délimitation: 'bg-[#D68910]/12 text-[#D68910]',
 };
 
 function DecisionCard({ 
@@ -57,7 +57,7 @@ function DecisionCard({
   return (
     <div 
       onClick={onSelect}
-      className="p-4 border border-border rounded-lg bg-card transition-all cursor-pointer hover:shadow-md hover:border-primary/30"
+      className="cursor-pointer rounded-lg border border-[#2ECC71]/20 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-4 transition-all hover:border-[#27AE60]/35 hover:shadow-md"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
@@ -77,13 +77,13 @@ function DecisionCard({
             </span>
           </div>
           <p className="font-medium text-foreground mt-2">{decision.title}</p>
-          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+          <p className="mt-1 text-sm text-[#616161] line-clamp-2">
             {decision.summary}
           </p>
         </div>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-border/50 flex items-center gap-4 text-xs text-muted-foreground">
+      <div className="mt-4 flex items-center gap-4 border-t border-[#2ECC71]/15 pt-3 text-xs text-[#616161]">
         <div className="flex items-center gap-1">
           <MapPin size={12} />
           <span>{decision.commune}</span>
@@ -94,7 +94,7 @@ function DecisionCard({
         </div>
         {decision.parcelName && (
           <div className="flex items-center gap-1">
-            <span className="text-muted-foreground">→</span>
+            <span className="text-[#616161]">→</span>
             <span>{decision.parcelName}</span>
           </div>
         )}
@@ -109,14 +109,14 @@ export function DecisionsPanel({ decisions, onSelectDecision }: DecisionsPanelPr
   const rejected = decisions.filter(d => d.status === 'refusée');
 
   return (
-    <Card className="border-border">
-      <CardHeader className="border-b border-border pb-4">
+    <Card className="border-[#2ECC71]/20 bg-white shadow-sm">
+      <CardHeader className="border-b border-[#2ECC71]/15 pb-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <FileText size={20} className="text-primary" />
+          <CardTitle className="text-lg flex items-center gap-2 text-[#212121]">
+            <FileText size={20} className="text-[#27AE60]" />
             Décisions foncières
             {pending.length > 0 && (
-              <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-warning text-warning-foreground">
+              <span className="ml-2 rounded-full bg-[#D68910] px-2 py-0.5 text-xs text-white">
                 {pending.length} en attente
               </span>
             )}
@@ -130,7 +130,7 @@ export function DecisionsPanel({ decisions, onSelectDecision }: DecisionsPanelPr
             {/* Pending - Priority */}
             {pending.length > 0 && (
               <div className="space-y-3">
-                <h4 className="text-sm font-medium text-warning flex items-center gap-2">
+                <h4 className="text-sm font-medium text-[#D68910] flex items-center gap-2">
                   <Clock size={14} />
                   En attente de décision
                 </h4>
@@ -147,7 +147,7 @@ export function DecisionsPanel({ decisions, onSelectDecision }: DecisionsPanelPr
             {/* Recent Decisions */}
             {(approved.length > 0 || rejected.length > 0) && (
               <div className="space-y-3">
-                <h4 className="text-sm font-medium text-muted-foreground">Décisions récentes</h4>
+                <h4 className="text-sm font-medium text-[#616161]">Décisions récentes</h4>
                 {[...approved, ...rejected]
                   .sort((a, b) => b.date.getTime() - a.date.getTime())
                   .slice(0, 4)
@@ -163,7 +163,7 @@ export function DecisionsPanel({ decisions, onSelectDecision }: DecisionsPanelPr
             )}
 
             {decisions.length === 0 && (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="py-8 text-center text-[#616161]">
                 <FileText size={32} className="mx-auto mb-2 opacity-30" />
                 <p className="text-sm">Aucune décision récente</p>
               </div>

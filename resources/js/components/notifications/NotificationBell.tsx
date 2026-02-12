@@ -1,7 +1,9 @@
+import { Link } from '@inertiajs/react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Bell, AlertTriangle, Info, AlertCircle, Check } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -31,17 +33,17 @@ const typeConfig: Record<string, {
 }> = {
   info: {
     icon: Info,
-    className: 'text-primary bg-primary/10',
+    className: 'text-[#27AE60] bg-[#2ECC71]/12 border-[#2ECC71]/30',
     label: 'Information',
   },
   warning: {
     icon: AlertTriangle,
-    className: 'text-warning bg-warning/10',
+    className: 'text-[#D68910] bg-[#D68910]/12 border-[#D68910]/30',
     label: 'Avertissement',
   },
   critical: {
     icon: AlertCircle,
-    className: 'text-danger bg-danger/10',
+    className: 'text-[#D68910] bg-[#D68910]/15 border-[#D68910]/35',
     label: 'Critique',
   },
 };
@@ -49,17 +51,86 @@ const typeConfig: Record<string, {
 export function NotificationBell() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isOpen, setIsOpen] = useState(false);
+  const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
 
   const unreadCount = notifications.filter((n) => !n.is_read).length;
 
-  function markAsRead(id: string) {
+  useEffect(() => {
+    let active = true;
+
+    async function fetchNotifications() {
+      try {
+        const response = await fetch('/api/notifications', {
+          headers: { Accept: 'application/json' },
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch notifications: ${response.status}`);
+        }
+
+        const payload = (await response.json()) as { data: Notification[] };
+        if (active) {
+          setNotifications(Array.isArray(payload.data) ? payload.data : []);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    void fetchNotifications();
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  async function markAsRead(id: string) {
+    const previous = notifications;
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, is_read: true } : n))
     );
+
+    try {
+      const response = await fetch(`/api/notifications/${id}/read`, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+        },
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to mark notification as read: ${response.status}`);
+      }
+    } catch (error) {
+      console.error(error);
+      setNotifications(previous);
+      toast.error('Impossible de marquer la notification comme lue.');
+    }
   }
 
-  function markAllAsRead() {
+  async function markAllAsRead() {
+    const previous = notifications;
     setNotifications((prev) => prev.map((n) => ({ ...n, is_read: true })));
+
+    try {
+      const response = await fetch('/api/notifications/read-all', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+        },
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to mark all notifications as read: ${response.status}`);
+      }
+    } catch (error) {
+      console.error(error);
+      setNotifications(previous);
+      toast.error('Impossible de marquer toutes les notifications comme lues.');
+    }
   }
 
   return (
@@ -68,49 +139,58 @@ export function NotificationBell() {
         <Button
           variant="ghost"
           size="icon"
-          className="relative"
+          className="relative text-sidebar-foreground hover:bg-sidebar-accent/60"
           aria-label="Notifications"
         >
           <Bell size={20} />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-danger text-danger-foreground text-xs flex items-center justify-center font-medium">
+            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#D68910] text-xs font-medium text-white">
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-96 p-0" align="end">
-        <div className="flex items-center justify-between p-4 border-b">
+      <PopoverContent className="w-[min(24rem,calc(100vw-1rem))] p-0" align="end">
+        <div className="flex items-center justify-between border-b border-[#2ECC71]/15 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-4">
           <div className="flex items-center gap-2">
-            <Bell size={18} className="text-muted-foreground" />
-            <h3 className="font-semibold">Notifications</h3>
+            <Bell size={18} className="text-[#27AE60]" />
+            <h3 className="font-semibold text-[#212121]">Notifications</h3>
             {unreadCount > 0 && (
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant="secondary" className="bg-[#2ECC71]/15 text-xs text-[#27AE60]">
                 {unreadCount} nouvelle{unreadCount > 1 ? 's' : ''}
               </Badge>
             )}
           </div>
-          {unreadCount > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={markAllAsRead}
-              className="text-xs"
-            >
-              <Check size={14} className="mr-1" />
-              Tout marquer lu
+          <div className="flex items-center gap-1">
+            {unreadCount > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  void markAllAsRead();
+                }}
+                className="text-xs text-[#27AE60] hover:bg-[#2ECC71]/10"
+              >
+                <Check size={14} className="mr-1" />
+                Tout lu
+              </Button>
+            )}
+            <Button variant="ghost" size="sm" asChild className="text-xs text-[#616161] hover:bg-[#2ECC71]/10">
+              <Link href="/alertes" onClick={() => setIsOpen(false)}>
+                Voir tout
+              </Link>
             </Button>
-          )}
+          </div>
         </div>
 
-        <ScrollArea className="h-[400px]">
+        <ScrollArea className="h-[420px]">
           {notifications.length === 0 ? (
-            <div className="p-8 text-center text-muted-foreground">
+            <div className="p-8 text-center text-[#616161]">
               <Bell size={32} className="mx-auto mb-2 opacity-50" />
               <p className="text-sm">Aucune notification</p>
             </div>
           ) : (
-            <div className="divide-y">
+            <div className="divide-y divide-[#2ECC71]/10">
               {notifications.map((notification) => {
                 const config = typeConfig[notification.type];
                 const Icon = config.icon;
@@ -120,14 +200,16 @@ export function NotificationBell() {
                     key={notification.id}
                     className={cn(
                       'p-4 hover:bg-muted/50 cursor-pointer transition-colors',
-                      !notification.is_read && 'bg-accent/30'
+                      !notification.is_read ? 'bg-[#2ECC71]/8 hover:bg-[#2ECC71]/12' : 'hover:bg-[#f8f9fa]'
                     )}
-                    onClick={() => markAsRead(notification.id)}
+                    onClick={() => {
+                      void markAsRead(notification.id);
+                    }}
                   >
                     <div className="flex gap-3">
                       <div
                         className={cn(
-                          'flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center',
+                          'flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border',
                           config.className
                         )}
                       >
@@ -138,33 +220,32 @@ export function NotificationBell() {
                           <p
                             className={cn(
                               'text-sm font-medium',
-                              !notification.is_read && 'text-foreground',
-                              notification.is_read && 'text-muted-foreground'
+                              !notification.is_read ? 'text-[#212121]' : 'text-[#616161]'
                             )}
                           >
                             {notification.title}
                           </p>
                           {!notification.is_read && (
-                            <span className="flex-shrink-0 w-2 h-2 rounded-full bg-primary mt-1.5" />
+                            <span className="mt-1.5 h-2 w-2 flex-shrink-0 rounded-full bg-[#27AE60]" />
                           )}
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                        <p className="mt-0.5 line-clamp-2 text-xs text-[#616161]">
                           {notification.message}
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                           <Badge
                             variant="outline"
-                            className={cn('text-xs', config.className)}
+                            className={cn('text-xs border', config.className)}
                           >
                             {config.label}
                           </Badge>
                           {notification.entity_name && (
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-[#616161]">
                               {notification.entity_name}
                             </span>
                           )}
                         </div>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="mt-1 text-xs text-[#616161]">
                           {format(
                             new Date(notification.created_at),
                             "d MMM yyyy 'à' HH:mm",

@@ -110,23 +110,23 @@ export function CorrectionForm({
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
-      <div className="p-3 border-b border-border bg-muted/50 flex items-center gap-2">
-        <FileCheck size={16} className="text-primary" />
-        <span className="font-medium text-sm">Formulaire de correction</span>
+      <div className="flex items-center gap-2 border-b border-[#2ECC71]/15 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-3">
+        <FileCheck size={16} className="text-[#27AE60]" />
+        <span className="text-sm font-medium text-[#212121]">Formulaire de correction</span>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
         {/* Current Data */}
         <div>
-          <h4 className="text-sm font-medium text-foreground mb-3">Données pédologiques actuelles</h4>
+          <h4 className="mb-3 text-sm font-medium text-[#212121]">Données pédologiques actuelles</h4>
           <div className="grid grid-cols-2 gap-3">
             {Object.entries(record.originalData).map(([key, value]) => (
               <div key={key} className="space-y-1">
-                <Label className="text-xs text-muted-foreground capitalize">{key}</Label>
+                <Label className="text-xs capitalize text-[#616161]">{key}</Label>
                 <Input 
                   value={String(value)} 
                   readOnly 
-                  className="bg-muted/50 text-sm h-9"
+                  className="h-9 border-[#2ECC71]/20 bg-[#f8f9fa] text-sm text-[#212121]"
                 />
               </div>
             ))}
@@ -137,7 +137,7 @@ export function CorrectionForm({
         {record.errors.length > 0 && (
           <div>
             <h4 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
-              <AlertCircle size={14} className="text-danger" />
+              <AlertCircle size={14} className="text-[#D68910]" />
               Erreurs détectées
             </h4>
             <div className="space-y-2">
@@ -152,7 +152,7 @@ export function CorrectionForm({
         {record.corrections.length > 0 && (
           <div>
             <h4 className="text-sm font-medium text-foreground mb-3 flex items-center gap-2">
-              <Check size={14} className="text-success" />
+              <Check size={14} className="text-[#27AE60]" />
               Corrections proposées
             </h4>
             <div className="space-y-3">
@@ -169,24 +169,24 @@ export function CorrectionForm({
 
         {/* Validation */}
         {record.currentStep === 'validation' && allCorrectionsHandled && !record.validatedBy && (
-          <div className="border-t border-border pt-4">
-            <h4 className="text-sm font-medium text-foreground mb-3">Validation finale</h4>
+          <div className="border-t border-[#2ECC71]/15 pt-4">
+            <h4 className="mb-3 text-sm font-medium text-[#212121]">Validation finale</h4>
             <div className="space-y-3">
               <div className="space-y-1">
-                <Label className="text-xs">Nom de l'agronome validateur</Label>
+                <Label className="text-xs text-[#616161]">Nom de l'agronome validateur</Label>
                 <Input
                   value={agronomistName}
                   onChange={(e) => setAgronomistName(e.target.value)}
                   placeholder="Dr. Diallo, Spécialiste Sols"
-                  className="h-9"
+                  className="h-9 border-[#2ECC71]/30 bg-white text-[#212121]"
                 />
               </div>
               <div className="flex gap-2">
                 <Button
-                  variant="destructive"
+                  variant="outline"
                   size="sm"
                   onClick={() => onReject(record.id)}
-                  className="flex-1"
+                  className="flex-1 border-[#D68910]/40 text-[#D68910] hover:bg-[#D68910]/10"
                 >
                   <X size={14} className="mr-1" />
                   Rejeter
@@ -195,7 +195,7 @@ export function CorrectionForm({
                   size="sm"
                   disabled={!canValidate}
                   onClick={() => onValidate(record.id, agronomistName)}
-                  className="flex-1 bg-success hover:bg-success/90"
+                  className="flex-1 bg-[#27AE60] text-white hover:bg-[#27AE60]/90 disabled:bg-[#2ECC71]/45"
                 >
                   <Check size={14} className="mr-1" />
                   Valider
@@ -207,13 +207,13 @@ export function CorrectionForm({
 
         {/* Already Validated */}
         {record.validatedBy && (
-          <div className="border-t border-border pt-4">
-            <div className="p-3 bg-success/10 rounded-lg border border-success/30">
-              <div className="flex items-center gap-2 text-success mb-2">
+          <div className="border-t border-[#2ECC71]/15 pt-4">
+            <div className="rounded-lg border border-[#2ECC71]/30 bg-[#2ECC71]/10 p-3">
+              <div className="mb-2 flex items-center gap-2 text-[#27AE60]">
                 <Check size={16} />
                 <span className="font-medium text-sm">Validé scientifiquement</span>
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-[#616161]">
                 Par {record.validatedBy} le {record.validatedAt?.toLocaleDateString('fr-FR')}
               </p>
             </div>
@@ -221,13 +221,13 @@ export function CorrectionForm({
         )}
 
         {/* Generate Certificate */}
-        <div className="border-t border-border pt-4">
+        <div className="border-t border-[#2ECC71]/15 pt-4">
           <Button
             variant="outline"
             size="sm"
             onClick={handleGenerateCertificate}
             disabled={isGeneratingCertificate}
-            className="w-full"
+            className="w-full border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10"
           >
             {isGeneratingCertificate ? (
               <Loader2 size={14} className="mr-2 animate-spin" />
@@ -238,13 +238,13 @@ export function CorrectionForm({
           </Button>
           
           {certificateData && (
-            <div className="mt-3 p-3 bg-muted/50 rounded-lg text-xs">
-              <p className="font-medium text-foreground">Certificat généré</p>
-              <p className="text-muted-foreground mt-1">
-                ID: <code className="text-primary">{certificateData.certificateId}</code>
+            <div className="mt-3 rounded-lg bg-[#f8f9fa] p-3 text-xs">
+              <p className="font-medium text-[#212121]">Certificat généré</p>
+              <p className="mt-1 text-[#616161]">
+                ID: <code className="text-[#27AE60]">{certificateData.certificateId}</code>
               </p>
-              <p className="text-muted-foreground">
-                Hash: <code className="text-primary">{certificateData.documentHash}</code>
+              <p className="text-[#616161]">
+                Hash: <code className="text-[#27AE60]">{certificateData.documentHash}</code>
               </p>
             </div>
           )}
@@ -259,23 +259,23 @@ function ErrorItem({ error }: { error: ValidationError }) {
     <div className={cn(
       'p-3 rounded-lg border-l-4',
       error.severity === 'error' 
-        ? 'bg-danger/5 border-l-danger' 
-        : 'bg-warning/5 border-l-warning'
+        ? 'bg-[#fff7ec] border-l-[#D68910]' 
+        : 'bg-[#D68910]/10 border-l-[#D68910]'
     )}>
       <div className="flex items-center gap-2 mb-1">
         <span className={cn(
           'text-xs px-1.5 py-0.5 rounded font-medium',
           error.severity === 'error' 
-            ? 'bg-danger/15 text-danger' 
-            : 'bg-warning/15 text-warning'
+            ? 'bg-[#D68910]/15 text-[#D68910]' 
+            : 'bg-[#D68910]/15 text-[#D68910]'
         )}>
           {error.severity === 'error' ? 'Erreur' : 'Alerte'}
         </span>
-        <span className="font-medium text-sm text-foreground capitalize">{error.field}</span>
+        <span className="font-medium text-sm text-[#212121] capitalize">{error.field}</span>
       </div>
-      <p className="text-xs text-muted-foreground">{error.message}</p>
-      <p className="text-xs text-muted-foreground mt-1">
-        Valeur: <code className="bg-muted px-1 rounded">{error.value}</code> • Règle: {error.rule}
+      <p className="text-xs text-[#616161]">{error.message}</p>
+      <p className="mt-1 text-xs text-[#616161]">
+        Valeur: <code className="rounded bg-white px-1">{error.value}</code> • Règle: {error.rule}
       </p>
     </div>
   );
@@ -291,19 +291,19 @@ function CorrectionItem({
   return (
     <div className={cn(
       'p-3 border rounded-lg',
-      correction.accepted === true && 'border-success bg-success/5',
-      correction.accepted === false && 'border-danger bg-danger/5',
-      correction.accepted === null && 'border-border bg-card'
+      correction.accepted === true && 'border-[#2ECC71]/30 bg-[#2ECC71]/10',
+      correction.accepted === false && 'border-[#D68910]/30 bg-[#fff7ec]',
+      correction.accepted === null && 'border-[#2ECC71]/20 bg-white'
     )}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
           <p className="font-medium text-sm text-foreground capitalize">{correction.field}</p>
           <div className="flex items-center gap-2 mt-1 text-xs">
-            <span className="text-danger line-through">{correction.originalValue}</span>
-            <span className="text-muted-foreground">→</span>
-            <span className="text-success font-medium">{correction.proposedValue}</span>
+            <span className="line-through text-[#D68910]">{correction.originalValue}</span>
+            <span className="text-[#616161]">→</span>
+            <span className="font-medium text-[#27AE60]">{correction.proposedValue}</span>
           </div>
-          <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{correction.reason}</p>
+          <p className="mt-1 line-clamp-2 text-xs text-[#616161]">{correction.reason}</p>
         </div>
         {correction.accepted === null ? (
           <div className="flex gap-1 shrink-0">
@@ -311,14 +311,14 @@ function CorrectionItem({
               size="icon" 
               variant="outline"
               onClick={() => onAccept(false)}
-              className="h-7 w-7"
+              className="h-7 w-7 border-[#D68910]/40 text-[#D68910] hover:bg-[#D68910]/10"
             >
               <X size={12} />
             </Button>
             <Button 
               size="icon"
               onClick={() => onAccept(true)}
-              className="h-7 w-7 bg-success hover:bg-success/90"
+              className="h-7 w-7 bg-[#27AE60] text-white hover:bg-[#27AE60]/90"
             >
               <Check size={12} />
             </Button>
@@ -326,7 +326,7 @@ function CorrectionItem({
         ) : (
           <div className={cn(
             'px-2 py-1 rounded text-xs font-medium shrink-0',
-            correction.accepted ? 'bg-success/15 text-success' : 'bg-danger/15 text-danger'
+            correction.accepted ? 'bg-[#2ECC71]/15 text-[#27AE60]' : 'bg-[#D68910]/15 text-[#D68910]'
           )}>
             {correction.accepted ? 'Acceptée' : 'Refusée'}
           </div>

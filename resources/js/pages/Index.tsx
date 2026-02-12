@@ -326,7 +326,7 @@ const Index = () => {
   }, [parcels]);
 
   const mapPanel = (
-    <div className="h-[480px] min-h-[360px] relative rounded-[28px] border border-border bg-card shadow-[0_20px_40px_rgba(0,0,0,0.08)] overflow-hidden">
+    <div className="relative h-[480px] min-h-[360px] overflow-hidden rounded-[28px] border border-[#2ECC71]/20 bg-white shadow-[0_20px_40px_rgba(33,33,33,0.08)]">
       <MapContainer
         parcels={parcels}
         selectedParcel={selectedParcel}
@@ -342,11 +342,11 @@ const Index = () => {
       </div>
       <div className="absolute top-5 right-5 z-[1100] hidden md:flex flex-col gap-2">
         <DataImporter onAddLayer={(layer) => setLayers((prev) => [...prev, layer])} />
-        <Button variant="outline" onClick={() => setLayerManagerOpen(true)} className="w-full">
+        <Button variant="outline" onClick={() => setLayerManagerOpen(true)} className="w-full border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10">
           Gestion des couches
         </Button>
         {layerStorageStatus !== 'inline' && layerStorageStatus !== 'none' && (
-          <div className="rounded-md border border-border bg-warning/10 px-3 py-2 text-xs text-warning-foreground">
+          <div className="rounded-md border border-[#D68910]/35 bg-[#D68910]/10 px-3 py-2 text-xs text-[#212121]">
             {layerStorageStatus === 'idb'
               ? 'Couches lourdes stockées dans le navigateur (IndexedDB).'
               : 'Stockage plein: couches conservées pour la session.'}
@@ -358,27 +358,27 @@ const Index = () => {
 
   const controlsPanel = (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-border bg-card px-4 py-4 shadow-sm space-y-4">
+      <div className="space-y-4 rounded-2xl border border-[#2ECC71]/20 bg-white px-4 py-4 shadow-sm">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#616161]">
             Couche & statuts
           </p>
         </div>
         <LayerControls layers={activeLayers} onToggle={handleLayerToggle} />
         <DynamicMapLegend activeLayers={activeLayers} visibleStatuses={visibleStatuses} />
       </div>
-      <div className="rounded-2xl border border-border bg-card px-4 py-4 shadow-sm space-y-4">
+      <div className="space-y-4 rounded-2xl border border-[#2ECC71]/20 bg-white px-4 py-4 shadow-sm">
         <div className="flex items-center justify-between">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#616161]">
             Import & couches
           </p>
         </div>
         <DataImporter onAddLayer={(layer) => setLayers((prev) => [...prev, layer])} />
-        <Button variant="outline" onClick={() => setLayerManagerOpen(true)} className="w-full">
+        <Button variant="outline" onClick={() => setLayerManagerOpen(true)} className="w-full border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10">
           Gestion des couches
         </Button>
         {layerStorageStatus !== 'inline' && layerStorageStatus !== 'none' && (
-          <div className="rounded-md border border-border bg-warning/10 px-3 py-2 text-xs text-warning-foreground">
+          <div className="rounded-md border border-[#D68910]/35 bg-[#D68910]/10 px-3 py-2 text-xs text-[#212121]">
             {layerStorageStatus === 'idb'
               ? 'Couches lourdes stockées dans le navigateur (IndexedDB).'
               : 'Stockage plein: couches conservées pour la session.'}
@@ -393,7 +393,7 @@ const Index = () => {
       <MainNav />
       <div className="flex flex-1 min-h-0 flex-col">
         {/* Geographic Context Selector */}
-        <div className="px-6 py-3 border-b border-border bg-muted/20">
+        <div className="border-b border-[#2ECC71]/15 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] px-6 py-3">
         <GeographicContextSelector
           currentContext={geoContext}
           onContextChange={setGeoContext}
@@ -403,7 +403,7 @@ const Index = () => {
         </div>
       
       {/* KPI Row */}
-        <div className="px-6 py-4 border-b border-border bg-muted/30">
+        <div className="border-b border-[#2ECC71]/15 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] px-6 py-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <KPICard
             title="Parcelles totales"
@@ -438,7 +438,7 @@ const Index = () => {
 
       {/* Land Unit Summary (visible when parcel selected) */}
       {selectedParcel && landUnitSummary && (
-        <div className="px-6 py-4 border-b border-border">
+        <div className="border-b border-[#2ECC71]/15 bg-white px-6 py-4">
           <LandUnitSummary
               unitId={selectedParcel.id}
               unitName={selectedParcel.name}
@@ -453,11 +453,11 @@ const Index = () => {
       <div className="flex-1 flex overflow-hidden">
         <div className="flex-1 flex flex-col overflow-hidden">
           {isMobile && (
-            <div className="px-6 pb-4 border-b border-border bg-muted/20 flex gap-2">
+            <div className="flex gap-2 border-b border-[#2ECC71]/15 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] px-6 pb-4">
               <Button
                 variant={mapPane === 'map' ? 'default' : 'outline'}
                 size="sm"
-                className="flex-1"
+                className={`flex-1 ${mapPane === 'map' ? 'bg-[#27AE60] text-white hover:bg-[#27AE60]/90' : 'border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10'}`}
                 onClick={() => setMapPane('map')}
               >
                 Carte
@@ -465,7 +465,7 @@ const Index = () => {
               <Button
                 variant={mapPane === 'controls' ? 'default' : 'outline'}
                 size="sm"
-                className="flex-1"
+                className={`flex-1 ${mapPane === 'controls' ? 'bg-[#27AE60] text-white hover:bg-[#27AE60]/90' : 'border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10'}`}
                 onClick={() => setMapPane('controls')}
               >
                 Contrôles
@@ -492,9 +492,9 @@ const Index = () => {
         />
 
         <Sheet open={layerManagerOpen} onOpenChange={setLayerManagerOpen}>
-          <SheetContent side="right" className="w-[360px] sm:max-w-[360px] p-4">
+          <SheetContent side="right" className="w-[360px] bg-white sm:max-w-[360px] p-4">
             <SheetHeader>
-              <SheetTitle>Gestion des couches</SheetTitle>
+              <SheetTitle className="text-[#212121]">Gestion des couches</SheetTitle>
               <SheetDescription className="sr-only">
                 Panneau de configuration des couches cartographiques importées.
               </SheetDescription>

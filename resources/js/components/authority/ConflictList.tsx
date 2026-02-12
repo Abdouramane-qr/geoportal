@@ -21,15 +21,15 @@ interface ConflictListProps {
 }
 
 const priorityConfig = {
-  haute: { className: 'bg-danger text-danger-foreground', label: 'Priorité haute' },
-  moyenne: { className: 'bg-warning text-warning-foreground', label: 'Priorité moyenne' },
-  basse: { className: 'bg-muted text-muted-foreground', label: 'Priorité basse' },
+  haute: { className: 'bg-[#D68910] text-white', label: 'Priorité haute' },
+  moyenne: { className: 'bg-[#D68910]/15 text-[#D68910]', label: 'Priorité moyenne' },
+  basse: { className: 'bg-[#616161]/15 text-[#616161]', label: 'Priorité basse' },
 };
 
 const statusConfig = {
-  actif: { className: 'bg-danger/15 text-danger border-danger/30', label: 'Actif' },
-  en_cours: { className: 'bg-warning/15 text-warning border-warning/30', label: 'En cours' },
-  résolu: { className: 'bg-success/15 text-success border-success/30', label: 'Résolu' },
+  actif: { className: 'border-[#D68910]/30 bg-[#D68910]/12 text-[#D68910]', label: 'Actif' },
+  en_cours: { className: 'border-[#D68910]/25 bg-[#D68910]/10 text-[#D68910]', label: 'En cours' },
+  résolu: { className: 'border-[#2ECC71]/30 bg-[#2ECC71]/12 text-[#27AE60]', label: 'Résolu' },
 };
 
 function ConflictCard({ 
@@ -48,18 +48,18 @@ function ConflictCard({
       className={cn(
         'p-4 border rounded-lg transition-all cursor-pointer hover:shadow-md',
         conflict.priority === 'haute' && conflict.status === 'actif'
-          ? 'border-danger bg-danger/5'
-          : 'border-border bg-card'
+          ? 'border-[#D68910]/35 bg-[linear-gradient(135deg,#fff7ec_0%,#ffffff_100%)]'
+          : 'border-[#2ECC71]/20 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)]'
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <div className={cn(
             'p-2 rounded-lg',
-            conflict.priority === 'haute' ? 'bg-danger/10' : 'bg-warning/10'
+            conflict.priority === 'haute' ? 'bg-[#D68910]/12' : 'bg-[#2ECC71]/12'
           )}>
             <AlertTriangle size={20} className={
-              conflict.priority === 'haute' ? 'text-danger' : 'text-warning'
+              conflict.priority === 'haute' ? 'text-[#D68910]' : 'text-[#27AE60]'
             } />
           </div>
           <div className="flex-1">
@@ -74,15 +74,15 @@ function ConflictCard({
             <p className="font-medium text-foreground mt-2">
               {CONFLICT_TYPE_LABELS[conflict.type]}
             </p>
-            <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+            <p className="text-sm text-[#616161] mt-1 line-clamp-2">
               {conflict.description}
             </p>
           </div>
         </div>
-        <ChevronRight size={16} className="text-muted-foreground mt-2" />
+        <ChevronRight size={16} className="text-[#616161] mt-2" />
       </div>
 
-      <div className="mt-4 pt-3 border-t border-border/50 flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
+      <div className="mt-4 pt-3 border-t border-[#2ECC71]/15 flex items-center gap-4 text-xs text-[#616161] flex-wrap">
         <div className="flex items-center gap-1">
           <MapPin size={12} />
           <span>{conflict.commune}</span>
@@ -99,7 +99,7 @@ function ConflictCard({
 
       <div className="mt-3 flex flex-wrap gap-1">
         {conflict.parcelNames.map((name, idx) => (
-          <span key={idx} className="text-xs bg-muted px-2 py-0.5 rounded">
+          <span key={idx} className="rounded bg-[#2ECC71]/12 px-2 py-0.5 text-xs text-[#27AE60]">
             {name}
           </span>
         ))}
@@ -114,13 +114,13 @@ export function ConflictList({ conflicts, onSelectConflict }: ConflictListProps)
   const resolvedConflicts = conflicts.filter(c => c.status === 'résolu');
 
   return (
-    <Card className="border-border h-full">
-      <CardHeader className="border-b border-border pb-4">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <Shield size={20} className="text-danger" />
+    <Card className="h-full border-[#2ECC71]/20 bg-white shadow-sm">
+      <CardHeader className="border-b border-[#2ECC71]/15 pb-4">
+        <CardTitle className="text-lg flex items-center gap-2 text-[#212121]">
+          <Shield size={20} className="text-[#D68910]" />
           Conflits fonciers
           {activeConflicts.length > 0 && (
-            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-danger text-danger-foreground">
+            <span className="ml-2 rounded-full bg-[#D68910] px-2 py-0.5 text-xs text-white">
               {activeConflicts.length} actif{activeConflicts.length > 1 ? 's' : ''}
             </span>
           )}
@@ -134,8 +134,8 @@ export function ConflictList({ conflicts, onSelectConflict }: ConflictListProps)
             {activeConflicts.length > 0 && (
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <AlertCircle size={14} className="text-danger" />
-                  <h4 className="text-sm font-medium text-danger">Conflits actifs</h4>
+                  <AlertCircle size={14} className="text-[#D68910]" />
+                  <h4 className="text-sm font-medium text-[#D68910]">Conflits actifs</h4>
                 </div>
                 {activeConflicts.map(conflict => (
                   <ConflictCard 
@@ -150,7 +150,7 @@ export function ConflictList({ conflicts, onSelectConflict }: ConflictListProps)
             {/* In Progress */}
             {inProgressConflicts.length > 0 && (
               <div className="space-y-3">
-                <h4 className="text-sm font-medium text-muted-foreground">En cours de traitement</h4>
+                <h4 className="text-sm font-medium text-[#616161]">En cours de traitement</h4>
                 {inProgressConflicts.map(conflict => (
                   <ConflictCard 
                     key={conflict.id} 
@@ -164,7 +164,7 @@ export function ConflictList({ conflicts, onSelectConflict }: ConflictListProps)
             {/* Resolved */}
             {resolvedConflicts.length > 0 && (
               <div className="space-y-3">
-                <h4 className="text-sm font-medium text-muted-foreground">Résolus récemment</h4>
+                <h4 className="text-sm font-medium text-[#616161]">Résolus récemment</h4>
                 {resolvedConflicts.map(conflict => (
                   <ConflictCard 
                     key={conflict.id} 
@@ -176,7 +176,7 @@ export function ConflictList({ conflicts, onSelectConflict }: ConflictListProps)
             )}
 
             {conflicts.length === 0 && (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="py-8 text-center text-[#616161]">
                 <Shield size={32} className="mx-auto mb-2 opacity-30" />
                 <p className="text-sm">Aucun conflit signalé</p>
               </div>

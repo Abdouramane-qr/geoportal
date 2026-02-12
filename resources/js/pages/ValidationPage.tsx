@@ -131,14 +131,14 @@ export default function ValidationPage() {
       <MainNav />
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-border">
+        <div className="border-b border-[#2ECC71]/15 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] px-6 py-4">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-2xl font-semibold text-foreground flex items-center gap-2">
-                <FileCheck size={24} className="text-primary" />
+              <h1 className="flex items-center gap-2 text-2xl font-semibold text-[#212121]">
+                <FileCheck size={24} className="text-[#27AE60]" />
                 Validation scientifique des données
               </h1>
-              <p className="text-muted-foreground mt-1">
+              <p className="mt-1 text-[#616161]">
                 Workflow de validation des données agricoles avec détection d'erreurs
               </p>
             </div>
@@ -146,6 +146,7 @@ export default function ValidationPage() {
               <Button
                 variant={viewMode === 'list' ? 'default' : 'outline'}
                 size="sm"
+                className={viewMode === 'list' ? 'bg-[#27AE60] text-white hover:bg-[#27AE60]/90' : 'border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10'}
                 onClick={() => setViewMode('list')}
               >
                 <List size={16} className="mr-1" />
@@ -154,6 +155,7 @@ export default function ValidationPage() {
               <Button
                 variant={viewMode === 'split' ? 'default' : 'outline'}
                 size="sm"
+                className={viewMode === 'split' ? 'bg-[#27AE60] text-white hover:bg-[#27AE60]/90' : 'border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10'}
                 onClick={() => setViewMode('split')}
               >
                 <LayoutPanelLeft size={16} className="mr-1" />
@@ -163,11 +165,11 @@ export default function ValidationPage() {
           </div>
 
           {isMobile && selectedRecord && (
-            <div className="px-6 pb-4 border-b border-border bg-muted/30 flex gap-2">
+            <div className="flex gap-2 border-b border-[#2ECC71]/15 bg-white px-6 pb-4">
               <Button
                 variant={mobilePane === 'map' ? 'default' : 'outline'}
                 size="sm"
-                className="flex-1"
+                className={`flex-1 ${mobilePane === 'map' ? 'bg-[#27AE60] text-white hover:bg-[#27AE60]/90' : 'border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10'}`}
                 onClick={() => setMobilePane('map')}
               >
                 Carte
@@ -175,7 +177,7 @@ export default function ValidationPage() {
               <Button
                 variant={mobilePane === 'form' ? 'default' : 'outline'}
                 size="sm"
-                className="flex-1"
+                className={`flex-1 ${mobilePane === 'form' ? 'bg-[#27AE60] text-white hover:bg-[#27AE60]/90' : 'border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10'}`}
                 onClick={() => setMobilePane('form')}
               >
                 Formulaire
@@ -185,17 +187,17 @@ export default function ValidationPage() {
 
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-            <div className="bg-card border border-border rounded-lg p-3">
-              <div className="text-xs text-muted-foreground">Sessions totales</div>
-              <div className="text-xl font-semibold text-foreground">{allRecordsCount}</div>
+            <div className="rounded-lg border border-[#2ECC71]/20 bg-white p-3 shadow-sm">
+              <div className="text-xs text-[#616161]">Sessions totales</div>
+              <div className="text-xl font-semibold text-[#212121]">{allRecordsCount}</div>
             </div>
-            <div className="bg-card border border-border rounded-lg p-3 border-l-4 border-l-warning">
-              <div className="text-xs text-muted-foreground">À vérifier</div>
-              <div className="text-xl font-semibold text-warning">{pendingCount}</div>
+            <div className="rounded-lg border border-[#D68910]/25 bg-[#D68910]/10 p-3">
+              <div className="text-xs text-[#616161]">À vérifier</div>
+              <div className="text-xl font-semibold text-[#D68910]">{pendingCount}</div>
             </div>
-            <div className="bg-card border border-border rounded-lg p-3 border-l-4 border-l-danger">
-              <div className="text-xs text-muted-foreground">Avec erreurs</div>
-              <div className="text-xl font-semibold text-danger">{errorCount}</div>
+            <div className="rounded-lg border border-[#D68910]/30 bg-[#fff7ec] p-3">
+              <div className="text-xs text-[#616161]">Avec erreurs</div>
+              <div className="text-xl font-semibold text-[#D68910]">{errorCount}</div>
             </div>
           </div>
         </div>
@@ -203,14 +205,14 @@ export default function ValidationPage() {
         {/* Content */}
         <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
           {/* Record List Sidebar */}
-          <aside className="w-full md:w-72 flex flex-col border-b md:border-b-0 md:border-r border-border bg-card">
-            <div className="p-3 border-b border-border bg-muted/50">
-              <h3 className="font-medium text-sm text-foreground">Imports récents</h3>
-              <p className="text-xs text-muted-foreground mt-0.5">
+          <aside className="flex w-full flex-col border-b border-[#2ECC71]/15 bg-white md:w-72 md:border-b-0 md:border-r">
+            <div className="border-b border-[#2ECC71]/15 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-3">
+              <h3 className="text-sm font-medium text-[#212121]">Imports récents</h3>
+              <p className="mt-0.5 text-xs text-[#616161]">
                 {pendingCount} session(s) à vérifier
               </p>
             </div>
-            <div className="flex-1 overflow-y-auto divide-y divide-border">
+            <div className="flex-1 divide-y divide-[#2ECC71]/10 overflow-y-auto">
               {records.map(record => {
                 const status = getRecordStatus(record);
                 return (
@@ -220,21 +222,21 @@ export default function ValidationPage() {
                     className={cn(
                       'w-full p-3 text-left transition-colors',
                       selectedRecordId === record.id 
-                        ? 'bg-primary/10' 
-                        : 'hover:bg-muted/50'
+                        ? 'bg-[#2ECC71]/10' 
+                        : 'hover:bg-[#2ECC71]/5'
                     )}
                   >
                     <div className="flex items-start justify-between">
                       <div className="min-w-0 flex-1">
-                        <p className="font-medium text-sm text-foreground truncate">
+                        <p className="truncate text-sm font-medium text-[#212121]">
                           {record.parcelName}
                         </p>
-                        <p className="text-xs text-muted-foreground mt-0.5">
+                        <p className="mt-0.5 text-xs text-[#616161]">
                           ID: {record.parcelId}
                         </p>
                       </div>
                       {record.errors.length > 0 && !record.validatedBy && (
-                        <AlertTriangle size={14} className="text-warning mt-0.5 shrink-0 ml-2" />
+                        <AlertTriangle size={14} className="ml-2 mt-0.5 shrink-0 text-[#D68910]" />
                       )}
                     </div>
                     <div className="flex items-center gap-2 mt-2">
@@ -259,7 +261,7 @@ export default function ValidationPage() {
                   <div className="px-6 pt-4">
                     <p className="text-sm font-semibold text-foreground">{selectedRecord.parcelName}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <p className="text-xs text-muted-foreground mr-2">ID {selectedRecord.parcelId}</p>
+                      <p className="mr-2 text-xs text-[#616161]">ID {selectedRecord.parcelId}</p>
                       {selectedRecordStatus && (
                         <span className={cn(
                           'text-[11px] px-2 py-0.5 rounded-full font-semibold',

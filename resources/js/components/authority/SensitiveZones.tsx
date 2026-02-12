@@ -21,19 +21,19 @@ interface SensitiveZonesProps {
 
 const sensitivityConfig = {
   critique: { 
-    className: 'bg-danger text-danger-foreground', 
+    className: 'bg-[#D68910] text-white', 
     label: 'Critique',
-    bgClass: 'bg-danger/5 border-danger',
+    bgClass: 'bg-[linear-gradient(135deg,#fff7ec_0%,#ffffff_100%)] border-[#D68910]/35',
   },
   élevée: { 
-    className: 'bg-warning text-warning-foreground', 
+    className: 'bg-[#D68910]/15 text-[#D68910]', 
     label: 'Élevée',
-    bgClass: 'bg-warning/5 border-warning',
+    bgClass: 'bg-[linear-gradient(135deg,#fff7ec_0%,#ffffff_100%)] border-[#D68910]/25',
   },
   modérée: { 
-    className: 'bg-info/15 text-info', 
+    className: 'bg-[#2ECC71]/15 text-[#27AE60]', 
     label: 'Modérée',
-    bgClass: 'bg-card border-border',
+    bgClass: 'bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] border-[#2ECC71]/20',
   },
 };
 
@@ -65,12 +65,12 @@ function ZoneCard({
       <div className="flex items-start gap-3">
         <div className={cn(
           'p-2 rounded-lg',
-          zone.sensitivity === 'critique' ? 'bg-danger/15' : 
-          zone.sensitivity === 'élevée' ? 'bg-warning/15' : 'bg-muted'
+          zone.sensitivity === 'critique' ? 'bg-[#D68910]/12' : 
+          zone.sensitivity === 'élevée' ? 'bg-[#D68910]/10' : 'bg-[#2ECC71]/12'
         )}>
           <Icon size={20} className={
-            zone.sensitivity === 'critique' ? 'text-danger' : 
-            zone.sensitivity === 'élevée' ? 'text-warning' : 'text-muted-foreground'
+            zone.sensitivity === 'critique' ? 'text-[#D68910]' : 
+            zone.sensitivity === 'élevée' ? 'text-[#D68910]' : 'text-[#27AE60]'
           } />
         </div>
         <div className="flex-1">
@@ -78,12 +78,12 @@ function ZoneCard({
             <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium', sensitivity.className)}>
               {sensitivity.label}
             </span>
-            <span className="text-xs text-muted-foreground">
+            <span className="text-xs text-[#616161]">
               {ZONE_TYPE_LABELS[zone.type]}
             </span>
           </div>
           <p className="font-medium text-foreground mt-2">{zone.name}</p>
-          <div className="flex items-center gap-3 mt-2 text-xs text-muted-foreground">
+          <div className="mt-2 flex items-center gap-3 text-xs text-[#616161]">
             <div className="flex items-center gap-1">
               <MapPin size={12} />
               <span>{zone.commune}</span>
@@ -94,20 +94,20 @@ function ZoneCard({
       </div>
 
       {/* Restrictions */}
-      <div className="mt-4 pt-3 border-t border-border/50">
-        <div className="flex items-center gap-1 text-xs font-medium text-muted-foreground mb-2">
+      <div className="mt-4 border-t border-[#2ECC71]/15 pt-3">
+        <div className="mb-2 flex items-center gap-1 text-xs font-medium text-[#616161]">
           <Lock size={12} />
           <span>Restrictions</span>
         </div>
         <ul className="space-y-1">
           {zone.restrictions.slice(0, 2).map((restriction, idx) => (
-            <li key={idx} className="flex items-start gap-2 text-xs text-muted-foreground">
-              <span className="text-danger mt-0.5">•</span>
+            <li key={idx} className="flex items-start gap-2 text-xs text-[#616161]">
+              <span className="mt-0.5 text-[#D68910]">•</span>
               <span>{restriction}</span>
             </li>
           ))}
           {zone.restrictions.length > 2 && (
-            <li className="text-xs text-muted-foreground">
+            <li className="text-xs text-[#616161]">
               +{zone.restrictions.length - 2} autre{zone.restrictions.length > 3 ? 's' : ''}
             </li>
           )}
@@ -123,13 +123,13 @@ export function SensitiveZones({ zones, onSelectZone }: SensitiveZonesProps) {
   const moderateZones = zones.filter(z => z.sensitivity === 'modérée');
 
   return (
-    <Card className="border-border h-full">
-      <CardHeader className="border-b border-border pb-4">
-        <CardTitle className="text-lg flex items-center gap-2">
-          <AlertTriangle size={20} className="text-warning" />
+    <Card className="h-full border-[#2ECC71]/20 bg-white shadow-sm">
+      <CardHeader className="border-b border-[#2ECC71]/15 pb-4">
+        <CardTitle className="text-lg flex items-center gap-2 text-[#212121]">
+          <AlertTriangle size={20} className="text-[#D68910]" />
           Zones sensibles
           {criticalZones.length > 0 && (
-            <span className="ml-2 px-2 py-0.5 text-xs rounded-full bg-danger text-danger-foreground">
+            <span className="ml-2 rounded-full bg-[#D68910] px-2 py-0.5 text-xs text-white">
               {criticalZones.length} critique{criticalZones.length > 1 ? 's' : ''}
             </span>
           )}
@@ -142,7 +142,7 @@ export function SensitiveZones({ zones, onSelectZone }: SensitiveZonesProps) {
             {/* Critical Zones */}
             {criticalZones.length > 0 && (
               <div className="space-y-3">
-                <h4 className="text-sm font-medium text-danger flex items-center gap-2">
+                <h4 className="text-sm font-medium text-[#D68910] flex items-center gap-2">
                   <AlertTriangle size={14} />
                   Zones critiques
                 </h4>
@@ -159,7 +159,7 @@ export function SensitiveZones({ zones, onSelectZone }: SensitiveZonesProps) {
             {/* High Sensitivity */}
             {highZones.length > 0 && (
               <div className="space-y-3">
-                <h4 className="text-sm font-medium text-warning">Sensibilité élevée</h4>
+                <h4 className="text-sm font-medium text-[#D68910]">Sensibilité élevée</h4>
                 {highZones.map(zone => (
                   <ZoneCard 
                     key={zone.id} 
@@ -173,7 +173,7 @@ export function SensitiveZones({ zones, onSelectZone }: SensitiveZonesProps) {
             {/* Moderate */}
             {moderateZones.length > 0 && (
               <div className="space-y-3">
-                <h4 className="text-sm font-medium text-muted-foreground">Sensibilité modérée</h4>
+                <h4 className="text-sm font-medium text-[#616161]">Sensibilité modérée</h4>
                 {moderateZones.map(zone => (
                   <ZoneCard 
                     key={zone.id} 
@@ -185,7 +185,7 @@ export function SensitiveZones({ zones, onSelectZone }: SensitiveZonesProps) {
             )}
 
             {zones.length === 0 && (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="py-8 text-center text-[#616161]">
                 <Info size={32} className="mx-auto mb-2 opacity-30" />
                 <p className="text-sm">Aucune zone sensible identifiée</p>
               </div>

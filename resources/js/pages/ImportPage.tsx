@@ -115,9 +115,9 @@ const getRowValues = (row: { values?: unknown }) => {
 
 function StatusBadge({ status }: { status: ImportStatus }) {
   const config = {
-    brouillon: { label: 'Brouillon', className: 'bg-muted text-muted-foreground' },
-    validé: { label: 'Validé', className: 'bg-success/15 text-success' },
-    rejeté: { label: 'Rejeté', className: 'bg-danger/15 text-danger' },
+    brouillon: { label: 'Brouillon', className: 'bg-[#616161]/12 text-[#616161]' },
+    validé: { label: 'Validé', className: 'bg-[#2ECC71]/15 text-[#27AE60]' },
+    rejeté: { label: 'Rejeté', className: 'bg-[#D68910]/15 text-[#D68910]' },
   };
 
   const { label, className } = config[status];
@@ -140,10 +140,10 @@ function ValidationTable({ rows }: { rows: ImportedRow[] }) {
 
   return (
     <div className="space-y-4">
-      <div className="hidden md:block border border-border rounded-md overflow-hidden">
+      <div className="hidden overflow-hidden rounded-md border border-[#2ECC71]/20 md:block">
         <div className="overflow-x-auto">
           <table className="min-w-[720px] w-full text-sm">
-            <thead className="bg-muted">
+            <thead className="bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)]">
               <tr>
                 <th className="px-4 py-3 text-left font-medium text-foreground">ID Parcelle</th>
                 <th className="px-4 py-3 text-left font-medium text-foreground">pH</th>
@@ -153,27 +153,27 @@ function ValidationTable({ rows }: { rows: ImportedRow[] }) {
                 <th className="px-4 py-3 text-left font-medium text-foreground">Erreurs</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-[#2ECC71]/10">
               {rows.map((row) => (
-                <tr key={row.id} className={!row.isValid ? 'bg-danger/5' : ''}>
+                <tr key={row.id} className={!row.isValid ? 'bg-[#fff7ec]' : ''}>
                   <td className="px-4 py-3 font-mono text-xs">{row.data.parcelId ?? row.id}</td>
                   <td
                     className={`px-4 py-3 ${
-                      hasIssue(row, 'pH') ? 'text-danger font-semibold' : ''
+                      hasIssue(row, 'pH') ? 'text-[#D68910] font-semibold' : ''
                     }`}
                   >
                     {formatValue(row.data.pH)}
                   </td>
                   <td
                     className={`px-4 py-3 ${
-                      hasIssue(row, 'organicMatter') ? 'text-danger font-semibold' : ''
+                      hasIssue(row, 'organicMatter') ? 'text-[#D68910] font-semibold' : ''
                     }`}
                   >
                     {formatValue(row.data.organicMatter)}
                   </td>
                   <td
                     className={`px-4 py-3 ${
-                      hasIssue(row, 'slope') ? 'text-danger font-semibold' : ''
+                      hasIssue(row, 'slope') ? 'text-[#D68910] font-semibold' : ''
                     }`}
                   >
                     {formatValue(row.data.slope)}
@@ -185,7 +185,7 @@ function ValidationTable({ rows }: { rows: ImportedRow[] }) {
                         Valide
                       </span>
                     ) : (
-                      <span className="inline-flex items-center text-danger">
+                      <span className="inline-flex items-center text-[#D68910]">
                         <XCircle size={14} className="mr-1" />
                         Erreur
                       </span>
@@ -193,7 +193,7 @@ function ValidationTable({ rows }: { rows: ImportedRow[] }) {
                   </td>
                   <td className="px-4 py-3">
                     {row.issues.map((issue, idx) => (
-                      <div key={idx} className="text-xs text-danger">
+                      <div key={idx} className="text-xs text-[#D68910]">
                         {issue.message}
                       </div>
                     ))}
@@ -210,7 +210,7 @@ function ValidationTable({ rows }: { rows: ImportedRow[] }) {
             key={row.id}
             className={[
               'flex flex-col gap-3 border rounded-lg p-4 bg-card shadow-sm',
-              row.isValid ? 'border-border' : 'border-danger/40 bg-danger/5',
+              row.isValid ? 'border-[#2ECC71]/20 bg-white' : 'border-[#D68910]/40 bg-[#fff7ec]',
             ].join(' ')}
           >
             <div className="flex items-center justify-between">
@@ -224,7 +224,7 @@ function ValidationTable({ rows }: { rows: ImportedRow[] }) {
               </div>
               <span
                 className={`text-xs font-semibold uppercase tracking-wide ${
-                  row.isValid ? 'text-success' : 'text-danger'
+                  row.isValid ? 'text-[#27AE60]' : 'text-[#D68910]'
                 }`}
               >
                 {row.isValid ? 'Valide' : 'Erreur'}
@@ -233,21 +233,21 @@ function ValidationTable({ rows }: { rows: ImportedRow[] }) {
             <div className="grid grid-cols-2 gap-3 text-sm text-foreground">
               <div>
                 <p className="text-xs text-muted-foreground">pH</p>
-                <p className={`font-semibold ${hasIssue(row, 'pH') ? 'text-danger' : ''}`}>
+                <p className={`font-semibold ${hasIssue(row, 'pH') ? 'text-[#D68910]' : ''}`}>
                   {formatValue(row.data.pH)}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Mat. Org. (%)</p>
                 <p
-                  className={`font-semibold ${hasIssue(row, 'organicMatter') ? 'text-danger' : ''}`}
+                  className={`font-semibold ${hasIssue(row, 'organicMatter') ? 'text-[#D68910]' : ''}`}
                 >
                   {formatValue(row.data.organicMatter)}
                 </p>
               </div>
               <div>
                 <p className="text-xs text-muted-foreground">Pente (%)</p>
-                <p className={`font-semibold ${hasIssue(row, 'slope') ? 'text-danger' : ''}`}>
+                <p className={`font-semibold ${hasIssue(row, 'slope') ? 'text-[#D68910]' : ''}`}>
                   {formatValue(row.data.slope)}
                 </p>
               </div>
@@ -259,7 +259,7 @@ function ValidationTable({ rows }: { rows: ImportedRow[] }) {
               </div>
             </div>
             {row.issues.length > 0 && (
-              <div className="bg-danger/10 border border-danger/30 rounded-md px-3 py-2 text-xs text-danger space-y-1">
+              <div className="space-y-1 rounded-md border border-[#D68910]/35 bg-[#D68910]/10 px-3 py-2 text-xs text-[#D68910]">
                 {row.issues.map((issue, idx) => (
                   <p key={idx}>{issue.message}</p>
                 ))}
@@ -512,12 +512,12 @@ export default function ImportPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background app-shell">
       <MainNav />
-      <main className="flex-1 p-6">
+      <main className="flex-1 bg-[linear-gradient(180deg,#f8f9fa_0%,#ffffff_45%,#f8f9fa_100%)] p-4 sm:p-6">
         <div className="max-w-6xl mx-auto">
-          <div className="mb-6">
-            <h1 className="text-2xl font-semibold text-foreground">Import de données scientifiques</h1>
-            <p className="text-muted-foreground mt-1">
-              Importez vos fichiers Excel, CSV ou Shapefile pour validation
+          <div className="mb-6 rounded-xl border border-[#2ECC71]/20 bg-white p-4 shadow-[0_10px_30px_rgba(33,33,33,0.06)]">
+            <h1 className="text-2xl font-semibold text-[#212121]">Import de données scientifiques</h1>
+            <p className="mt-1 text-[#616161]">
+              Importez vos fichiers Excel, CSV, JSON ou GeoJSON pour validation
             </p>
           </div>
 
@@ -529,18 +529,18 @@ export default function ImportPage() {
               onDrop={handleDrop}
               className={`
                 border-2 border-dashed rounded-lg p-12 text-center transition-colors
-                ${isDragging ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}
+                ${isDragging ? 'border-[#27AE60] bg-[#2ECC71]/10' : 'border-[#2ECC71]/35 bg-white hover:border-[#27AE60]/60'}
               `}
             >
-              <Upload size={48} className="mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium text-foreground mb-2">
+              <Upload size={48} className="mx-auto mb-4 text-[#27AE60]" />
+              <h3 className="mb-2 text-lg font-medium text-[#212121]">
                 Déposez vos fichiers ici
               </h3>
-              <p className="text-sm text-muted-foreground mb-4">
+              <p className="mb-4 text-sm text-[#616161]">
                 Formats acceptés : JSON / GeoJSON / Excel (.xlsx/.xls) / CSV (.csv)
               </p>
               {errorMessage && (
-                <p className="text-sm text-danger mb-4">{errorMessage}</p>
+                <p className="mb-4 text-sm text-[#D68910]">{errorMessage}</p>
               )}
               <input
                 id={inputId}
@@ -549,7 +549,7 @@ export default function ImportPage() {
                 onChange={handleFileSelect}
                 className="hidden"
               />
-              <Button variant="outline" asChild>
+              <Button variant="outline" asChild className="border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10">
                 <label htmlFor={inputId} className="cursor-pointer">
                   <FileSpreadsheet size={16} className="mr-2" />
                   Sélectionner un fichier
@@ -562,15 +562,15 @@ export default function ImportPage() {
           {session && (
             <div className="space-y-6">
               {/* Session Header */}
-              <div className="bg-card border border-border rounded-lg p-4">
+              <div className="rounded-lg border border-[#2ECC71]/20 bg-white p-4 shadow-sm">
                 <div className="flex items-center justify-between flex-wrap gap-4">
                   <div className="flex items-center gap-4">
-                    <div className="p-3 bg-muted rounded-md">
-                      <FileSpreadsheet size={24} className="text-primary" />
+                    <div className="rounded-md bg-[#2ECC71]/10 p-3">
+                      <FileSpreadsheet size={24} className="text-[#27AE60]" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-foreground">{session.fileName}</h3>
-                      <p className="text-sm text-muted-foreground">
+                      <h3 className="font-medium text-[#212121]">{session.fileName}</h3>
+                      <p className="text-sm text-[#616161]">
                         Importé le {session.uploadedAt.toLocaleDateString('fr-FR')} à {session.uploadedAt.toLocaleTimeString('fr-FR')}
                       </p>
                     </div>
@@ -581,27 +581,27 @@ export default function ImportPage() {
 
               {/* Statistics */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-card border border-border rounded-lg p-4">
-                  <div className="text-sm text-muted-foreground">Total lignes</div>
-                  <div className="text-2xl font-semibold text-foreground">{session.totalRows}</div>
+                <div className="rounded-lg border border-[#2ECC71]/20 bg-white p-4">
+                  <div className="text-sm text-[#616161]">Total lignes</div>
+                  <div className="text-2xl font-semibold text-[#212121]">{session.totalRows}</div>
                 </div>
-                <div className="bg-card border border-border rounded-lg p-4 border-l-4 border-l-success">
-                  <div className="text-sm text-muted-foreground">Lignes valides</div>
-                  <div className="text-2xl font-semibold text-success">{session.validRows}</div>
+                <div className="rounded-lg border border-[#2ECC71]/25 bg-[#2ECC71]/10 p-4">
+                  <div className="text-sm text-[#616161]">Lignes valides</div>
+                  <div className="text-2xl font-semibold text-[#27AE60]">{session.validRows}</div>
                 </div>
-                <div className="bg-card border border-border rounded-lg p-4 border-l-4 border-l-danger">
-                  <div className="text-sm text-muted-foreground">Lignes en erreur</div>
-                  <div className="text-2xl font-semibold text-danger">{session.errorRows}</div>
+                <div className="rounded-lg border border-[#D68910]/35 bg-[#fff7ec] p-4">
+                  <div className="text-sm text-[#616161]">Lignes en erreur</div>
+                  <div className="text-2xl font-semibold text-[#D68910]">{session.errorRows}</div>
                 </div>
               </div>
 
               {/* Validation Rules Info */}
-              <div className="bg-muted/50 border border-border rounded-lg p-4">
+              <div className="rounded-lg border border-[#2ECC71]/20 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-4">
                 <div className="flex items-start gap-2">
-                  <AlertTriangle size={18} className="text-warning mt-0.5" />
+                  <AlertTriangle size={18} className="mt-0.5 text-[#D68910]" />
                   <div>
-                    <h4 className="font-medium text-foreground">Règles de validation scientifique</h4>
-                    <div className="text-sm text-muted-foreground mt-1 grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <h4 className="font-medium text-[#212121]">Règles de validation scientifique</h4>
+                    <div className="mt-1 grid grid-cols-2 gap-2 text-sm text-[#616161] md:grid-cols-4">
                       {Object.entries(VALIDATION_RULES).slice(0, 4).map(([key, rule]) => (
                         <span key={key}>{rule.label}: {rule.min}-{rule.max}</span>
                       ))}
@@ -612,26 +612,27 @@ export default function ImportPage() {
 
               {/* Validation Table */}
               <div>
-                <h3 className="text-lg font-medium text-foreground mb-3">Tableau de validation</h3>
+                <h3 className="mb-3 text-lg font-medium text-[#212121]">Tableau de validation</h3>
                 <ValidationTable rows={session.rows} />
               </div>
 
               {/* Actions */}
               {session.status === 'brouillon' && (
-                <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
-                  <Button variant="outline" onClick={handleClear}>
+                <div className="flex flex-wrap items-center justify-end gap-3 border-t border-[#2ECC71]/15 pt-4">
+                  <Button variant="outline" onClick={handleClear} className="border-[#616161]/35 text-[#616161] hover:bg-[#616161]/10">
                     <Trash2 size={16} className="mr-2" />
                     Annuler
                   </Button>
-                  <Button 
-                    variant="destructive" 
+                  <Button
+                    variant="outline"
                     onClick={handleReject}
+                    className="border-[#D68910]/40 text-[#D68910] hover:bg-[#D68910]/10"
                   >
                     <XCircle size={16} className="mr-2" />
                     Rejeter
                   </Button>
                   {geojsonData && (
-                    <Button variant="outline" onClick={handleSendToMap} disabled={sentToMap}>
+                    <Button variant="outline" onClick={handleSendToMap} disabled={sentToMap} className="border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10 disabled:opacity-60">
                       <Upload size={16} className="mr-2" />
                       {sentToMap ? 'Envoyé vers la carte' : 'Envoyer vers la carte'}
                     </Button>
@@ -639,7 +640,7 @@ export default function ImportPage() {
                   <Button 
                     onClick={handleValidate}
                     disabled={session.errorRows > 0}
-                    className="bg-primary hover:bg-primary/90"
+                    className="bg-[#27AE60] text-white hover:bg-[#27AE60]/90 disabled:bg-[#2ECC71]/45"
                   >
                     <CheckCircle size={16} className="mr-2" />
                     Valider l'import
@@ -648,7 +649,7 @@ export default function ImportPage() {
               )}
 
               {mapMessage && (
-                <div className="mt-4 text-sm text-success">
+                <div className="mt-4 text-sm text-[#27AE60]">
                   {mapMessage}
                 </div>
               )}

@@ -27,32 +27,32 @@ export function AuthorityKPIs({
       value: activeConflicts,
       total: totalConflicts,
       icon: Shield,
-      color: activeConflicts > 0 ? 'text-danger' : 'text-success',
-      bgColor: activeConflicts > 0 ? 'bg-danger/10' : 'bg-success/10',
+      color: activeConflicts > 0 ? 'text-[#D68910]' : 'text-[#27AE60]',
+      bgColor: activeConflicts > 0 ? 'bg-[#D68910]/12' : 'bg-[#2ECC71]/12',
       urgent: activeConflicts > 0,
     },
     {
       label: 'Zones sensibles',
       value: sensitiveZones,
       icon: AlertTriangle,
-      color: 'text-warning',
-      bgColor: 'bg-warning/10',
+      color: 'text-[#D68910]',
+      bgColor: 'bg-[#D68910]/12',
       urgent: false,
     },
     {
       label: 'Décisions en attente',
       value: pendingDecisions,
       icon: FileText,
-      color: pendingDecisions > 0 ? 'text-warning' : 'text-muted-foreground',
-      bgColor: pendingDecisions > 0 ? 'bg-warning/10' : 'bg-muted',
+      color: pendingDecisions > 0 ? 'text-[#D68910]' : 'text-[#616161]',
+      bgColor: pendingDecisions > 0 ? 'bg-[#D68910]/12' : 'bg-[#616161]/10',
       urgent: pendingDecisions > 3,
     },
     {
       label: 'Résolus ce mois',
       value: resolvedThisMonth,
       icon: TrendingUp,
-      color: 'text-success',
-      bgColor: 'bg-success/10',
+      color: 'text-[#27AE60]',
+      bgColor: 'bg-[#2ECC71]/12',
       urgent: false,
     },
   ];
@@ -63,30 +63,32 @@ export function AuthorityKPIs({
         <div 
           key={idx}
           className={cn(
-            'p-4 rounded-lg border',
-            kpi.urgent ? 'border-danger bg-danger/5' : 'border-border bg-card'
+            'rounded-xl border p-4 shadow-sm',
+            kpi.urgent
+              ? 'border-[#D68910]/35 bg-[linear-gradient(135deg,#fff7ec_0%,#ffffff_100%)]'
+              : 'border-[#2ECC71]/20 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)]'
           )}
         >
           <div className="flex items-center justify-between">
-            <div className={cn('p-2 rounded-lg', kpi.bgColor)}>
+            <div className={cn('rounded-lg p-2', kpi.bgColor)}>
               <kpi.icon size={20} className={kpi.color} />
             </div>
             {kpi.urgent && (
-              <span className="text-xs px-2 py-0.5 rounded-full bg-danger text-danger-foreground font-medium">
+              <span className="rounded-full bg-[#D68910] px-2 py-0.5 text-xs font-medium text-white">
                 Urgent
               </span>
             )}
           </div>
           <div className="mt-3">
-            <p className="text-2xl font-semibold text-foreground">
+            <p className="text-2xl font-semibold text-[#212121]">
               {kpi.value}
               {kpi.total && (
-                <span className="text-sm text-muted-foreground font-normal">
+                <span className="text-sm font-normal text-[#616161]">
                   /{kpi.total}
                 </span>
               )}
             </p>
-            <p className="text-sm text-muted-foreground">{kpi.label}</p>
+            <p className="text-sm text-[#616161]">{kpi.label}</p>
           </div>
         </div>
       ))}

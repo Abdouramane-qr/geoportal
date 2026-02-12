@@ -65,14 +65,14 @@ export default function DataImporter({ onAddLayer }: DataImporterProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2 border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10">
           <Upload size={16} />
           Importer données
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="bg-white sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Importer un fichier GeoJSON</DialogTitle>
+          <DialogTitle className="text-[#212121]">Importer un fichier GeoJSON</DialogTitle>
         </DialogHeader>
         <div
           onDragOver={(event) => {
@@ -83,13 +83,13 @@ export default function DataImporter({ onAddLayer }: DataImporterProps) {
           onDrop={handleDrop}
           className={cn(
             'flex flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed p-6 text-center text-sm',
-            isDragging ? 'border-primary bg-primary/5' : 'border-border',
+            isDragging ? 'border-[#27AE60] bg-[#2ECC71]/10' : 'border-[#2ECC71]/35 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)]',
           )}
         >
-          <Upload className="text-muted-foreground" />
+          <Upload className="text-[#27AE60]" />
           <div>
-            <p className="font-medium text-foreground">Déposez un GeoJSON ici</p>
-            <p className="text-xs text-muted-foreground">Formats acceptés: .geojson, .json</p>
+            <p className="font-medium text-[#212121]">Déposez un GeoJSON ici</p>
+            <p className="text-xs text-[#616161]">Formats acceptés: .geojson, .json</p>
           </div>
           <input
             id={inputId}
@@ -98,12 +98,12 @@ export default function DataImporter({ onAddLayer }: DataImporterProps) {
             onChange={handleFileSelect}
             className="hidden"
           />
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild className="border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10">
             <label htmlFor={inputId} className="cursor-pointer">
               Choisir un fichier
             </label>
           </Button>
-          {error && <p className="text-xs text-danger">{error}</p>}
+          {error && <p className="text-xs text-[#D68910]">{error}</p>}
         </div>
       </DialogContent>
     </Dialog>

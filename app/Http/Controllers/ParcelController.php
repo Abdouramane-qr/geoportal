@@ -45,66 +45,105 @@ class ParcelController extends Controller
         return response()->json($parcels);
     }
 
-        public function geojson(\Illuminate\Http\Request $request): JsonResponse
-        {
-            if (auth()->check()) {
-                $this->authorize('viewAny', Parcel::class);
-            }
-    
-            $statusFilter = auth()->check() ? null : 'official';
-            $params = [];
-            $whereClauses = [];
-    
-            if ($statusFilter) {
-                $whereClauses[] = "status = ?";
-                $params[] = $statusFilter;
-            }
-    
-            $minLat = $request->query('minLat');
-            $minLng = $request->query('minLng');
-            $maxLat = $request->query('maxLat');
-            $maxLng = $request->query('maxLng');
-    
-                    Log::info('Fetching parcels with params:', $request->query());
-            
-                    if ($minLat !== null && $minLng !== null && $maxLat !== null && $maxLng !== null) {
-                        $whereClauses[] = "ST_Intersects(geom, ST_MakeEnvelope(?, ?, ?, ?, 4326))";
-                        $params[] = $minLng;
-                        $params[] = $minLat;
-                        $params[] = $maxLng;
-                        $params[] = $maxLat;
-                    }
-            
-                    $sql = "
-                        SELECT
-                            id,
-                            owner_name,
-                            status,
-                            soil_data,
-                            created_by,
-                            soil_m,
-                            soil_a,
-                            soil_b,
-                            soil_c,
-                            factor_r,
-                            factor_ls,
-                            factor_c_veg,
-                            factor_p_prac,
-                            computed_k,
-                            computed_erosion,
-                            erosion_risk_level,
-                            ST_AsGeoJSON(geom)::json AS geometry
-                        FROM parcels
-                    ";
-            
-                    if (!empty($whereClauses)) {
-                        $sql .= " WHERE " . implode(" AND ", $whereClauses);
-                    }
-            
-                    Log::info('Executing parcel query:', ['sql' => $sql, 'params' => $params]);
-            
-                    $rows = DB::select($sql, $params);    
-            $features = array_map(function ($row) {
+    public function geojson(Request $request): JsonResponse
+    {
+        if (auth()->check()) {
+            $this->authorize('viewAny', Parcel::class);
+        }
+
+        $validated = $request->validate([
+            'minLat' => ['nullable', 'numeric', 'between:-90,90'],
+            'minLng' => ['nullable', 'numeric', 'between:-180,180'],
+            'maxLat' => ['nullable', 'numeric', 'between:-90,90'],
+            'maxLng' => ['nullable', 'numeric', 'between:-180,180'],
+        ]);
+
+        $hasAnyBound = collect(['minLat', 'minLng', 'maxLat', 'maxLng'])
+            ->contains(fn (string $key) => array_key_exists($key, $validated));
+
+        $hasAllBounds = collect(['minLat', 'minLng', 'maxLat', 'maxLng'])
+            ->every(fn (string $key) => array_key_exists($key, $validated));
+
+        if ($hasAnyBound && ! $hasAllBounds) {
+            return response()->json([
+                'message' => 'Les paramètres minLat, minLng, maxLat et maxLng doivent être fournis ensemble.',
+            ], 422);
+        }
+
+        if ($hasAllBounds && ($validated['minLat'] > $validated['maxLat'] || $validated['minLng'] > $validated['maxLng'])) {
+            return response()->json([
+                'message' => 'Bornes invalides: min doit être inférieur ou égal à max.',
+            ], 422);
+        }
+
+        $statusFilter = auth()->check() ? null : 'official';
+        $params = [];
+        $whereClauses = [];
+
+        if ($statusFilter) {
+            $whereClauses[] = 'status = ?';
+            $params[] = $statusFilter;
+        }
+
+        Log::info('Fetching parcels with params', $request->query());
+
+        if ($hasAllBounds) {
+            // Normalize geometries to SRID 4326 before intersection to avoid mixed-SRID PostGIS errors.
+            $whereClauses[] = 'ST_Intersects(
+                ST_Transform(CASE WHEN ST_SRID(geom) = 0 THEN ST_SetSRID(geom, 4326) ELSE geom END, 4326),
+                ST_MakeEnvelope(CAST(? AS double precision), CAST(? AS double precision), CAST(? AS double precision), CAST(? AS double precision), 4326)
+            )';
+            $params[] = $validated['minLng'];
+            $params[] = $validated['minLat'];
+            $params[] = $validated['maxLng'];
+            $params[] = $validated['maxLat'];
+        }
+
+        $sql = '
+            SELECT
+                id,
+                owner_name,
+                status,
+                soil_data,
+                created_by,
+                soil_m,
+                soil_a,
+                soil_b,
+                soil_c,
+                factor_r,
+                factor_ls,
+                factor_c_veg,
+                factor_p_prac,
+                computed_k,
+                computed_erosion,
+                erosion_risk_level,
+                ST_AsGeoJSON(
+                    ST_Transform(CASE WHEN ST_SRID(geom) = 0 THEN ST_SetSRID(geom, 4326) ELSE geom END, 4326)
+                )::json AS geometry
+            FROM parcels
+        ';
+
+        if (! empty($whereClauses)) {
+            $sql .= ' WHERE '.implode(' AND ', $whereClauses);
+        }
+
+        Log::info('Executing parcel query', ['sql' => $sql, 'params' => $params]);
+
+        try {
+            $rows = DB::select($sql, $params);
+        } catch (\Throwable $e) {
+            Log::error('GeoJSON query failed', [
+                'message' => $e->getMessage(),
+                'query' => $sql,
+                'params' => $params,
+            ]);
+
+            return response()->json([
+                'message' => 'Erreur lors du chargement des parcelles.',
+            ], 500);
+        }
+
+        $features = array_map(function ($row) {
                 $properties = [
                     'id' => $row->id,
                     'owner_name' => $row->owner_name,
@@ -130,13 +169,13 @@ class ParcelController extends Controller
                     'geometry' => $row->geometry,
                     'properties' => $properties,
                 ];
-            }, $rows);
-    
-            return response()->json([
-                'type' => 'FeatureCollection',
-                'features' => $features,
-            ]);
-        }
+        }, $rows);
+
+        return response()->json([
+            'type' => 'FeatureCollection',
+            'features' => $features,
+        ]);
+    }
     public function store(StoreParcelRequest $request): JsonResponse
     {
         $this->authorize('create', Parcel::class);

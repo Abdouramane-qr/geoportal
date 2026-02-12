@@ -70,4 +70,28 @@ class ParcelStatusUpdateTest extends TestCase
             ->assertUnprocessable()
             ->assertJsonValidationErrors(['status']);
     }
+
+    public function test_autorite_role_cannot_update_parcel_status(): void
+    {
+        $user = User::factory()->create();
+        $user->profile()->update(['role' => 'autorite']);
+
+        $parcel = Parcel::create([
+            'owner_name' => 'Owner',
+            'status' => 'draft',
+        ]);
+
+        $response = $this
+            ->actingAs($user)
+            ->patchJson("/parcels/{$parcel->id}/status", [
+                'status' => 'validated',
+            ]);
+
+        $response->assertForbidden();
+
+        $this->assertDatabaseHas('parcels', [
+            'id' => $parcel->id,
+            'status' => 'draft',
+        ]);
+    }
 }

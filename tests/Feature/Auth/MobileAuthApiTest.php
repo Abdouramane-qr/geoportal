@@ -136,4 +136,23 @@ class MobileAuthApiTest extends TestCase
 
         $this->assertDatabaseCount('personal_access_tokens', 0);
     }
+
+    public function test_login_endpoint_is_rate_limited_after_repeated_attempts(): void
+    {
+        $user = User::factory()->create();
+
+        for ($i = 0; $i < 6; $i++) {
+            $this->postJson('/api/auth/login', [
+                'email' => $user->email,
+                'password' => 'wrong-password',
+            ]);
+        }
+
+        $response = $this->postJson('/api/auth/login', [
+            'email' => $user->email,
+            'password' => 'wrong-password',
+        ]);
+
+        $response->assertTooManyRequests();
+    }
 }

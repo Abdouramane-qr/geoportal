@@ -66,7 +66,9 @@ class UserController extends Controller
             'password' => $data['password'],
         ]);
 
-        $user->profile()->update([
+        $user->profile()->updateOrCreate([
+            'user_id' => $user->id,
+        ], [
             'role' => $data['role'],
             'full_name' => $data['full_name'] ?? $data['name'],
         ]);
@@ -102,7 +104,9 @@ class UserController extends Controller
 
         $profileData = collect($data)->only(['role', 'full_name'])->toArray();
         if (! empty($profileData)) {
-            $user->profile()->update($profileData);
+            $user->profile()->updateOrCreate([
+                'user_id' => $user->id,
+            ], $profileData);
         }
 
         AuditLog::create([

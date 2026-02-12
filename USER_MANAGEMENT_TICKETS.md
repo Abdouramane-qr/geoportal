@@ -22,3 +22,10 @@
 - [x] `OPS-001` Add API docs examples for user CRUD.
 - [x] `OPS-002` Add audit logging for user create/update/delete.
 - [x] `OPS-003` Add pagination + search on user list endpoint.
+
+## Lot 5 - Security & Consistency (In Progress)
+- [x] `SEC-001` Protect `/api/parcels` write operations behind `auth:sanctum`.
+- [x] `SEC-002` Add feature tests for guest-denied parcel API writes.
+- [x] `CONS-001` Make user profile upsert resilient for legacy data (`updateOrCreate`).
+- [ ] `SEC-003` Add dedicated API endpoint/authorization for audit log consultation.
+- [ ] `SEC-004` Tighten web route access for non-public back-office pages.

@@ -18,4 +18,12 @@ Route::middleware('auth:sanctum')->prefix('auth')->group(function () {
 Route::middleware('auth:sanctum')->apiResource('users', UserController::class);
 
 Route::get('parcels/geojson', [ParcelController::class, 'geojson']);
-Route::apiResource('parcels', ParcelController::class);
+Route::get('parcels', [ParcelController::class, 'index']);
+Route::get('parcels/{id}', [ParcelController::class, 'show']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('parcels', [ParcelController::class, 'store']);
+    Route::put('parcels/{id}', [ParcelController::class, 'update']);
+    Route::patch('parcels/{id}', [ParcelController::class, 'update']);
+    Route::delete('parcels/{id}', [ParcelController::class, 'destroy']);
+});

@@ -10,7 +10,8 @@ import {
   Mail,
   MapPin
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import { MainNav } from '@/components/layout/MainNav';
 import { Button } from '@/components/ui/button';
 import {
@@ -23,12 +24,22 @@ import { Input } from '@/components/ui/input';
 import type { User, UserRole} from '@/types/users';
 import { ROLE_PERMISSIONS, ROLE_LABELS } from '@/types/users';
 
+type ApiUser = {
+  id: number;
+  name: string;
+  email: string;
+  created_at: string;
+  profile?: {
+    role?: UserRole;
+    full_name?: string | null;
+  } | null;
+};
 
 function RoleBadge({ role }: { role: UserRole }) {
   const config = {
     admin: { icon: ShieldCheck, className: 'bg-danger/15 text-danger' },
     agronome: { icon: Shield, className: 'bg-success/15 text-success' },
-    autorité_locale: { icon: ShieldAlert, className: 'bg-warning/15 text-warning' },
+    autorite: { icon: ShieldAlert, className: 'bg-warning/15 text-warning' },
   };
 
   const { icon: Icon, className } = config[role];
@@ -57,23 +68,136 @@ function PermissionsList({ role }: { role: UserRole }) {
 }
 
 export default function UsersPage() {
-  const [users] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/users', {
+        headers: { Accept: 'application/json' },
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch users: ${response.status}`);
+      }
+
+      const data = (await response.json()) as ApiUser[];
+      const mapped: User[] = data.map((user) => ({
+        id: String(user.id),
+        name: user.name,
+        email: user.email,
+        role: user.profile?.role ?? 'agronome',
+        region: '—',
+        isActive: true,
+        lastLogin: null,
+        createdAt: new Date(user.created_at),
+      }));
+      setUsers(mapped);
+    } catch (error) {
+      console.error(error);
+      toast.error("Impossible de charger la liste des utilisateurs.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void fetchUsers();
+  }, []);
+
+  const createUser = async () => {
+    const name = window.prompt("Nom de l'utilisateur ?");
+    if (!name) return;
+    const email = window.prompt("Email de l'utilisateur ?");
+    if (!email) return;
+    const roleInput = window.prompt('Rôle (admin|agronome|autorite) ?', 'agronome');
+    const role = (roleInput ?? 'agronome') as UserRole;
+    const password = window.prompt('Mot de passe initial ?', 'Password#12345');
+    if (!password) return;
+
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ name, email, role, password }),
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to create user: ${response.status}`);
+      }
+      toast.success('Utilisateur créé.');
+      await fetchUsers();
+    } catch (error) {
+      console.error(error);
+      toast.error("Échec de création de l'utilisateur.");
+    }
+  };
+
+  const updateRole = async (userId: string, role: UserRole) => {
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ role }),
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to update role: ${response.status}`);
+      }
+      setUsers((prev) =>
+        prev.map((user) => (user.id === userId ? { ...user, role } : user)),
+      );
+      setSelectedUser((prev) => (prev && prev.id === userId ? { ...prev, role } : prev));
+      toast.success('Rôle mis à jour.');
+    } catch (error) {
+      console.error(error);
+      toast.error('Échec de mise à jour du rôle.');
+    }
+  };
+
+  const deleteUser = async (userId: string) => {
+    if (!window.confirm('Supprimer cet utilisateur ?')) return;
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'DELETE',
+        headers: { Accept: 'application/json' },
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to delete user: ${response.status}`);
+      }
+      setUsers((prev) => prev.filter((user) => user.id !== userId));
+      setSelectedUser((prev) => (prev?.id === userId ? null : prev));
+      toast.success('Utilisateur supprimé.');
+    } catch (error) {
+      console.error(error);
+      toast.error("Échec de suppression de l'utilisateur.");
+    }
+  };
 
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.region.toLowerCase().includes(searchQuery.toLowerCase())
+    (user.region ?? '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const stats = {
+  const stats = useMemo(() => ({
     total: users.length,
     active: users.filter(u => u.isActive).length,
     admins: users.filter(u => u.role === 'admin').length,
     agronomes: users.filter(u => u.role === 'agronome').length,
-    autorites: users.filter(u => u.role === 'autorité_locale').length,
-  };
+    autorites: users.filter(u => u.role === 'autorite').length,
+  }), [users]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background app-shell">
@@ -88,7 +212,7 @@ export default function UsersPage() {
                 Gérez les accès et les permissions des utilisateurs du système
               </p>
             </div>
-            <Button>
+            <Button onClick={createUser}>
               <Plus size={16} className="mr-2" />
               Nouvel utilisateur
             </Button>
@@ -146,7 +270,13 @@ export default function UsersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {filteredUsers.map((user) => (
+                {loading ? (
+                  <tr>
+                    <td className="px-4 py-6 text-sm text-muted-foreground" colSpan={6}>
+                      Chargement des utilisateurs...
+                    </td>
+                  </tr>
+                ) : filteredUsers.map((user) => (
                   <tr 
                     key={user.id} 
                     className="hover:bg-muted/50 cursor-pointer"
@@ -203,9 +333,21 @@ export default function UsersPage() {
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem>Modifier</DropdownMenuItem>
-                          <DropdownMenuItem>Réinitialiser le mot de passe</DropdownMenuItem>
-                          <DropdownMenuItem className="text-danger">Désactiver</DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => updateRole(user.id, 'admin')}>
+                            Définir Admin
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => updateRole(user.id, 'agronome')}>
+                            Définir Agronome
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => updateRole(user.id, 'autorite')}>
+                            Définir Autorité
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-danger"
+                            onClick={() => deleteUser(user.id)}
+                          >
+                            Supprimer
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </td>
@@ -229,7 +371,7 @@ export default function UsersPage() {
                   <h3 className="font-semibold text-foreground">{selectedUser.name}</h3>
                   <div className="flex items-center gap-2 mt-1">
                     <RoleBadge role={selectedUser.role} />
-                    <span className="text-sm text-muted-foreground">• {selectedUser.region}</span>
+                    <span className="text-sm text-muted-foreground">• {selectedUser.region ?? '—'}</span>
                   </div>
                 </div>
               </div>

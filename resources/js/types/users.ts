@@ -1,4 +1,4 @@
-export type UserRole = 'agronome' | 'admin' | 'autorité_locale';
+export type UserRole = 'agronome' | 'admin' | 'autorite';
 
 export interface Permission {
   id: string;
@@ -11,7 +11,7 @@ export interface User {
   name: string;
   email: string;
   role: UserRole;
-  region: string;
+  region?: string;
   isActive: boolean;
   lastLogin: Date | null;
   createdAt: Date;
@@ -31,7 +31,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
     'Modifier les parcelles',
     'Générer des rapports',
   ],
-  autorité_locale: [
+  autorite: [
     'Consulter les données',
     'Valider les règles foncières',
     'Consulter les rapports',
@@ -41,5 +41,5 @@ export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
 export const ROLE_LABELS: Record<UserRole, string> = {
   admin: 'Administrateur',
   agronome: 'Agronome',
-  autorité_locale: 'Autorité locale',
+  autorite: 'Autorité locale',
 };

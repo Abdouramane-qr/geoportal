@@ -7,10 +7,10 @@
 - [x] `USER-CRUD-004` Add Feature tests for authz + CRUD API behavior.
 
 ## Lot 2 - Frontend UsersPage Integration
-- [ ] `USER-UI-001` Load users from backend API instead of local empty state.
-- [ ] `USER-UI-002` Implement create user flow from "Nouvel utilisateur".
-- [ ] `USER-UI-003` Implement edit role/profile and activate/deactivate actions.
-- [ ] `USER-UI-004` Handle API errors and optimistic updates safely.
+- [x] `USER-UI-001` Load users from backend API instead of local empty state.
+- [x] `USER-UI-002` Implement create user flow from "Nouvel utilisateur".
+- [x] `USER-UI-003` Implement edit role/profile actions (role updates + delete).
+- [x] `USER-UI-004` Handle API errors and optimistic updates safely.
 
 ## Lot 3 - Role & Access Hardening
 - [ ] `RBAC-001` Protect `/utilisateurs` route with auth and role check.

@@ -88,6 +88,40 @@ class MobileAuthApiTest extends TestCase
             ]);
     }
 
+    public function test_two_factor_challenge_fails_with_invalid_code(): void
+    {
+        $user = User::factory()->create();
+        $secret = app(TwoFactorAuthenticationProvider::class)->generateSecretKey();
+
+        $user->forceFill([
+            'two_factor_secret' => encrypt($secret),
+            'two_factor_recovery_codes' => encrypt(json_encode(['recovery-code-1'])),
+            'two_factor_confirmed_at' => now(),
+        ])->save();
+
+        $login = $this->postJson('/api/auth/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $challengeToken = $login->json('challenge_token');
+
+        $response = $this->postJson('/api/auth/two-factor-challenge', [
+            'challenge_token' => $challengeToken,
+            'code' => '000000',
+            'device_name' => 'ios-app',
+        ]);
+
+        $response->assertStatus(422);
+    }
+
+    public function test_me_endpoint_requires_authentication(): void
+    {
+        $response = $this->getJson('/api/auth/me');
+
+        $response->assertUnauthorized();
+    }
+
     public function test_authenticated_user_can_fetch_profile_and_logout(): void
     {
         $user = User::factory()->create();

@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\ParcelController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('auth')->group(function () {
+Route::middleware('throttle:6,1')->prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::post('two-factor-challenge', [AuthController::class, 'twoFactorChallenge']);
 });

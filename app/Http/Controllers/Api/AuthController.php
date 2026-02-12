@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -24,6 +25,16 @@ class AuthController extends Controller
         $user = User::where('email', $validated['email'])->first();
 
         if (! $user || ! Hash::check($validated['password'], $user->password)) {
+            $this->recordLoginAudit(
+                request: $request,
+                action: 'auth.login.failed',
+                user: $user,
+                metadata: [
+                    'email' => $validated['email'],
+                    'reason' => 'invalid_credentials',
+                ],
+            );
+
             return response()->json([
                 'message' => 'Identifiants invalides.',
             ], 422);
@@ -41,6 +52,15 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken($validated['device_name'] ?? 'mobile-app')->plainTextToken;
+        $this->recordLoginAudit(
+            request: $request,
+            action: 'auth.login.success',
+            user: $user,
+            metadata: [
+                'email' => $user->email,
+                'device_name' => $validated['device_name'] ?? 'mobile-app',
+            ],
+        );
 
         return response()->json([
             'token' => $token,
@@ -125,5 +145,20 @@ class AuthController extends Controller
     private function challengeCacheKey(string $challengeToken): string
     {
         return "mobile-auth:2fa:{$challengeToken}";
+    }
+
+    private function recordLoginAudit(Request $request, string $action, ?User $user, array $metadata = []): void
+    {
+        AuditLog::create([
+            'actor_user_id' => $user?->id,
+            'action' => $action,
+            'entity_type' => 'auth',
+            'entity_id' => (string) ($user?->id ?? ($metadata['email'] ?? 'unknown')),
+            'metadata' => [
+                ...$metadata,
+                'ip_address' => $request->ip(),
+                'user_agent' => (string) $request->userAgent(),
+            ],
+        ]);
     }
 }

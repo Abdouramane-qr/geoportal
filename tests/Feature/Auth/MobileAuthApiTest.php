@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\TwoFactorAuthenticationProvider;
@@ -27,6 +28,13 @@ class MobileAuthApiTest extends TestCase
                 'token_type',
                 'user' => ['id', 'email', 'profile'],
             ]);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'auth.login.success',
+            'entity_type' => 'auth',
+            'entity_id' => (string) $user->id,
+            'actor_user_id' => $user->id,
+        ]);
     }
 
     public function test_login_requires_two_factor_when_enabled(): void
@@ -154,6 +162,27 @@ class MobileAuthApiTest extends TestCase
         ]);
 
         $response->assertTooManyRequests();
+    }
+
+    public function test_failed_login_writes_audit_log_entry(): void
+    {
+        $user = User::factory()->create();
+
+        $this->postJson('/api/auth/login', [
+            'email' => $user->email,
+            'password' => 'wrong-password',
+        ])->assertStatus(422);
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'auth.login.failed',
+            'entity_type' => 'auth',
+            'entity_id' => (string) $user->id,
+            'actor_user_id' => $user->id,
+        ]);
+
+        $this->assertNotNull(
+            AuditLog::where('action', 'auth.login.failed')->first()?->metadata['ip_address'] ?? null
+        );
     }
 
     public function test_two_factor_challenge_endpoint_is_rate_limited_after_repeated_attempts(): void

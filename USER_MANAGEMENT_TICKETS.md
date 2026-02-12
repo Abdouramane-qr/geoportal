@@ -29,3 +29,7 @@
 - [x] `CONS-001` Make user profile upsert resilient for legacy data (`updateOrCreate`).
 - [x] `SEC-003` Add dedicated API endpoint/authorization for audit log consultation.
 - [x] `SEC-004` Tighten web route access for non-public back-office pages.
+
+## Lot 6 - Mobile Auth Observability
+- [x] `AUTH-AUDIT-001` Log `auth.login.success` into `audit_logs`.
+- [x] `AUTH-AUDIT-002` Log `auth.login.failed` into `audit_logs`.

@@ -38,8 +38,8 @@ jobs:
         uses: easingthemes/ssh-deploy@v5.0.0
         with:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          REMOTE_HOST: 149.102.140.189
-          REMOTE_USER: root
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
           TARGET: /var/www/html/geoportal
           EXCLUDE: "/node_modules/"
           

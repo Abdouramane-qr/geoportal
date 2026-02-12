@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -70,6 +71,17 @@ class UserController extends Controller
             'full_name' => $data['full_name'] ?? $data['name'],
         ]);
 
+        AuditLog::create([
+            'actor_user_id' => $request->user()?->id,
+            'action' => 'user.created',
+            'entity_type' => 'user',
+            'entity_id' => (string) $user->id,
+            'metadata' => [
+                'email' => $user->email,
+                'role' => $user->profile?->role,
+            ],
+        ]);
+
         return response()->json($user->load('profile'), 201);
     }
 
@@ -93,6 +105,16 @@ class UserController extends Controller
             $user->profile()->update($profileData);
         }
 
+        AuditLog::create([
+            'actor_user_id' => $request->user()?->id,
+            'action' => 'user.updated',
+            'entity_type' => 'user',
+            'entity_id' => (string) $user->id,
+            'metadata' => [
+                'fields' => array_keys($data),
+            ],
+        ]);
+
         return response()->json($user->load('profile'));
     }
 
@@ -100,7 +122,19 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
+        $targetUserId = (string) $user->id;
+        $targetEmail = $user->email;
         $user->delete();
+
+        AuditLog::create([
+            'actor_user_id' => $request->user()?->id,
+            'action' => 'user.deleted',
+            'entity_type' => 'user',
+            'entity_id' => $targetUserId,
+            'metadata' => [
+                'email' => $targetEmail,
+            ],
+        ]);
 
         return response()->json(['deleted' => true]);
     }

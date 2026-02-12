@@ -59,6 +59,11 @@ class UserManagementApiTest extends TestCase
 
         $response->assertCreated()
             ->assertJsonPath('profile.role', 'autorite');
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'user.created',
+            'entity_type' => 'user',
+        ]);
     }
 
     public function test_admin_can_update_user_role(): void
@@ -72,6 +77,12 @@ class UserManagementApiTest extends TestCase
 
         $response->assertOk()
             ->assertJsonPath('profile.role', 'admin');
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'user.updated',
+            'entity_type' => 'user',
+            'entity_id' => (string) $target->id,
+        ]);
     }
 
     public function test_admin_cannot_delete_self(): void
@@ -80,6 +91,21 @@ class UserManagementApiTest extends TestCase
 
         $response = $this->deleteJson("/api/users/{$admin->id}");
         $response->assertForbidden();
+    }
+
+    public function test_admin_delete_user_writes_audit_log(): void
+    {
+        $this->actingAsAdmin();
+        $target = User::factory()->create();
+
+        $response = $this->deleteJson("/api/users/{$target->id}");
+        $response->assertOk();
+
+        $this->assertDatabaseHas('audit_logs', [
+            'action' => 'user.deleted',
+            'entity_type' => 'user',
+            'entity_id' => (string) $target->id,
+        ]);
     }
 
     public function test_admin_can_search_users_by_name_or_email(): void

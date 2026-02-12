@@ -20,5 +20,5 @@
 
 ## Lot 4 - Operational Quality
 - [x] `OPS-001` Add API docs examples for user CRUD.
-- [ ] `OPS-002` Add audit logging for user create/update/delete.
+- [x] `OPS-002` Add audit logging for user create/update/delete.
 - [x] `OPS-003` Add pagination + search on user list endpoint.

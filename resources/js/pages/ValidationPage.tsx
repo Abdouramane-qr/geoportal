@@ -120,11 +120,9 @@ export default function ValidationPage() {
 
   useEffect(() => {
     if (isMobile && viewMode === 'split') {
-      if (viewMode !== 'list') { // Only update if it's different
-        setTimeout(() => {
-          setViewMode('list');
-        }, 0);
-      }
+      setTimeout(() => {
+        setViewMode('list');
+      }, 0);
     }
   }, [isMobile, viewMode]);
 

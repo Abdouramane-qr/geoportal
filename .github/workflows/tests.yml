@@ -52,5 +52,8 @@ jobs:
       - name: Build Assets
         run: npm run build
 
+      - name: Type Check Frontend
+        run: npm run types
+
       - name: Tests
         run: ./vendor/bin/phpunit

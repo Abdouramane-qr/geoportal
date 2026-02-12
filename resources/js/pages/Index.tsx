@@ -31,6 +31,12 @@ import type { ParcelData, LayerState } from '@/types/parcel';
 import type { ParcelApi } from '@/types/parcel-api';
 import type { ScientificStatus } from '@/types/scientificStatus';
 
+const isLngLatPosition = (value: GeoJSON.Position): value is [number, number] =>
+  Array.isArray(value)
+  && value.length >= 2
+  && typeof value[0] === 'number'
+  && typeof value[1] === 'number';
+
 const Index = () => {
   const [parcels, setParcels] = useState<ParcelData[]>([]);
   const [selectedParcel, setSelectedParcel] = useState<ParcelData | null>(null);
@@ -86,9 +92,13 @@ const Index = () => {
           // Default to a placeholder if geometry is missing, but log a warning.
           let polygon: [number, number][] = [];
           if (geometry && geometry.type === 'Polygon' && Array.isArray(geometry.coordinates[0])) {
-            polygon = geometry.coordinates[0].map((coords: [number, number]) => [coords[1], coords[0]]); // Reverse coords for Leaflet
+            polygon = geometry.coordinates[0]
+              .filter(isLngLatPosition)
+              .map(([lng, lat]) => [lat, lng]); // Reverse coords for Leaflet
           } else if (geometry && geometry.type === 'MultiPolygon' && Array.isArray(geometry.coordinates[0][0])) {
-            polygon = geometry.coordinates[0][0].map((coords: [number, number]) => [coords[1], coords[0]]); // Use the first polygon of a MultiPolygon
+            polygon = geometry.coordinates[0][0]
+              .filter(isLngLatPosition)
+              .map(([lng, lat]) => [lat, lng]); // Use the first polygon of a MultiPolygon
           } else {
             console.warn(`Parcel ${item.id} has missing or invalid geometry.`);
             // Fallback to a small placeholder polygon around the context center

@@ -66,6 +66,18 @@ const createBbox = (): Bbox => ({
   sumLat: 0,
 });
 
+const visitGeometry = (geometry: GeoJSON.Geometry, onPoint: (lng: number, lat: number) => void) => {
+  if (geometry.type === 'GeometryCollection') {
+    geometry.geometries.forEach((child) => visitGeometry(child, onPoint));
+    return;
+  }
+
+  visitCoords(
+    geometry.coordinates as GeoJSON.Position | GeoJSON.Position[] | GeoJSON.Position[][] | GeoJSON.Position[][][],
+    onPoint,
+  );
+};
+
 const visitCoords = (coords: GeoJSON.Position | GeoJSON.Position[] | GeoJSON.Position[][] | GeoJSON.Position[][][], onPoint: (lng: number, lat: number) => void) => {
   if (!Array.isArray(coords)) return;
   if (coords.length === 0) return;
@@ -95,7 +107,7 @@ const computeBbox = (data: GeoJSON.FeatureCollection): Bbox => {
   data.features.forEach((feature) => {
     const geom = feature.geometry;
     if (!geom) return;
-    visitCoords(geom.coordinates as GeoJSON.Position[] | GeoJSON.Position[][] | GeoJSON.Position[][][], (lng, lat) => {
+    visitGeometry(geom, (lng, lat) => {
       updateBbox(bbox, lng, lat);
     });
   });
@@ -144,7 +156,7 @@ export const computeGeoJsonFingerprint = (data: GeoJSON.FeatureCollection): stri
     new Set(
       data.features
         .map((feature) => feature.geometry?.type)
-        .filter((value): value is string => Boolean(value)),
+        .filter((value): value is GeoJSON.GeoJsonGeometryTypes => Boolean(value)),
     ),
   ).sort();
   const bboxPart = [

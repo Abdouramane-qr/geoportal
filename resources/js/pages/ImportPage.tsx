@@ -135,7 +135,7 @@ function ValidationTable({ rows }: { rows: ImportedRow[] }) {
   const hasIssue = (row: ImportedRow, column: keyof RawRow) =>
     row.issues.some((issue) => issue.column === column);
 
-  const formatValue = (value: number | null | undefined) =>
+  const formatValue = (value: string | number | null | undefined) =>
     value === null || value === undefined ? '—' : value;
 
   return (

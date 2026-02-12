@@ -5,10 +5,12 @@ import {
   Shield, 
   Lightbulb,
   HelpCircle,
+  ChevronRight,
   FlaskConical,
   CheckCircle2,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
 import { ScientificStatusBadge } from '@/components/ui/scientific-status-badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import {

@@ -55,5 +55,8 @@ jobs:
       - name: Type Check Frontend
         run: npm run types
 
+      - name: Frontend Unit Tests
+        run: npx vitest run
+
       - name: Tests
         run: ./vendor/bin/phpunit

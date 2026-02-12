@@ -98,6 +98,7 @@ export default function UsersPage() {
   const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [totalUsers, setTotalUsers] = useState(0);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
   const [createSubmitting, setCreateSubmitting] = useState(false);
@@ -114,6 +115,7 @@ export default function UsersPage() {
     const targetSearch = options?.search ?? serverSearch;
     try {
       setLoading(true);
+      setLoadError(null);
       const query = new URLSearchParams({
         page: String(targetPage),
         per_page: '10',
@@ -148,6 +150,7 @@ export default function UsersPage() {
       setTotalUsers(payload.total);
     } catch (error) {
       console.error(error);
+      setLoadError("Impossible de charger la liste des utilisateurs.");
       toast.error("Impossible de charger la liste des utilisateurs.");
     } finally {
       setLoading(false);
@@ -274,7 +277,7 @@ export default function UsersPage() {
       <main className="flex-1 p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-2xl font-semibold text-foreground">Gestion des utilisateurs</h1>
               <p className="text-muted-foreground mt-1">
@@ -300,11 +303,11 @@ export default function UsersPage() {
                   </DialogDescription>
                 </DialogHeader>
               </div>
-              <div className="bg-white px-6 py-5">
+              <div className="bg-white px-4 py-4 sm:px-6 sm:py-5">
                 <div className="mb-4 rounded-md border border-[#2ECC71]/30 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] px-3 py-2 text-xs text-[#616161]">
                   Remplis les champs ci-dessous. Le mot de passe doit contenir au moins 8 caractères.
                 </div>
-              <div className="space-y-4 rounded-lg border border-[#2ECC71]/20 bg-[#f8f9fa] p-4">
+              <div className="space-y-4 rounded-lg border border-[#2ECC71]/20 bg-[#f8f9fa] p-3 sm:p-4">
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-[#212121]">Nom</label>
                   <Input
@@ -423,11 +426,17 @@ export default function UsersPage() {
             </div>
           </div>
 
+          {loadError ? (
+            <div className="mb-4 rounded-lg border border-[#D68910]/30 bg-[#D68910]/10 px-4 py-3 text-sm text-[#212121]">
+              {loadError}
+            </div>
+          ) : null}
+
           {/* Users Table */}
-          <div className="bg-card border border-border rounded-lg overflow-hidden">
+          <div className="overflow-hidden rounded-lg border border-[#2ECC71]/20 bg-card">
             <div className="overflow-x-auto">
               <table className="min-w-[720px] w-full">
-              <thead className="bg-muted">
+              <thead className="bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)]">
                 <tr>
                   <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Utilisateur</th>
                   <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Rôle</th>
@@ -444,10 +453,16 @@ export default function UsersPage() {
                       Chargement des utilisateurs...
                     </td>
                   </tr>
+                ) : users.length === 0 ? (
+                  <tr>
+                    <td className="px-4 py-6 text-sm text-muted-foreground" colSpan={6}>
+                      Aucun utilisateur trouvé pour cette recherche.
+                    </td>
+                  </tr>
                 ) : users.map((user) => (
                   <tr 
                     key={user.id} 
-                    className="hover:bg-muted/50 cursor-pointer"
+                    className="cursor-pointer hover:bg-[#2ECC71]/5"
                     onClick={() => setSelectedUser(selectedUser?.id === user.id ? null : user)}
                   >
                     <td className="px-4 py-3">
@@ -496,7 +511,12 @@ export default function UsersPage() {
                     <td className="px-4 py-3 text-right">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => e.stopPropagation()}
+                            className="hover:bg-[#2ECC71]/10 hover:text-[#27AE60]"
+                          >
                             <MoreVertical size={16} />
                           </Button>
                         </DropdownMenuTrigger>

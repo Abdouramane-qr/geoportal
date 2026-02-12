@@ -71,10 +71,10 @@ Appliquer le branding LandSense Hub et assurer un responsive design cohérent su
 ## Phase 2 - Branding Interfaces Métier (À exécuter)
 
 ### A) `Users` (`resources/js/pages/UsersPage.tsx`)
-- [ ] `UI-USR-001` Uniformiser les couleurs brand sur tableau, badges et actions.
-- [ ] `UI-USR-002` Finaliser lisibilité mobile du modal création (espacement, tailles, focus).
-- [ ] `UI-USR-003` Vérifier états `loading/error/empty` avec style cohérent brand.
-- [ ] `UI-USR-004` Ajouter test UI manuel responsive (320px, 768px, desktop).
+- [x] `UI-USR-001` Uniformiser les couleurs brand sur tableau, badges et actions.
+- [x] `UI-USR-002` Finaliser lisibilité mobile du modal création (espacement, tailles, focus).
+- [x] `UI-USR-003` Vérifier états `loading/error/empty` avec style cohérent brand.
+- [x] `UI-USR-004` Ajouter test UI manuel responsive (320px, 768px, desktop).
 
 ### B) `Audit` (`resources/js/pages/AuditLogPage.tsx`)
 - [ ] `UI-AUD-001` Appliquer palette branding sur filtres, badges d’action et stats.

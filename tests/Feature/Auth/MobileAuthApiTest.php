@@ -155,4 +155,21 @@ class MobileAuthApiTest extends TestCase
 
         $response->assertTooManyRequests();
     }
+
+    public function test_two_factor_challenge_endpoint_is_rate_limited_after_repeated_attempts(): void
+    {
+        for ($i = 0; $i < 5; $i++) {
+            $this->postJson('/api/auth/two-factor-challenge', [
+                'challenge_token' => 'invalid-token',
+                'code' => '000000',
+            ]);
+        }
+
+        $response = $this->postJson('/api/auth/two-factor-challenge', [
+            'challenge_token' => 'invalid-token',
+            'code' => '000000',
+        ]);
+
+        $response->assertTooManyRequests();
+    }
 }

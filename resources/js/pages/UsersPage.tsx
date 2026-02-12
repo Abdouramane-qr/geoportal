@@ -15,12 +15,27 @@ import { toast } from 'sonner';
 import { MainNav } from '@/components/layout/MainNav';
 import { Button } from '@/components/ui/button';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { User, UserRole} from '@/types/users';
 import { ROLE_PERMISSIONS, ROLE_LABELS } from '@/types/users';
 
@@ -84,6 +99,15 @@ export default function UsersPage() {
   const [lastPage, setLastPage] = useState(1);
   const [totalUsers, setTotalUsers] = useState(0);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
+  const [createSubmitting, setCreateSubmitting] = useState(false);
+  const [createForm, setCreateForm] = useState({
+    name: '',
+    email: '',
+    role: 'agronome' as UserRole,
+    password: '',
+  });
+  const [createErrors, setCreateErrors] = useState<Partial<Record<'name' | 'email' | 'role' | 'password', string>>>({});
 
   const fetchUsers = useCallback(async (options?: { page?: number; search?: string }) => {
     const targetPage = options?.page ?? page;
@@ -140,17 +164,24 @@ export default function UsersPage() {
     return () => clearTimeout(timer);
   }, [fetchUsers, searchQuery]);
 
+  const validateCreateForm = () => {
+    const nextErrors: Partial<Record<'name' | 'email' | 'role' | 'password', string>> = {};
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!createForm.name.trim()) nextErrors.name = 'Le nom est requis.';
+    if (!emailPattern.test(createForm.email.trim())) nextErrors.email = 'Adresse email invalide.';
+    if (!['admin', 'agronome', 'autorite'].includes(createForm.role)) nextErrors.role = 'Rôle invalide.';
+    if (createForm.password.length < 8) nextErrors.password = 'Le mot de passe doit contenir au moins 8 caractères.';
+
+    setCreateErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
   const createUser = async () => {
-    const name = window.prompt("Nom de l'utilisateur ?");
-    if (!name) return;
-    const email = window.prompt("Email de l'utilisateur ?");
-    if (!email) return;
-    const roleInput = window.prompt('Rôle (admin|agronome|autorite) ?', 'agronome');
-    const role = (roleInput ?? 'agronome') as UserRole;
-    const password = window.prompt('Mot de passe initial ?', 'Password#12345');
-    if (!password) return;
+    if (!validateCreateForm()) return;
 
     try {
+      setCreateSubmitting(true);
       const response = await fetch('/api/users', {
         method: 'POST',
         headers: {
@@ -158,16 +189,26 @@ export default function UsersPage() {
           Accept: 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify({ name, email, role, password }),
+        body: JSON.stringify({
+          name: createForm.name.trim(),
+          email: createForm.email.trim(),
+          role: createForm.role,
+          password: createForm.password,
+        }),
       });
       if (!response.ok) {
         throw new Error(`Failed to create user: ${response.status}`);
       }
       toast.success('Utilisateur créé.');
+      setCreateOpen(false);
+      setCreateForm({ name: '', email: '', role: 'agronome', password: '' });
+      setCreateErrors({});
       await fetchUsers({ page: 1, search: serverSearch });
     } catch (error) {
       console.error(error);
       toast.error("Échec de création de l'utilisateur.");
+    } finally {
+      setCreateSubmitting(false);
     }
   };
 
@@ -237,11 +278,87 @@ export default function UsersPage() {
                 Gérez les accès et les permissions des utilisateurs du système
               </p>
             </div>
-            <Button onClick={createUser}>
+            <Button onClick={() => setCreateOpen(true)}>
               <Plus size={16} className="mr-2" />
               Nouvel utilisateur
             </Button>
           </div>
+
+          <Dialog open={createOpen} onOpenChange={setCreateOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Nouvel utilisateur</DialogTitle>
+                <DialogDescription>
+                  Créez un compte utilisateur avec un rôle initial.
+                </DialogDescription>
+              </DialogHeader>
+
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-foreground">Nom</label>
+                  <Input
+                    value={createForm.name}
+                    onChange={(e) => setCreateForm((prev) => ({ ...prev, name: e.target.value }))}
+                    placeholder="Nom complet"
+                  />
+                  {createErrors.name ? <p className="text-xs text-danger">{createErrors.name}</p> : null}
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-foreground">Email</label>
+                  <Input
+                    type="email"
+                    value={createForm.email}
+                    onChange={(e) => setCreateForm((prev) => ({ ...prev, email: e.target.value }))}
+                    placeholder="email@domaine.com"
+                  />
+                  {createErrors.email ? <p className="text-xs text-danger">{createErrors.email}</p> : null}
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-foreground">Rôle</label>
+                  <Select
+                    value={createForm.role}
+                    onValueChange={(value) => setCreateForm((prev) => ({ ...prev, role: value as UserRole }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choisir un rôle" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="admin">Administrateur</SelectItem>
+                      <SelectItem value="agronome">Agronome</SelectItem>
+                      <SelectItem value="autorite">Autorité locale</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {createErrors.role ? <p className="text-xs text-danger">{createErrors.role}</p> : null}
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-sm font-medium text-foreground">Mot de passe initial</label>
+                  <Input
+                    type="password"
+                    value={createForm.password}
+                    onChange={(e) => setCreateForm((prev) => ({ ...prev, password: e.target.value }))}
+                    placeholder="Au moins 8 caractères"
+                  />
+                  {createErrors.password ? <p className="text-xs text-danger">{createErrors.password}</p> : null}
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setCreateOpen(false)}
+                  disabled={createSubmitting}
+                >
+                  Annuler
+                </Button>
+                <Button onClick={createUser} disabled={createSubmitting}>
+                  {createSubmitting ? 'Création...' : 'Créer'}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">

@@ -274,13 +274,14 @@ export default function UsersPage() {
   return (
     <div className="min-h-screen flex flex-col bg-background app-shell">
       <MainNav />
-      <main className="flex-1 p-6">
+      <main className="flex-1 bg-[linear-gradient(180deg,#f8f9fa_0%,#ffffff_45%,#f8f9fa_100%)] p-6">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-2xl font-semibold text-foreground">Gestion des utilisateurs</h1>
-              <p className="text-muted-foreground mt-1">
+          <div className="mb-6 rounded-xl border border-[#2ECC71]/20 bg-white p-5 shadow-[0_10px_30px_rgba(33,33,33,0.06)] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-wide text-[#27AE60]">Administration</p>
+              <h1 className="text-2xl font-semibold text-[#212121]">Gestion des utilisateurs</h1>
+              <p className="text-[#616161]">
                 Gérez les accès et les permissions des utilisateurs du système
               </p>
             </div>
@@ -391,25 +392,25 @@ export default function UsersPage() {
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-            <div className="bg-card border border-border rounded-lg p-4">
-              <div className="text-sm text-muted-foreground">Total</div>
-              <div className="text-2xl font-semibold text-foreground">{stats.total}</div>
+            <div className="rounded-xl border border-[#2ECC71]/25 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-4 shadow-sm">
+              <div className="text-sm text-[#616161]">Total</div>
+              <div className="text-2xl font-semibold text-[#212121]">{stats.total}</div>
             </div>
-            <div className="bg-card border border-border rounded-lg p-4">
-              <div className="text-sm text-muted-foreground">Actifs</div>
-              <div className="text-2xl font-semibold text-success">{stats.active}</div>
+            <div className="rounded-xl border border-[#2ECC71]/25 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-4 shadow-sm">
+              <div className="text-sm text-[#616161]">Actifs</div>
+              <div className="text-2xl font-semibold text-[#27AE60]">{stats.active}</div>
             </div>
-            <div className="bg-card border border-border rounded-lg p-4">
-              <div className="text-sm text-muted-foreground">Admins</div>
-              <div className="text-2xl font-semibold text-danger">{stats.admins}</div>
+            <div className="rounded-xl border border-[#2ECC71]/25 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-4 shadow-sm">
+              <div className="text-sm text-[#616161]">Admins</div>
+              <div className="text-2xl font-semibold text-[#D68910]">{stats.admins}</div>
             </div>
-            <div className="bg-card border border-border rounded-lg p-4">
-              <div className="text-sm text-muted-foreground">Agronomes</div>
-              <div className="text-2xl font-semibold text-foreground">{stats.agronomes}</div>
+            <div className="rounded-xl border border-[#2ECC71]/25 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-4 shadow-sm">
+              <div className="text-sm text-[#616161]">Agronomes</div>
+              <div className="text-2xl font-semibold text-[#212121]">{stats.agronomes}</div>
             </div>
-            <div className="bg-card border border-border rounded-lg p-4">
-              <div className="text-sm text-muted-foreground">Autorités</div>
-              <div className="text-2xl font-semibold text-foreground">{stats.autorites}</div>
+            <div className="rounded-xl border border-[#2ECC71]/25 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] p-4 shadow-sm">
+              <div className="text-sm text-[#616161]">Autorités</div>
+              <div className="text-2xl font-semibold text-[#212121]">{stats.autorites}</div>
             </div>
           </div>
 
@@ -421,7 +422,7 @@ export default function UsersPage() {
                 placeholder="Rechercher par nom, email ou région..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
+                className="pl-9 border-[#2ECC71]/30 bg-white text-[#212121] placeholder:text-[#616161]"
               />
             </div>
           </div>
@@ -433,20 +434,20 @@ export default function UsersPage() {
           ) : null}
 
           {/* Users Table */}
-          <div className="overflow-hidden rounded-lg border border-[#2ECC71]/20 bg-card">
+          <div className="overflow-hidden rounded-xl border border-[#2ECC71]/20 bg-white shadow-[0_12px_30px_rgba(33,33,33,0.06)]">
             <div className="overflow-x-auto">
               <table className="min-w-[720px] w-full">
               <thead className="bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)]">
                 <tr>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Utilisateur</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Rôle</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Région</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Statut</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-foreground">Dernière connexion</th>
-                  <th className="px-4 py-3 text-right text-sm font-medium text-foreground">Actions</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-[#212121]">Utilisateur</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-[#212121]">Rôle</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-[#212121]">Région</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-[#212121]">Statut</th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-[#212121]">Dernière connexion</th>
+                  <th className="px-4 py-3 text-right text-sm font-semibold text-[#212121]">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody className="divide-y divide-[#2ECC71]/10">
                 {loading ? (
                   <tr>
                     <td className="px-4 py-6 text-sm text-muted-foreground" colSpan={6}>
@@ -474,7 +475,7 @@ export default function UsersPage() {
                         </div>
                         <div>
                           <div className="font-medium text-foreground">{user.name}</div>
-                          <div className="text-xs text-muted-foreground flex items-center gap-1">
+                          <div className="text-xs text-[#616161] flex items-center gap-1">
                             <Mail size={10} />
                             {user.email}
                           </div>
@@ -485,7 +486,7 @@ export default function UsersPage() {
                       <RoleBadge role={user.role} />
                     </td>
                     <td className="px-4 py-3">
-                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1 text-sm text-[#616161]">
                         <MapPin size={12} />
                         {user.region}
                       </div>
@@ -503,7 +504,7 @@ export default function UsersPage() {
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">
+                    <td className="px-4 py-3 text-sm text-[#616161]">
                       {user.lastLogin 
                         ? user.lastLogin.toLocaleDateString('fr-FR') 
                         : 'Jamais connecté'}
@@ -520,18 +521,18 @@ export default function UsersPage() {
                             <MoreVertical size={16} />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => updateRole(user.id, 'admin')}>
+                        <DropdownMenuContent align="end" className="w-48 border-[#2ECC71]/25 bg-white text-[#212121]">
+                          <DropdownMenuItem className="focus:bg-[#2ECC71]/10 focus:text-[#212121]" onClick={() => updateRole(user.id, 'admin')}>
                             Définir Admin
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => updateRole(user.id, 'agronome')}>
+                          <DropdownMenuItem className="focus:bg-[#2ECC71]/10 focus:text-[#212121]" onClick={() => updateRole(user.id, 'agronome')}>
                             Définir Agronome
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => updateRole(user.id, 'autorite')}>
+                          <DropdownMenuItem className="focus:bg-[#2ECC71]/10 focus:text-[#212121]" onClick={() => updateRole(user.id, 'autorite')}>
                             Définir Autorité
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                            className="text-danger"
+                            className="text-danger focus:bg-[#D68910]/10 focus:text-[#D68910]"
                             onClick={() => deleteUser(user.id)}
                           >
                             Supprimer
@@ -544,8 +545,8 @@ export default function UsersPage() {
               </tbody>
               </table>
             </div>
-            <div className="flex items-center justify-between px-4 py-3 border-t border-border">
-              <p className="text-sm text-muted-foreground">
+            <div className="flex items-center justify-between px-4 py-3 border-t border-[#2ECC71]/15 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)]">
+              <p className="text-sm text-[#616161]">
                 Page {page} / {lastPage} ({totalUsers} utilisateurs)
               </p>
               <div className="flex items-center gap-2">
@@ -571,7 +572,7 @@ export default function UsersPage() {
 
           {/* Selected User Permissions */}
           {selectedUser && (
-            <div className="mt-6 bg-card border border-border rounded-lg p-4">
+            <div className="mt-6 rounded-xl border border-[#2ECC71]/25 bg-[linear-gradient(135deg,#ffffff_0%,#f8f9fa_100%)] p-4 shadow-sm">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
                   <span className="text-lg font-medium text-primary">
@@ -582,7 +583,7 @@ export default function UsersPage() {
                   <h3 className="font-semibold text-foreground">{selectedUser.name}</h3>
                   <div className="flex items-center gap-2 mt-1">
                     <RoleBadge role={selectedUser.role} />
-                    <span className="text-sm text-muted-foreground">• {selectedUser.region ?? '—'}</span>
+                    <span className="text-sm text-[#616161]">• {selectedUser.region ?? '—'}</span>
                   </div>
                 </div>
               </div>

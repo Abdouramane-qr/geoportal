@@ -10,7 +10,7 @@ import { MapContainer } from '@/components/dashboard/MapContainer';
 import { ParcelDetailsSidebar } from '@/components/dashboard/ParcelDetailsSidebar';
 import { MainNav } from '@/components/layout/MainNav';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import DataImporter from '@/features/map/components/DataImporter';
 import LayerManager from '@/features/map/components/LayerManager';
 import {
@@ -495,6 +495,9 @@ const Index = () => {
           <SheetContent side="right" className="w-[360px] sm:max-w-[360px] p-4">
             <SheetHeader>
               <SheetTitle>Gestion des couches</SheetTitle>
+              <SheetDescription className="sr-only">
+                Panneau de configuration des couches cartographiques importées.
+              </SheetDescription>
             </SheetHeader>
             <LayerManager
               layers={layers}

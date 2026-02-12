@@ -1,5 +1,5 @@
 import L from 'leaflet';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import type { Layer } from '@/features/map/types/layers';
 import type { GeographicContext } from '@/types/geographic';
 import type { ParcelData, LayerState } from '@/types/parcel';
@@ -202,20 +202,21 @@ export function MapContainer({
   const uploadedLayersRef = useRef<Map<string, L.GeoJSON>>(new Map());
   const maskRef = useRef<L.Polygon | null>(null);
   const boundaryRef = useRef<L.Rectangle | null>(null);
-  const [isMapReady, setIsMapReady] = useState(false);
   const prevLayerIdsRef = useRef<Set<string>>(new Set());
   const styleUpdateRafRef = useRef<number | null>(null);
   const lastImportedFitKeyRef = useRef<string | null>(null);
+  const initialCenterRef = useRef(authorizedContext.center);
+  const initialZoomRef = useRef(authorizedContext.zoom);
   const perfEnabled =
     typeof window !== 'undefined' && Boolean((window as Window & { __MAP_PERF__?: boolean }).__MAP_PERF__);
 
-  // Initialize map
+  // Initialize map once; context updates are handled by dedicated effects below.
   useEffect(() => {
     if (!mapRef.current || mapInstanceRef.current) return;
 
     const map = L.map(mapRef.current, {
-      center: authorizedContext.center,
-      zoom: authorizedContext.zoom,
+      center: initialCenterRef.current,
+      zoom: initialZoomRef.current,
       scrollWheelZoom: true,
       maxBoundsViscosity: 0.8,
       preferCanvas: true,
@@ -235,24 +236,18 @@ export function MapContainer({
     }).addTo(map);
 
     mapInstanceRef.current = map;
-    if (!isMapReady) { // Only set if not already true
-      setTimeout(() => {
-        setIsMapReady(true);
-      }, 0);
-    }
 
     return () => {
       map.remove();
       mapInstanceRef.current = null;
-      setIsMapReady(false);
     };
-  }, [authorizedContext.center, authorizedContext.zoom, isMapReady]);
+  }, []);
 
   const hasVisibleImportedLayer = (layers ?? []).some((layer) => layer.visible);
 
   // Update map when context changes
   useEffect(() => {
-    if (!mapInstanceRef.current || !isMapReady) return;
+    if (!mapInstanceRef.current) return;
 
     const map = mapInstanceRef.current;
 
@@ -269,11 +264,11 @@ export function MapContainer({
     } else {
       map.setMaxBounds(undefined);
     }
-  }, [authorizedContext, isMapReady, hasVisibleImportedLayer]);
+  }, [authorizedContext, hasVisibleImportedLayer]);
 
   // Add/update mask overlay
   useEffect(() => {
-    if (!mapInstanceRef.current || !isMapReady) return;
+    if (!mapInstanceRef.current) return;
 
     const map = mapInstanceRef.current;
 
@@ -314,11 +309,11 @@ export function MapContainer({
     );
     boundary.addTo(map);
     boundaryRef.current = boundary;
-  }, [authorizedContext, isMapReady, hasVisibleImportedLayer]);
+  }, [authorizedContext, hasVisibleImportedLayer]);
 
   // Handle uploaded GeoJSON layers - fitBounds and style by layer
   useEffect(() => {
-    if (!mapInstanceRef.current || !isMapReady) return;
+    if (!mapInstanceRef.current) return;
 
     const map = mapInstanceRef.current;
     const perfStart = perfEnabled ? performance.now() : 0;
@@ -439,7 +434,7 @@ export function MapContainer({
         durationMs: Math.round(duration),
       });
     }
-  }, [layers, isMapReady, perfEnabled]);
+  }, [layers, perfEnabled]);
 
   useEffect(() => {
     activeLayersRef.current = activeLayers;
@@ -450,7 +445,7 @@ export function MapContainer({
   }, [selectedParcel]);
 
   useEffect(() => {
-    if (!mapInstanceRef.current || !isMapReady) return;
+    if (!mapInstanceRef.current) return;
     const map = mapInstanceRef.current;
     const handleFocus = (event: Event) => {
       const layerId = (event as CustomEvent<string>).detail;
@@ -473,11 +468,11 @@ export function MapContainer({
     return () => {
       window.removeEventListener('geoportal:layer-focus', handleFocus);
     };
-  }, [isMapReady]);
+  }, []);
 
   // Add/update existing parcels (diff update)
   useEffect(() => {
-    if (!mapInstanceRef.current || !isMapReady) return;
+    if (!mapInstanceRef.current) return;
 
     const map = mapInstanceRef.current;
     const perfStart = perfEnabled ? performance.now() : 0;
@@ -547,11 +542,11 @@ export function MapContainer({
         durationMs: Math.round(duration),
       });
     }
-  }, [parcels, authorizedContext, onSelectParcel, isMapReady, perfEnabled]);
+  }, [parcels, authorizedContext, onSelectParcel, perfEnabled]);
 
   // Update parcel styles without rebuilding geometry
   useEffect(() => {
-    if (!mapInstanceRef.current || !isMapReady) return;
+    if (!mapInstanceRef.current) return;
 
     if (styleUpdateRafRef.current !== null) {
       cancelAnimationFrame(styleUpdateRafRef.current);
@@ -593,7 +588,7 @@ export function MapContainer({
         styleUpdateRafRef.current = null;
       }
     };
-  }, [selectedParcel, activeLayers, isMapReady, perfEnabled]);
+  }, [selectedParcel, activeLayers, perfEnabled]);
 
   return (
     <div className="relative w-full h-full">

@@ -19,7 +19,7 @@ export function MainNav() {
   const { url, props } = usePage<SharedData>();
   const currentUserRole = props.auth.user?.role;
   const visibleNavItems = navItems.filter((item) => {
-    if (item.path === '/utilisateurs') {
+    if (item.path === '/utilisateurs' || item.path === '/journal-audit') {
       return currentUserRole === 'admin';
     }
     return true;

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AuditLogController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\ParcelController;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,7 @@ Route::middleware('auth:sanctum')->prefix('auth')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->apiResource('users', UserController::class);
+Route::middleware('auth:sanctum')->get('audit-logs', [AuditLogController::class, 'index']);
 
 Route::get('parcels/geojson', [ParcelController::class, 'geojson']);
 Route::get('parcels', [ParcelController::class, 'index']);

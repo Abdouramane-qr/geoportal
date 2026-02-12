@@ -27,5 +27,5 @@
 - [x] `SEC-001` Protect `/api/parcels` write operations behind `auth:sanctum`.
 - [x] `SEC-002` Add feature tests for guest-denied parcel API writes.
 - [x] `CONS-001` Make user profile upsert resilient for legacy data (`updateOrCreate`).
-- [ ] `SEC-003` Add dedicated API endpoint/authorization for audit log consultation.
-- [ ] `SEC-004` Tighten web route access for non-public back-office pages.
+- [x] `SEC-003` Add dedicated API endpoint/authorization for audit log consultation.
+- [x] `SEC-004` Tighten web route access for non-public back-office pages.

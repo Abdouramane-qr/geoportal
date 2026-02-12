@@ -12,7 +12,7 @@ import {
   CheckCircle,
   Loader2,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { MainNav } from '@/components/layout/MainNav';
 import { Badge } from '@/components/ui/badge';
@@ -182,11 +182,83 @@ function AuditRow({ entry }: { entry: AuditEntry }) {
 }
 
 export default function AuditLogPage() {
-  const [logs] = useState<AuditEntry[]>([]);
+  const [logs, setLogs] = useState<AuditEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [actionFilter, setActionFilter] = useState<string>('all');
   const [entityFilter, setEntityFilter] = useState<string>('all');
   const [isExporting, setIsExporting] = useState(false);
+
+  useEffect(() => {
+    async function fetchLogs() {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/audit-logs?per_page=100', {
+          headers: { Accept: 'application/json' },
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch audit logs: ${response.status}`);
+        }
+
+        const payload = (await response.json()) as {
+          data: Array<{
+            id: number;
+            created_at: string;
+            action: string;
+            entity_type: string;
+            entity_id: string;
+            metadata?: Record<string, unknown> | null;
+            actor?: {
+              id: number;
+              name: string;
+              profile?: { role?: string | null } | null;
+            } | null;
+          }>;
+        };
+
+        const actionMap: Record<string, AuditAction> = {
+          'user.created': 'create',
+          'user.updated': 'update',
+          'user.deleted': 'delete',
+        };
+
+        const mapped: AuditEntry[] = payload.data.map((row) => {
+          const metadata = row.metadata ?? {};
+          const entityType = row.entity_type as AuditEntry['entityType'];
+
+          return {
+            id: String(row.id),
+            timestamp: new Date(row.created_at),
+            userId: String(row.actor?.id ?? '0'),
+            userName: row.actor?.name ?? 'Système',
+            userRole: row.actor?.profile?.role ?? 'inconnu',
+            action: actionMap[row.action] ?? 'update',
+            entityType: entityType in ENTITY_LABELS ? entityType : 'user',
+            entityId: row.entity_id ?? 'n/a',
+            entityName: String((metadata.entity_name as string | undefined) ?? row.entity_type),
+            field: Array.isArray(metadata.fields) ? String(metadata.fields[0] ?? '') : undefined,
+            previousValue: undefined,
+            newValue: undefined,
+            justification: String((metadata.email as string | undefined) ?? 'Action utilisateur'),
+            justificationType: 'administrative',
+            ipAddress: 'n/a',
+            checksum: 'n/a',
+          };
+        });
+
+        setLogs(mapped);
+      } catch (error) {
+        console.error(error);
+        toast.error("Impossible de charger le journal d'audit.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    void fetchLogs();
+  }, []);
 
   const filteredLogs = logs.filter((entry) => {
     const matchesSearch =
@@ -424,9 +496,26 @@ export default function AuditLogPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredLogs.map((entry) => (
-                    <AuditRow key={entry.id} entry={entry} />
-                  ))}
+                  {loading ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+                        <div className="inline-flex items-center gap-2">
+                          <Loader2 size={16} className="animate-spin" />
+                          Chargement...
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ) : filteredLogs.length === 0 ? (
+                    <TableRow>
+                      <TableCell colSpan={7} className="h-24 text-center text-muted-foreground">
+                        Aucune entrée trouvée.
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    filteredLogs.map((entry) => (
+                      <AuditRow key={entry.id} entry={entry} />
+                    ))
+                  )}
                 </TableBody>
               </Table>
             </div>

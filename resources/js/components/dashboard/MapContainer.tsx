@@ -246,7 +246,7 @@ export function MapContainer({
       mapInstanceRef.current = null;
       setIsMapReady(false);
     };
-  }, []);
+  }, [authorizedContext.center, authorizedContext.zoom, isMapReady]);
 
   const hasVisibleImportedLayer = (layers ?? []).some((layer) => layer.visible);
 
@@ -439,7 +439,7 @@ export function MapContainer({
         durationMs: Math.round(duration),
       });
     }
-  }, [layers, isMapReady]);
+  }, [layers, isMapReady, perfEnabled]);
 
   useEffect(() => {
     activeLayersRef.current = activeLayers;
@@ -547,7 +547,7 @@ export function MapContainer({
         durationMs: Math.round(duration),
       });
     }
-  }, [parcels, authorizedContext, onSelectParcel, isMapReady]);
+  }, [parcels, authorizedContext, onSelectParcel, isMapReady, perfEnabled]);
 
   // Update parcel styles without rebuilding geometry
   useEffect(() => {
@@ -593,7 +593,7 @@ export function MapContainer({
         styleUpdateRafRef.current = null;
       }
     };
-  }, [selectedParcel, activeLayers, isMapReady]);
+  }, [selectedParcel, activeLayers, isMapReady, perfEnabled]);
 
   return (
     <div className="relative w-full h-full">

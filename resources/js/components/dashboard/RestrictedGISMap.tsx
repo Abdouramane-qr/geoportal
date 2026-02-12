@@ -111,7 +111,7 @@ export function RestrictedGISMap({
       mapInstanceRef.current = null;
       setIsMapReady(false);
     };
-  }, []);
+  }, [authorizedContext.center, authorizedContext.zoom, isMapReady]);
 
   // Update map when context changes
   useEffect(() => {

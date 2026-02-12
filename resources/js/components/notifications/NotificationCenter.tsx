@@ -145,11 +145,10 @@ export function NotificationCenter({ onNavigateToParcel, onClose }: Notification
   const [filter, setFilter] = useState<'all' | NotificationType>('all');
 
   useEffect(() => {
-    if (loading) { // Only set to false if it's currently true
-      setTimeout(() => {
-        setLoading(false);
-      }, 0);
-    }
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const markAsRead = (id: string) => {

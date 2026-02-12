@@ -281,71 +281,85 @@ export default function UsersPage() {
                 Gérez les accès et les permissions des utilisateurs du système
               </p>
             </div>
-            <Button onClick={() => setCreateOpen(true)}>
+            <Button
+              onClick={() => setCreateOpen(true)}
+              className="bg-[#2ECC71] text-white shadow-[0_10px_25px_rgba(39,174,96,0.25)] transition-transform hover:translate-y-[-2px] hover:bg-[#27AE60]"
+            >
               <Plus size={16} className="mr-2" />
               Nouvel utilisateur
             </Button>
           </div>
 
           <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-            <DialogContent className="sm:max-w-xl">
-              <DialogHeader>
-                <DialogTitle>Nouvel utilisateur</DialogTitle>
-                <DialogDescription>
-                  Créez un compte utilisateur avec un rôle initial.
-                </DialogDescription>
-              </DialogHeader>
-
-              <div className="space-y-4 rounded-md border border-border bg-muted/30 p-4">
+            <DialogContent className="overflow-hidden border-0 p-0 sm:max-w-xl">
+              <div className="bg-[linear-gradient(135deg,#2ECC71_0%,#27AE60_50%,#D68910_100%)] px-6 py-5 text-white">
+                <DialogHeader>
+                  <DialogTitle className="text-xl font-bold text-white">Nouvel utilisateur</DialogTitle>
+                  <DialogDescription className="text-white/90">
+                    Créez un compte utilisateur avec un rôle initial.
+                  </DialogDescription>
+                </DialogHeader>
+              </div>
+              <div className="bg-white px-6 py-5">
+                <div className="mb-4 rounded-md border border-[#2ECC71]/30 bg-[linear-gradient(135deg,#f8f9fa_0%,#ffffff_100%)] px-3 py-2 text-xs text-[#616161]">
+                  Remplis les champs ci-dessous. Le mot de passe doit contenir au moins 8 caractères.
+                </div>
+              <div className="space-y-4 rounded-lg border border-[#2ECC71]/20 bg-[#f8f9fa] p-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Nom</label>
+                  <label className="text-sm font-semibold text-[#212121]">Nom</label>
                   <Input
                     value={createForm.name}
                     onChange={(e) => setCreateForm((prev) => ({ ...prev, name: e.target.value }))}
                     placeholder="Nom complet"
-                    className="bg-background"
+                    className="border-[#2ECC71]/30 bg-white text-[#212121] placeholder:text-[#616161]"
                   />
                   {createErrors.name ? <p className="text-xs text-danger">{createErrors.name}</p> : null}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Email</label>
+                  <label className="text-sm font-semibold text-[#212121]">Email</label>
                   <Input
                     type="email"
                     value={createForm.email}
                     onChange={(e) => setCreateForm((prev) => ({ ...prev, email: e.target.value }))}
                     placeholder="email@domaine.com"
-                    className="bg-background"
+                    className="border-[#2ECC71]/30 bg-white text-[#212121] placeholder:text-[#616161]"
                   />
                   {createErrors.email ? <p className="text-xs text-danger">{createErrors.email}</p> : null}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Rôle</label>
+                  <label className="text-sm font-semibold text-[#212121]">Rôle</label>
                   <Select
                     value={createForm.role}
                     onValueChange={(value) => setCreateForm((prev) => ({ ...prev, role: value as UserRole }))}
                   >
-                    <SelectTrigger className="bg-background">
+                    <SelectTrigger className="border-[#2ECC71]/30 bg-white text-[#212121]">
                       <SelectValue placeholder="Choisir un rôle" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="admin">Administrateur</SelectItem>
-                      <SelectItem value="agronome">Agronome</SelectItem>
-                      <SelectItem value="autorite">Autorité locale</SelectItem>
+                    <SelectContent className="border-[#2ECC71]/30 bg-white text-[#212121]">
+                      <SelectItem value="admin" className="text-[#212121] focus:bg-[#2ECC71]/15 focus:text-[#212121]">
+                        Administrateur
+                      </SelectItem>
+                      <SelectItem value="agronome" className="text-[#212121] focus:bg-[#2ECC71]/15 focus:text-[#212121]">
+                        Agronome
+                      </SelectItem>
+                      <SelectItem value="autorite" className="text-[#212121] focus:bg-[#2ECC71]/15 focus:text-[#212121]">
+                        Autorité locale
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   {createErrors.role ? <p className="text-xs text-danger">{createErrors.role}</p> : null}
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-foreground">Mot de passe initial</label>
+                  <label className="text-sm font-semibold text-[#212121]">Mot de passe initial</label>
                   <Input
                     type="password"
                     value={createForm.password}
                     onChange={(e) => setCreateForm((prev) => ({ ...prev, password: e.target.value }))}
                     placeholder="Au moins 8 caractères"
-                    className="bg-background"
+                    className="border-[#2ECC71]/30 bg-white text-[#212121] placeholder:text-[#616161]"
                   />
                   {createErrors.password ? <p className="text-xs text-danger">{createErrors.password}</p> : null}
                 </div>
@@ -356,13 +370,19 @@ export default function UsersPage() {
                   variant="outline"
                   onClick={() => setCreateOpen(false)}
                   disabled={createSubmitting}
+                  className="border-[#27AE60]/40 text-[#27AE60] hover:bg-[#27AE60]/10"
                 >
                   Annuler
                 </Button>
-                <Button onClick={createUser} disabled={createSubmitting}>
+                <Button
+                  onClick={createUser}
+                  disabled={createSubmitting}
+                  className="bg-[#2ECC71] text-white shadow-[0_8px_20px_rgba(39,174,96,0.25)] hover:bg-[#27AE60]"
+                >
                   {createSubmitting ? 'Création...' : 'Créer'}
                 </Button>
               </DialogFooter>
+              </div>
             </DialogContent>
           </Dialog>
 

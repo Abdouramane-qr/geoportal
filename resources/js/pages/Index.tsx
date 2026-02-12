@@ -1,5 +1,6 @@
 import { Map, AlertTriangle, CheckCircle, TrendingUp } from 'lucide-react';
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { toast } from 'sonner';
 import { DynamicMapLegend } from '@/components/dashboard/DynamicMapLegend';
 import { GeographicContextSelector } from '@/components/dashboard/GeographicContextSelector';
 import { KPICard } from '@/components/dashboard/KPICard';
@@ -36,6 +37,12 @@ const isLngLatPosition = (value: GeoJSON.Position): value is [number, number] =>
   && value.length >= 2
   && typeof value[0] === 'number'
   && typeof value[1] === 'number';
+
+const scientificStatusToApiStatus: Record<ScientificStatus, 'draft' | 'validated' | 'official'> = {
+  brouillon: 'draft',
+  valide: 'validated',
+  officiel: 'official',
+};
 
 const Index = () => {
   const [parcels, setParcels] = useState<ParcelData[]>([]);
@@ -277,6 +284,47 @@ const Index = () => {
     setIsSidebarOpen(true);
   }, []);
 
+  const handleValidateParcel = useCallback(async (parcelId: string) => {
+    const parcel = parcels.find((item) => item.id === parcelId);
+    if (!parcel) return;
+
+    const nextStatus: ScientificStatus =
+      parcel.scientificStatus === 'brouillon' ? 'valide' : 'officiel';
+    const csrfToken = document
+      .querySelector('meta[name="csrf-token"]')
+      ?.getAttribute('content');
+
+    try {
+      const response = await fetch(`/parcels/${parcelId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+        },
+        body: JSON.stringify({
+          status: scientificStatusToApiStatus[nextStatus],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`status update failed: ${response.status}`);
+      }
+
+      setParcels((prev) =>
+        prev.map((item) =>
+          item.id === parcelId ? { ...item, scientificStatus: nextStatus } : item,
+        ),
+      );
+      setSelectedParcel((prev) =>
+        prev && prev.id === parcelId ? { ...prev, scientificStatus: nextStatus } : prev,
+      );
+    } catch (error) {
+      console.error('Failed to update parcel status', error);
+      toast.error("Échec de la mise à jour du statut de validation.");
+    }
+  }, [parcels]);
+
   const mapPanel = (
     <div className="h-[480px] min-h-[360px] relative rounded-[28px] border border-border bg-card shadow-[0_20px_40px_rgba(0,0,0,0.08)] overflow-hidden">
       <MapContainer
@@ -440,10 +488,7 @@ const Index = () => {
             setIsSidebarOpen(false);
             setSelectedParcel(null);
           }}
-          onValidate={(parcelId) => {
-            console.log('Validating parcel:', parcelId);
-            // TODO: Update parcel status in database
-          }}
+          onValidate={handleValidateParcel}
         />
 
         <Sheet open={layerManagerOpen} onOpenChange={setLayerManagerOpen}>

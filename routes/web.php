@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ParcelController;
 
 Route::get('/', function () {
     return Inertia::render('Landing');
@@ -20,6 +21,7 @@ Route::get('/regles-foncieres', fn () => Inertia::render('LandRulesPage'));
 Route::get('/utilisateurs', fn () => Inertia::render('UsersPage'));
 Route::get('/journal-audit', fn () => Inertia::render('AuditLogPage'));
 Route::get('/design-system', fn () => Inertia::render('DesignSystemPage'));
+Route::middleware(['auth'])->patch('/parcels/{id}/status', [ParcelController::class, 'updateStatus']);
 
 Route::fallback(function () {
     return Inertia::render('NotFound')->toResponse(request())->setStatusCode(404);

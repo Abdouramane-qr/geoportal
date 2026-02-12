@@ -6,6 +6,7 @@ use App\Http\Requests\StoreParcelRequest;
 use App\Http\Requests\UpdateParcelRequest;
 use App\Models\Parcel;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -197,5 +198,23 @@ class ParcelController extends Controller
         $parcel->delete();
 
         return response()->json(['deleted' => true]);
+    }
+
+    public function updateStatus(Request $request, string $id): JsonResponse
+    {
+        $parcel = Parcel::findOrFail($id);
+        $this->authorize('update', $parcel);
+
+        $data = $request->validate([
+            'status' => ['required', 'in:draft,validated,official'],
+        ]);
+
+        $parcel->status = $data['status'];
+        $parcel->save();
+
+        return response()->json([
+            'id' => $parcel->id,
+            'status' => $parcel->status,
+        ]);
     }
 }

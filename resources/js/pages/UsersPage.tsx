@@ -125,6 +125,9 @@ export default function UsersPage() {
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          toast.error('Session expirée. Recharge la page et reconnecte-toi.');
+        }
         throw new Error(`Failed to fetch users: ${response.status}`);
       }
 
@@ -285,7 +288,7 @@ export default function UsersPage() {
           </div>
 
           <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-            <DialogContent>
+            <DialogContent className="sm:max-w-xl">
               <DialogHeader>
                 <DialogTitle>Nouvel utilisateur</DialogTitle>
                 <DialogDescription>
@@ -293,35 +296,37 @@ export default function UsersPage() {
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="space-y-4">
-                <div className="space-y-1">
+              <div className="space-y-4 rounded-md border border-border bg-muted/30 p-4">
+                <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">Nom</label>
                   <Input
                     value={createForm.name}
                     onChange={(e) => setCreateForm((prev) => ({ ...prev, name: e.target.value }))}
                     placeholder="Nom complet"
+                    className="bg-background"
                   />
                   {createErrors.name ? <p className="text-xs text-danger">{createErrors.name}</p> : null}
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">Email</label>
                   <Input
                     type="email"
                     value={createForm.email}
                     onChange={(e) => setCreateForm((prev) => ({ ...prev, email: e.target.value }))}
                     placeholder="email@domaine.com"
+                    className="bg-background"
                   />
                   {createErrors.email ? <p className="text-xs text-danger">{createErrors.email}</p> : null}
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">Rôle</label>
                   <Select
                     value={createForm.role}
                     onValueChange={(value) => setCreateForm((prev) => ({ ...prev, role: value as UserRole }))}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-background">
                       <SelectValue placeholder="Choisir un rôle" />
                     </SelectTrigger>
                     <SelectContent>
@@ -333,13 +338,14 @@ export default function UsersPage() {
                   {createErrors.role ? <p className="text-xs text-danger">{createErrors.role}</p> : null}
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-2">
                   <label className="text-sm font-medium text-foreground">Mot de passe initial</label>
                   <Input
                     type="password"
                     value={createForm.password}
                     onChange={(e) => setCreateForm((prev) => ({ ...prev, password: e.target.value }))}
                     placeholder="Au moins 8 caractères"
+                    className="bg-background"
                   />
                   {createErrors.password ? <p className="text-xs text-danger">{createErrors.password}</p> : null}
                 </div>

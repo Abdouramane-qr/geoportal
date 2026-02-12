@@ -18,7 +18,11 @@ Route::get('/validation', fn () => Inertia::render('ValidationPage'));
 Route::get('/alertes', fn () => Inertia::render('AlertsPage'));
 Route::get('/autorites', fn () => Inertia::render('AuthorityDashboard'));
 Route::get('/regles-foncieres', fn () => Inertia::render('LandRulesPage'));
-Route::get('/utilisateurs', fn () => Inertia::render('UsersPage'));
+Route::middleware(['auth'])->get('/utilisateurs', function () {
+    abort_unless(request()->user()?->profile?->role === 'admin', 403);
+
+    return Inertia::render('UsersPage');
+});
 Route::get('/journal-audit', fn () => Inertia::render('AuditLogPage'));
 Route::get('/design-system', fn () => Inertia::render('DesignSystemPage'));
 Route::middleware(['auth'])->patch('/parcels/{id}/status', [ParcelController::class, 'updateStatus']);

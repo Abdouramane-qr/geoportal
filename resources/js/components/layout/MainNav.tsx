@@ -3,6 +3,7 @@ import { Map, Upload, Scale, Users, Menu, X, Shield, FileCheck, AlertTriangle } 
 import { useState } from 'react';
 import { NotificationBell } from '@/components/notifications/NotificationBell';
 import { cn } from '@/lib/utils';
+import type { SharedData } from '@/types';
 
 const navItems = [
   { path: '/carte', label: 'Carte SIG', icon: Map },
@@ -15,7 +16,14 @@ const navItems = [
 ];
 
 export function MainNav() {
-  const { url } = usePage();
+  const { url, props } = usePage<SharedData>();
+  const currentUserRole = props.auth.user?.role;
+  const visibleNavItems = navItems.filter((item) => {
+    if (item.path === '/utilisateurs') {
+      return currentUserRole === 'admin';
+    }
+    return true;
+  });
   const currentPath = url.split('?')[0];
   const isActive = (path: string) =>
     currentPath === path || (path !== '/' && currentPath.startsWith(`${path}/`));
@@ -38,7 +46,7 @@ export function MainNav() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-1 overflow-x-auto">
-          {navItems.map(({ path, label, icon: Icon }) => (
+          {visibleNavItems.map(({ path, label, icon: Icon }) => (
             <Link
               key={path}
               href={path}
@@ -75,7 +83,7 @@ export function MainNav() {
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <nav className="md:hidden border-t border-sidebar-border px-4 py-3">
-          {navItems.map(({ path, label, icon: Icon }) => (
+          {visibleNavItems.map(({ path, label, icon: Icon }) => (
             <Link
               key={path}
               href={path}

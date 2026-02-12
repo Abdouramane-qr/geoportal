@@ -13,10 +13,10 @@
 - [x] `USER-UI-004` Handle API errors and optimistic updates safely.
 
 ## Lot 3 - Role & Access Hardening
-- [ ] `RBAC-001` Protect `/utilisateurs` route with auth and role check.
+- [x] `RBAC-001` Protect `/utilisateurs` route with auth and role check.
 - [ ] `RBAC-002` Align role naming front/back (`autorite` vs `autorité_locale`).
-- [ ] `RBAC-003` Add role-aware navigation visibility (hide forbidden pages).
-- [ ] `RBAC-004` Add tests for route/page access by role.
+- [x] `RBAC-003` Add role-aware navigation visibility (hide forbidden pages).
+- [x] `RBAC-004` Add tests for route/page access by role.
 
 ## Lot 4 - Operational Quality
 - [ ] `OPS-001` Add API docs examples for user CRUD.
